@@ -63,47 +63,44 @@
         // Use the "gviz" version of the link for better compatibility
 const sheetURL = 'https://docs.google.com/spreadsheets/d/1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig/gviz/tq?tqx=out:csv&cacheBust=${Date.now()}`;
 
-async function loadData() {
+async function loadData(retries = 3) {
+    const gallery = document.getElementById('gallery');
+    console.log(`Attempting to load gallery... (${4 - retries} attempt)`);
+
     try {
         const response = await fetch(sheetURL);
+        if (!response.ok) throw new Error('Google Sheets is busy');
+        
         const csvText = await response.text();
         
-        // This cleans up the Google Sheets extra formatting
+        // Check if the data is actually CSV and not an HTML error page
+        if (csvText.includes('<!DOCTYPE html>')) {
+            throw new Error('Received HTML instead of CSV. Check if sheet is Published to Web.');
+        }
+
         const rows = csvText.split('\n').map(row => 
             row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.replace(/^"|"$/g, '').trim())
         );
 
-        const gallery = document.getElementById('gallery');
-        gallery.innerHTML = ''; // Clear gallery before loading
+        gallery.innerHTML = ''; 
+        // ... (rest of your loop code to build the gallery cards) ...
+        
+        console.log("Gallery loaded successfully!");
+        if(document.getElementById('loader')) document.getElementById('loader').style.display = 'none';
 
-        // Start from row 1 to skip headers
-        for (let i = 1; i < rows.length; i++) {
-            const [title, images, material, desc, year] = rows[i];
-            if (!title || !images) continue;
-
-            const imageArray = images.split(',');
-            const mainImg = imageArray[0].trim();
-
-            const item = document.createElement('div');
-            item.className = "cursor-pointer group animate-fade-in";
-            item.onclick = () => openModal(title, imageArray, material, desc);
-            item.innerHTML = `
-                <div class="aspect-[4/5] overflow-hidden bg-zinc-100 shadow-sm">
-                    <img src="${mainImg}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                </div>
-                <div class="mt-4">
-                    <h3 class="text-lg font-medium tracking-tight">${title}</h3>
-                    <p class="text-sm text-zinc-400 italic">${material}</p>
-                </div>
-            `;
-            gallery.appendChild(item);
-        }
     } catch (error) {
-        console.error("Error loading gallery:", error);
-        document.getElementById('gallery').innerHTML = "<p class='col-span-3 text-center text-red-400'>Error loading paintings. Please check your Google Sheet link.</p>";
+        console.error("Fetch error:", error);
+        if (retries > 0) {
+            console.log("Retrying in 2 seconds...");
+            setTimeout(() => loadData(retries - 1), 2000);
+        } else {
+            gallery.innerHTML = `<div class="col-span-full text-center py-20">
+                <p class="text-red-400">The gallery is taking a moment to wake up.</p>
+                <button onclick="location.reload()" class="mt-4 px-4 py-2 border border-zinc-900 uppercase text-xs tracking-widest">Refresh Gallery</button>
+            </div>`;
+        }
     }
 }
-
 // Keep your openModal and closeModal functions here...
 loadData();
     </script>

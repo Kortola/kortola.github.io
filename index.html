@@ -244,7 +244,9 @@
 <!-- MODAL / LIGHTBOX -->
 <div id="artModal" class="modal">
     <span class="close-btn" onclick="closeModal()">&times;</span>
-    <div class="modal-content">
+    <div style="text-align: center; padding-top: 40px;">
+        <button onclick="closeModal()" style="background: none; border: 1px solid #000; color: #000; padding: 10px 20px; cursor: pointer;">← Back to Gallery</button>
+    </div>    <div class="modal-content">
         <div style="text-align: center; margin-bottom: 60px;">
             <h2 id="modalTitle" style="font-size: 2.5rem;"></h2>
             <p id="modalDescription" style="color: var(--secondary); max-width: 600px; margin: 0 auto;"></p>
@@ -264,54 +266,90 @@
 </footer>
 
 <script>
-    const paintingData = {
-        'painting1': {
-            title: 'Ethereal Dreams',
-            description: 'A deep dive into the subconscious using layers of oil glazes. These detail shots show the texture of the canvas and the fine line work.',
-            images: [
-                'https://via.placeholder.com/1000x1200?text=Detail+1',
-                'https://via.placeholder.com/1000x1200?text=Detail+2',
-                'https://via.placeholder.com/1000x1200?text=Detail+3'
-            ]
-        },
-        'painting2': {
-            title: 'Urban Silence',
-            description: 'Captured during the early hours of dawn. This series focuses on the stillness of concrete.',
-            images: [
-                'https://via.placeholder.com/1000x1200?text=Detail+A',
-                'https://via.placeholder.com/1000x1200?text=Detail+B',
-                'https://via.placeholder.com/1000x1200?text=Detail+C'
-            ]
+    // 1. PASTE YOUR PUBLISHED GOOGLE SHEET CSV LINK HERE:
+    // (Make sure it ends in output=csv)
+    const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQW_NRdZlNhe-ANiOUVH7FiKTsxTHE38XHV5RtpZh2gysbWTUq915LHGZhXNdwc5ptInrJ_mVNG693-/pub?gid=0&single=true&output=csv";
+
+    let portfolioData = [];
+
+    async function loadGallery() {
+        try {
+            const response = await fetch(SHEET_URL);
+            const data = await response.text();
+            
+            // This splits the Google Sheet rows
+            const rows = data.split('\n').slice(1); 
+
+            const galleryContainer = document.getElementById('main-gallery');
+            
+            // Clear the loading message
+            if(document.getElementById('loading-msg')) {
+                document.getElementById('loading-msg').style.display = 'none';
+            }
+
+            rows.forEach(row => {
+                // This splits the columns (ID, Title, Medium, etc.)
+                const cols = row.split(',');
+                if (cols.length < 5) return; // Skip empty rows
+
+                const item = {
+                    id: cols[0].trim(),
+                    title: cols[1].trim(),
+                    medium: cols[2].trim(),
+                    desc: cols[3].trim(),
+                    main: cols[4].trim(),
+                    details: [cols[5], cols[6], cols[7], cols[8]].filter(url => url && url.trim() !== "")
+                };
+                portfolioData.push(item);
+
+                // Create the Visual Card for the Grid
+                const card = document.createElement('div');
+                card.className = 'painting-card';
+                card.onclick = () => openModal(item.id);
+                card.innerHTML = `
+                    <div class="img-container">
+                        <img src="${item.main}" alt="${item.title}">
+                    </div>
+                    <div class="painting-info">
+                        <h3 class="painting-title">${item.title}</h3>
+                        <p>${item.medium}</p>
+                    </div>
+                `;
+                galleryContainer.appendChild(card);
+            });
+        } catch (error) {
+            console.error("Error loading sheet:", error);
         }
-    };
+    }
 
     function openModal(id) {
-        const data = paintingData[id];
-        document.getElementById('modalTitle').innerText = data.title;
-        document.getElementById('modalDescription').innerText = data.description;
+        const item = portfolioData.find(p => p.id === id);
+        if(!item) return;
+
+        document.getElementById('modalTitle').innerText = item.title;
+        document.getElementById('modalDescription').innerText = item.desc;
         
         const container = document.getElementById('modalImages');
-        container.innerHTML = '';
+        container.innerHTML = ''; // Clear previous images
         
-        data.images.forEach(src => {
+        // Add the detail images to the pop-up
+        item.details.forEach(src => {
             const img = document.createElement('img');
-            img.src = src;
+            img.src = src.trim();
             container.appendChild(img);
         });
 
         document.getElementById('artModal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden'; // Stop background scrolling
     }
 
     function closeModal() {
         document.getElementById('artModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
+        document.body.style.overflow = 'auto'; // Enable scrolling again
     }
 
-    window.onclick = function(e) {
-        if (e.target.className === 'modal') closeModal();
-    }
+    // This starts the loading process when the page opens
+    loadGallery();
 </script>
-
 </body>
 </html>

@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artist Portfolio</title>
+    <title>Kortola | Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
         body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
         .modal { display: none; background: rgba(255,255,255,0.98); }
         .modal.active { display: flex; }
+        .animate-fade-in { animation: fadeIn 0.8s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body class="bg-white text-zinc-800">
 
-    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-zinc-100">
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md z-50 border-b border-zinc-100">
         <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <h1 class="text-xl tracking-widest uppercase font-light">Your Name</h1>
-            <div class="space-x-8 text-sm uppercase tracking-wider font-medium">
-                <a href="#paintings" class="hover:text-zinc-500">Paintings</a>
-                <a href="#about" class="hover:text-zinc-500">About</a>
-                <a href="#contact" class="hover:text-zinc-500">Contact</a>
+            <h1 class="text-xl tracking-widest uppercase font-light">Kortola</h1>
+            <div class="space-x-8 text-[10px] uppercase tracking-[0.2em] font-medium">
+                <a href="#paintings" class="hover:text-zinc-400 transition">Paintings</a>
+                <a href="#about" class="hover:text-zinc-400 transition">About</a>
+                <a href="#contact" class="hover:text-zinc-400 transition">Contact</a>
             </div>
         </div>
     </nav>
@@ -30,79 +32,113 @@
             </div>
     </section>
 
-    <section id="about" class="py-20 bg-zinc-50">
-        <div class="max-w-3xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-light mb-8 uppercase tracking-widest">About the Artist</h2>
-            <p class="text-lg leading-relaxed text-zinc-600">
-                [Insert your story here. Describe your technique, your passion for color, and what drives your creative process.]
+    <section id="about" class="py-24 bg-zinc-50 border-y border-zinc-100">
+        <div class="max-w-2xl mx-auto px-6 text-center">
+            <h2 class="text-2xl font-light mb-8 uppercase tracking-[0.3em]">About the Artist</h2>
+            <p class="text-lg leading-relaxed text-zinc-500 font-light">
+                Creating atmosphere through texture and light. Based on a passion for traditional techniques translated into a modern aesthetic.
             </p>
         </div>
     </section>
 
-    <section id="contact" class="py-20">
+    <section id="contact" class="py-24">
         <div class="max-w-xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-light mb-8 uppercase tracking-widest">Contact</h2>
-            <p class="mb-6">For inquiries or commissions:</p>
-            <a href="mailto:your@email.com" class="text-xl border-b border-zinc-900 pb-1 hover:text-zinc-500 hover:border-zinc-500 transition">your@email.com</a>
+            <h2 class="text-2xl font-light mb-8 uppercase tracking-[0.3em]">Contact</h2>
+            <p class="mb-8 text-zinc-400">For inquiries and acquisitions</p>
+            <a href="mailto:your-email@example.com" class="text-lg border-b border-zinc-900 pb-1 hover:text-zinc-400 hover:border-zinc-400 transition">Email Me</a>
         </div>
     </section>
 
     <div id="modal" class="modal fixed inset-0 z-[100] p-6 flex-col items-center overflow-y-auto">
-        <button onclick="closeModal()" class="fixed top-8 right-8 text-3xl font-light">&times;</button>
+        <button onclick="closeModal()" class="fixed top-8 right-8 text-4xl font-light hover:rotate-90 transition duration-300">&times;</button>
         <div class="max-w-4xl w-full mt-20">
-            <div id="modal-images" class="space-y-6 mb-12"></div>
-            <div class="border-t pt-8 pb-20">
-                <h2 id="modal-title" class="text-4xl font-light mb-2"></h2>
-                <p id="modal-material" class="text-zinc-400 italic mb-4"></p>
-                <p id="modal-desc" class="text-lg leading-relaxed max-w-2xl"></p>
+            <div id="modal-images" class="space-y-8 mb-12"></div>
+            <div class="border-t border-zinc-100 pt-8 pb-32">
+                <h2 id="modal-title" class="text-3xl font-light mb-2 tracking-tight"></h2>
+                <p id="modal-material" class="text-zinc-400 italic mb-6 text-sm"></p>
+                <p id="modal-desc" class="text-lg leading-relaxed text-zinc-600 font-light"></p>
             </div>
         </div>
     </div>
 
     <script>
-        // Use the "gviz" version of the link for better compatibility
-const sheetURL = 'https://docs.google.com/spreadsheets/d/1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig/gviz/tq?tqx=out:csv&cacheBust=${Date.now()}`;
+        // 1. REPLACE THIS WITH YOUR ID
+        const sheetID = '1vA5W3H03p_P3p3P3p3P3p3P3p3P3p'; // Replace with the ID from your URL
+        const sheetURL = `https://docs.google.com/spreadsheets/d/${1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig}/gviz/tq?tqx=out:csv&cb=${Date.now()}`;
 
-async function loadData(retries = 3) {
-    const gallery = document.getElementById('gallery');
-    console.log(`Attempting to load gallery... (${4 - retries} attempt)`);
+        async function loadData() {
+            try {
+                const response = await fetch(sheetURL);
+                const csvText = await response.text();
+                
+                // Better CSV parser to handle quotes and commas
+                const rows = csvText.split(/\r?\n/).map(line => {
+                    const result = [];
+                    let cell = '', inQuotes = false;
+                    for (let char of line) {
+                        if (char === '"') inQuotes = !inQuotes;
+                        else if (char === ',' && !inQuotes) { result.push(cell); cell = ''; }
+                        else cell += char;
+                    }
+                    result.push(cell);
+                    return result;
+                }).slice(1); // Skip header
 
-    try {
-        const response = await fetch(sheetURL);
-        if (!response.ok) throw new Error('Google Sheets is busy');
-        
-        const csvText = await response.text();
-        
-        // Check if the data is actually CSV and not an HTML error page
-        if (csvText.includes('<!DOCTYPE html>')) {
-            throw new Error('Received HTML instead of CSV. Check if sheet is Published to Web.');
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = '';
+
+                rows.forEach(row => {
+                    const title = row[0]?.replace(/^"|"$/g, '') || 'Untitled';
+                    const imagesStr = row[1]?.replace(/^"|"$/g, '') || '';
+                    const material = row[2]?.replace(/^"|"$/g, '') || '';
+                    const desc = row[3]?.replace(/^"|"$/g, '') || '';
+
+                    if (!imagesStr) return;
+
+                    const imageArray = imagesStr.split(',').map(s => s.trim());
+                    const mainImg = imageArray[0];
+
+                    const item = document.createElement('div');
+                    item.className = "cursor-pointer group animate-fade-in";
+                    item.onclick = () => openModal(title, imageArray, material, desc);
+                    item.innerHTML = `
+                        <div class="aspect-[4/5] overflow-hidden bg-zinc-50 border border-zinc-100">
+                            <img src="${mainImg}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-[1.5s] ease-out">
+                        </div>
+                        <div class="mt-6">
+                            <h3 class="text-xs tracking-[0.2em] uppercase font-medium">${title}</h3>
+                            <p class="text-[10px] text-zinc-400 mt-2 uppercase tracking-widest">${material}</p>
+                        </div>
+                    `;
+                    gallery.appendChild(item);
+                });
+            } catch (e) {
+                console.error("Layout error:", e);
+            }
         }
 
-        const rows = csvText.split('\n').map(row => 
-            row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.replace(/^"|"$/g, '').trim())
-        );
-
-        gallery.innerHTML = ''; 
-        // ... (rest of your loop code to build the gallery cards) ...
-        
-        console.log("Gallery loaded successfully!");
-        if(document.getElementById('loader')) document.getElementById('loader').style.display = 'none';
-
-    } catch (error) {
-        console.error("Fetch error:", error);
-        if (retries > 0) {
-            console.log("Retrying in 2 seconds...");
-            setTimeout(() => loadData(retries - 1), 2000);
-        } else {
-            gallery.innerHTML = `<div class="col-span-full text-center py-20">
-                <p class="text-red-400">The gallery is taking a moment to wake up.</p>
-                <button onclick="location.reload()" class="mt-4 px-4 py-2 border border-zinc-900 uppercase text-xs tracking-widest">Refresh Gallery</button>
-            </div>`;
+        function openModal(title, images, material, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-material').innerText = material;
+            document.getElementById('modal-desc').innerText = desc;
+            const container = document.getElementById('modal-images');
+            container.innerHTML = '';
+            images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = "w-full shadow-2xl";
+                container.appendChild(img);
+            });
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
-    }
-}
-// Keep your openModal and closeModal functions here...
-loadData();
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onload = loadData;
     </script>
 </body>
 </html>

@@ -266,49 +266,55 @@
 </footer>
 
 <script>
-    // 1. PASTE YOUR PUBLISHED GOOGLE SHEET CSV LINK HERE:
-    // (Make sure it ends in output=csv)
+    // 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQW_NRdZlNhe-ANiOUVH7FiKTsxTHE38XHV5RtpZh2gysbWTUq915LHGZhXNdwc5ptInrJ_mVNG693-/pub?gid=0&single=true&output=csv";
 
     let portfolioData = [];
 
     async function loadGallery() {
         try {
+            console.log("Starting to fetch sheet...");
             const response = await fetch(SHEET_URL);
-            const data = await response.text();
+            const csvText = await response.text();
             
-            // This splits the Google Sheet rows
-            const rows = data.split('\n').slice(1); 
+            // This splits the rows and removes any completely empty rows
+            const rows = csvText.split(/\r?\n/).filter(row => row.trim() !== "");
+            
+            // Skip the header row (Row 1)
+            const dataRows = rows.slice(1); 
 
             const galleryContainer = document.getElementById('main-gallery');
-            
-            // Clear the loading message
             if(document.getElementById('loading-msg')) {
                 document.getElementById('loading-msg').style.display = 'none';
             }
 
-            rows.forEach(row => {
-                // This splits the columns (ID, Title, Medium, etc.)
-                const cols = row.split(',');
-                if (cols.length < 5) return; // Skip empty rows
+            dataRows.forEach((row, index) => {
+                // Use a smarter split that ignores commas inside quotes if they exist
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                
+                if (cols.length < 5) return; 
+
+                // Clean up the data (remove quotes and spaces)
+                const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : "";
 
                 const item = {
-                    id: cols[0].trim(),
-                    title: cols[1].trim(),
-                    medium: cols[2].trim(),
-                    desc: cols[3].trim(),
-                    main: cols[4].trim(),
-                    details: [cols[5], cols[6], cols[7], cols[8]].filter(url => url && url.trim() !== "")
+                    id: clean(cols[0]) || `item-${index}`,
+                    title: clean(cols[1]),
+                    medium: clean(cols[2]),
+                    desc: clean(cols[3]),
+                    main: clean(cols[4]),
+                    details: [clean(cols[5]), clean(cols[6]), clean(cols[7])].filter(url => url !== "")
                 };
+                
                 portfolioData.push(item);
 
-                // Create the Visual Card for the Grid
+                // Create the Gallery Card
                 const card = document.createElement('div');
                 card.className = 'painting-card';
                 card.onclick = () => openModal(item.id);
                 card.innerHTML = `
                     <div class="img-container">
-                        <img src="${item.main}" alt="${item.title}">
+                        <img src="${item.main}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x500?text=Image+Not+Found'">
                     </div>
                     <div class="painting-info">
                         <h3 class="painting-title">${item.title}</h3>
@@ -317,8 +323,10 @@
                 `;
                 galleryContainer.appendChild(card);
             });
+            console.log("Gallery loaded successfully with " + portfolioData.length + " items.");
         } catch (error) {
-            console.error("Error loading sheet:", error);
+            console.error("Detailed Error:", error);
+            document.getElementById('loading-msg').innerText = "Error: Could not read the Google Sheet. Please check the Publish settings.";
         }
     }
 
@@ -330,25 +338,26 @@
         document.getElementById('modalDescription').innerText = item.desc;
         
         const container = document.getElementById('modalImages');
-        container.innerHTML = ''; // Clear previous images
+        container.innerHTML = ''; 
         
-        // Add the detail images to the pop-up
         item.details.forEach(src => {
-            const img = document.createElement('img');
-            img.src = src.trim();
-            container.appendChild(img);
+            if(src) {
+                const img = document.createElement('img');
+                img.src = src;
+                container.appendChild(img);
+            }
         });
 
         document.getElementById('artModal').style.display = 'block';
-        document.body.style.overflow = 'hidden'; // Stop background scrolling
+        document.body.style.overflow = 'hidden';
     }
 
     function closeModal() {
         document.getElementById('artModal').style.display = 'none';
-        document.body.style.overflow = 'auto'; // Enable scrolling again
+        document.body.style.overflow = 'auto';
     }
 
-    // This starts the loading process when the page opens
+    // Start the app
     loadGallery();
 </script>
 </body>

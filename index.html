@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artist Portfolio | Modern & Elegant</title>
-    <!-- Importing a clean Serif font for that gallery feel -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <title>Artist Portfolio | Modern & Elegant</title>    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #ffffff;
@@ -31,7 +30,6 @@
             letter-spacing: 1px;
         }
 
-        /* Navigation */
         nav {
             position: sticky;
             top: 0;
@@ -63,7 +61,6 @@
         header h1 { font-size: 3rem; margin: 0; }
         header p { color: var(--secondary); font-style: italic; margin-top: 10px; }
 
-        /* Gallery Grid */
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
@@ -96,7 +93,6 @@
 
         .painting-info { padding: 20px 0; }
 
-        /* Sections */
         .section {
             max-width: 800px;
             margin: 0 auto;
@@ -105,9 +101,6 @@
             border-top: 1px solid #eee;
         }
 
-        .about-text { font-size: 1.1rem; text-align: justify; }
-
-        /* Contact Form Styles */
         .contact-form {
             display: flex;
             flex-direction: column;
@@ -133,9 +126,6 @@
             transition: opacity 0.3s;
         }
 
-        button:hover { opacity: 0.8; }
-
-        /* Modal / Lightbox */
         .modal {
             display: none;
             position: fixed;
@@ -167,16 +157,6 @@
             background: #fafafa;
         }
 
-        .social-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--accent);
-            font-weight: bold;
-            margin-top: 20px;
-        }
-
         @media (max-width: 600px) {
             .portfolio-grid { grid-template-columns: 1fr; padding: 0 20px; }
             header h1 { font-size: 2rem; }
@@ -196,43 +176,21 @@
     <p>Visual Artist</p>
 </header>
 
-<main class="portfolio-grid">
-    <!-- PAINTING 1 -->
-    <div class="painting-card" onclick="openModal('painting1')">
-        <div class="img-container">
-            <img src="https://via.placeholder.com/800x1000?text=Main+Artwork+1" alt="Painting 1">
-        </div>
-        <div class="painting-info">
-            <h3 class="painting-title">Ethereal Dreams</h3>
-            <p>Oil on Canvas</p>
-        </div>
-    </div>
-
-    <!-- PAINTING 2 -->
-    <div class="painting-card" onclick="openModal('painting2')">
-        <div class="img-container">
-            <img src="https://via.placeholder.com/800x1000?text=Main+Artwork+2" alt="Painting 2">
-        </div>
-        <div class="painting-info">
-            <h3 class="painting-title">Urban Silence</h3>
-            <p>Acrylic on Wood</p>
-        </div>
-    </div>
+<!-- Added ID "main-gallery" so JavaScript can find it -->
+<main class="portfolio-grid" id="main-gallery">
+    <p id="loading-msg" style="text-align: center; grid-column: 1/-1;">Loading gallery...</p>
+    <!-- Dynamic content from Google Sheets will load here -->
 </main>
 
-<!-- ABOUT SECTION -->
 <section class="section" id="about">
     <h2>About the Artist</h2>
     <div class="about-text">
-        <p>Write your story here. Talk about your inspiration, where you studied, and what your art represents. A modern portfolio focuses on the narrative behind the brushstrokes.</p>
-        <p>My work has been featured in [Gallery Name] and explores the intersection of [Theme A] and [Theme B].</p>
+        <p>Write your story here. Talk about your inspiration and what your art represents.</p>
     </div>
 </section>
 
-<!-- CONTACT SECTION -->
 <section class="section" id="contact">
     <h2>Get in Touch</h2>
-    <p>For inquiries, commissions, or collaborations, please use the form below.</p>
     <form class="contact-form" action="https://formspree.io/f/your-id-here" method="POST">
         <input type="text" name="name" placeholder="Your Name" required>
         <input type="email" name="email" placeholder="Your Email" required>
@@ -241,32 +199,26 @@
     </form>
 </section>
 
-<!-- MODAL / LIGHTBOX -->
 <div id="artModal" class="modal">
     <span class="close-btn" onclick="closeModal()">&times;</span>
     <div style="text-align: center; padding-top: 40px;">
         <button onclick="closeModal()" style="background: none; border: 1px solid #000; color: #000; padding: 10px 20px; cursor: pointer;">← Back to Gallery</button>
-    </div>    <div class="modal-content">
+    </div>
+    <div class="modal-content">
         <div style="text-align: center; margin-bottom: 60px;">
             <h2 id="modalTitle" style="font-size: 2.5rem;"></h2>
             <p id="modalDescription" style="color: var(--secondary); max-width: 600px; margin: 0 auto;"></p>
         </div>
-        <div id="modalImages" class="detail-gallery">
-            <!-- Details Images go here -->
-        </div>
+        <div id="modalImages" class="detail-gallery"></div>
     </div>
 </div>
 
 <footer>
     <p>&copy; 2026 Your Name</p>
-    <!-- Change this URL to your actual Instagram profile -->
-    <a href="https://instagram.com/yourusername" class="social-link" target="_blank">
-        Follow on Instagram
-    </a>
 </footer>
 
-<script>// 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
-    const SHEET_URL = "<script>// 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
+<script>
+    // 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQW_NRdZlNhe-ANiOUVH7FiKTsxTHE38XHV5RtpZh2gysbWTUq915LHGZhXNdwc5ptInrJ_mVNG693-/pub?gid=0&single=true&output=csv";
 
     let portfolioData = [];
@@ -277,17 +229,14 @@
             if (!response.ok) throw new Error('Sheet not found');
             const csvText = await response.text();
             
-            // Clean up rows and skip the first header row
             const rows = csvText.split(/\r?\n/).filter(row => row.trim() !== "");
             const dataRows = rows.slice(1); 
 
             const galleryContainer = document.getElementById('main-gallery');
-            if(document.getElementById('loading-msg')) {
-                document.getElementById('loading-msg').style.display = 'none';
-            }
+            const loadingMsg = document.getElementById('loading-msg');
+            if(loadingMsg) loadingMsg.style.display = 'none';
 
             dataRows.forEach((row, index) => {
-                // Split by comma, but handle potential issues
                 const cols = row.split(',');
                 if (cols.length < 5) return;
 
@@ -320,86 +269,8 @@
             });
         } catch (error) {
             console.error("Error:", error);
-            document.getElementById('loading-msg').innerText = "Gallery is updating... please refresh in a moment.";
-        }
-    }
-
-    function openModal(id) {
-        const item = portfolioData.find(p => p.id === id);
-        if(!item) return;
-        document.getElementById('modalTitle').innerText = item.title;
-        document.getElementById('modalDescription').innerText = item.desc;
-        const container = document.getElementById('modalImages');
-        container.innerHTML = ''; 
-        item.details.forEach(src => {
-            const img = document.createElement('img');
-            img.src = src;
-            container.appendChild(img);
-        });
-        document.getElementById('artModal').style.display = 'block';
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal() {
-        document.getElementById('artModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-
-    loadGallery();
-</script>";
-
-    let portfolioData = [];
-
-    async function loadGallery() {
-        try {
-            const response = await fetch(SHEET_URL);
-            if (!response.ok) throw new Error('Sheet not found');
-            const csvText = await response.text();
-            
-            // Clean up rows and skip the first header row
-            const rows = csvText.split(/\r?\n/).filter(row => row.trim() !== "");
-            const dataRows = rows.slice(1); 
-
-            const galleryContainer = document.getElementById('main-gallery');
-            if(document.getElementById('loading-msg')) {
-                document.getElementById('loading-msg').style.display = 'none';
-            }
-
-            dataRows.forEach((row, index) => {
-                // Split by comma, but handle potential issues
-                const cols = row.split(',');
-                if (cols.length < 5) return;
-
-                const clean = (str) => str ? str.trim().replace(/^"|"$/g, '') : "";
-
-                const item = {
-                    id: clean(cols[0]) || `item-${index}`,
-                    title: clean(cols[1]),
-                    medium: clean(cols[2]),
-                    desc: clean(cols[3]),
-                    main: clean(cols[4]),
-                    details: [clean(cols[5]), clean(cols[6]), clean(cols[7])].filter(url => url !== "")
-                };
-                
-                portfolioData.push(item);
-
-                const card = document.createElement('div');
-                card.className = 'painting-card';
-                card.onclick = () => openModal(item.id);
-                card.innerHTML = `
-                    <div class="img-container">
-                        <img src="${item.main}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x500?text=Image+Error'">
-                    </div>
-                    <div class="painting-info">
-                        <h3 class="painting-title">${item.title}</h3>
-                        <p>${item.medium}</p>
-                    </div>
-                `;
-                galleryContainer.appendChild(card);
-            });
-        } catch (error) {
-            console.error("Error:", error);
-            document.getElementById('loading-msg').innerText = "Gallery is updating... please refresh in a moment.";
+            const loadingMsg = document.getElementById('loading-msg');
+            if(loadingMsg) loadingMsg.innerText = "Error loading gallery. Please try again later.";
         }
     }
 

@@ -265,22 +265,20 @@
     </a>
 </footer>
 
-<script>
-    // 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
+<script>// 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
+    const SHEET_URL = "<script>// 1. YOUR PUBLISHED GOOGLE SHEET CSV LINK
     const SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQW_NRdZlNhe-ANiOUVH7FiKTsxTHE38XHV5RtpZh2gysbWTUq915LHGZhXNdwc5ptInrJ_mVNG693-/pub?gid=0&single=true&output=csv";
 
     let portfolioData = [];
 
     async function loadGallery() {
         try {
-            console.log("Starting to fetch sheet...");
             const response = await fetch(SHEET_URL);
+            if (!response.ok) throw new Error('Sheet not found');
             const csvText = await response.text();
             
-            // This splits the rows and removes any completely empty rows
+            // Clean up rows and skip the first header row
             const rows = csvText.split(/\r?\n/).filter(row => row.trim() !== "");
-            
-            // Skip the header row (Row 1)
             const dataRows = rows.slice(1); 
 
             const galleryContainer = document.getElementById('main-gallery');
@@ -289,13 +287,11 @@
             }
 
             dataRows.forEach((row, index) => {
-                // Use a smarter split that ignores commas inside quotes if they exist
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                
-                if (cols.length < 5) return; 
+                // Split by comma, but handle potential issues
+                const cols = row.split(',');
+                if (cols.length < 5) return;
 
-                // Clean up the data (remove quotes and spaces)
-                const clean = (str) => str ? str.replace(/^"|"$/g, '').trim() : "";
+                const clean = (str) => str ? str.trim().replace(/^"|"$/g, '') : "";
 
                 const item = {
                     id: clean(cols[0]) || `item-${index}`,
@@ -308,13 +304,12 @@
                 
                 portfolioData.push(item);
 
-                // Create the Gallery Card
                 const card = document.createElement('div');
                 card.className = 'painting-card';
                 card.onclick = () => openModal(item.id);
                 card.innerHTML = `
                     <div class="img-container">
-                        <img src="${item.main}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x500?text=Image+Not+Found'">
+                        <img src="${item.main}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x500?text=Image+Error'">
                     </div>
                     <div class="painting-info">
                         <h3 class="painting-title">${item.title}</h3>
@@ -323,31 +318,24 @@
                 `;
                 galleryContainer.appendChild(card);
             });
-            console.log("Gallery loaded successfully with " + portfolioData.length + " items.");
         } catch (error) {
-            console.error("Detailed Error:", error);
-            document.getElementById('loading-msg').innerText = "Error: Could not read the Google Sheet. Please check the Publish settings.";
+            console.error("Error:", error);
+            document.getElementById('loading-msg').innerText = "Gallery is updating... please refresh in a moment.";
         }
     }
 
     function openModal(id) {
         const item = portfolioData.find(p => p.id === id);
         if(!item) return;
-
         document.getElementById('modalTitle').innerText = item.title;
         document.getElementById('modalDescription').innerText = item.desc;
-        
         const container = document.getElementById('modalImages');
         container.innerHTML = ''; 
-        
         item.details.forEach(src => {
-            if(src) {
-                const img = document.createElement('img');
-                img.src = src;
-                container.appendChild(img);
-            }
+            const img = document.createElement('img');
+            img.src = src;
+            container.appendChild(img);
         });
-
         document.getElementById('artModal').style.display = 'block';
         document.body.style.overflow = 'hidden';
     }
@@ -357,7 +345,85 @@
         document.body.style.overflow = 'auto';
     }
 
-    // Start the app
+    loadGallery();
+</script>";
+
+    let portfolioData = [];
+
+    async function loadGallery() {
+        try {
+            const response = await fetch(SHEET_URL);
+            if (!response.ok) throw new Error('Sheet not found');
+            const csvText = await response.text();
+            
+            // Clean up rows and skip the first header row
+            const rows = csvText.split(/\r?\n/).filter(row => row.trim() !== "");
+            const dataRows = rows.slice(1); 
+
+            const galleryContainer = document.getElementById('main-gallery');
+            if(document.getElementById('loading-msg')) {
+                document.getElementById('loading-msg').style.display = 'none';
+            }
+
+            dataRows.forEach((row, index) => {
+                // Split by comma, but handle potential issues
+                const cols = row.split(',');
+                if (cols.length < 5) return;
+
+                const clean = (str) => str ? str.trim().replace(/^"|"$/g, '') : "";
+
+                const item = {
+                    id: clean(cols[0]) || `item-${index}`,
+                    title: clean(cols[1]),
+                    medium: clean(cols[2]),
+                    desc: clean(cols[3]),
+                    main: clean(cols[4]),
+                    details: [clean(cols[5]), clean(cols[6]), clean(cols[7])].filter(url => url !== "")
+                };
+                
+                portfolioData.push(item);
+
+                const card = document.createElement('div');
+                card.className = 'painting-card';
+                card.onclick = () => openModal(item.id);
+                card.innerHTML = `
+                    <div class="img-container">
+                        <img src="${item.main}" alt="${item.title}" onerror="this.src='https://via.placeholder.com/400x500?text=Image+Error'">
+                    </div>
+                    <div class="painting-info">
+                        <h3 class="painting-title">${item.title}</h3>
+                        <p>${item.medium}</p>
+                    </div>
+                `;
+                galleryContainer.appendChild(card);
+            });
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById('loading-msg').innerText = "Gallery is updating... please refresh in a moment.";
+        }
+    }
+
+    function openModal(id) {
+        const item = portfolioData.find(p => p.id === id);
+        if(!item) return;
+        document.getElementById('modalTitle').innerText = item.title;
+        document.getElementById('modalDescription').innerText = item.desc;
+        const container = document.getElementById('modalImages');
+        container.innerHTML = ''; 
+        item.details.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            container.appendChild(img);
+        });
+        document.getElementById('artModal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('artModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
     loadGallery();
 </script>
 </body>

@@ -60,60 +60,52 @@
     </div>
 
     <script>
-        const sheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQW_NRdZlNhe-ANiOUVH7FiKTsxTHE38XHV5RtpZh2gysbWTUq915LHGZhXNdwc5ptInrJ_mVNG693-/pub?gid=0&single=true&output=csv'; 
+        // Use the "gviz" version of the link for better compatibility
+const sheetURL = 'https://docs.google.com/spreadsheets/d/1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig/gviz/tq?tqx=out:csv'; 
 
-        async function loadData() {
-            const response = await fetch(sheetURL);
-            const data = await response.text();
-            const rows = data.split('\n').slice(1);
-            const gallery = document.getElementById('gallery');
+async function loadData() {
+    try {
+        const response = await fetch(sheetURL);
+        const csvText = await response.text();
+        
+        // This cleans up the Google Sheets extra formatting
+        const rows = csvText.split('\n').map(row => 
+            row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(col => col.replace(/^"|"$/g, '').trim())
+        );
 
-            rows.forEach((row, index) => {
-                // Split by comma but handle potential quotes
-                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-                if (cols.length < 2) return;
+        const gallery = document.getElementById('gallery');
+        gallery.innerHTML = ''; // Clear gallery before loading
 
-                const [title, images, material, desc, year] = cols;
-                const imageArray = images.replace(/"/g, '').split(',');
-                const mainImg = imageArray[0].trim();
+        // Start from row 1 to skip headers
+        for (let i = 1; i < rows.length; i++) {
+            const [title, images, material, desc, year] = rows[i];
+            if (!title || !images) continue;
 
-                const item = document.createElement('div');
-                item.className = "cursor-pointer group";
-                item.onclick = () => openModal(title, imageArray, material, desc);
-                item.innerHTML = `
-                    <div class="aspect-[4/5] overflow-hidden bg-zinc-100">
-                        <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                    </div>
-                    <div class="mt-4">
-                        <h3 class="text-lg font-medium">${title}</h3>
-                        <p class="text-sm text-zinc-400">${material}</p>
-                    </div>
-                `;
-                gallery.appendChild(item);
-            });
+            const imageArray = images.split(',');
+            const mainImg = imageArray[0].trim();
+
+            const item = document.createElement('div');
+            item.className = "cursor-pointer group animate-fade-in";
+            item.onclick = () => openModal(title, imageArray, material, desc);
+            item.innerHTML = `
+                <div class="aspect-[4/5] overflow-hidden bg-zinc-100 shadow-sm">
+                    <img src="${mainImg}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                </div>
+                <div class="mt-4">
+                    <h3 class="text-lg font-medium tracking-tight">${title}</h3>
+                    <p class="text-sm text-zinc-400 italic">${material}</p>
+                </div>
+            `;
+            gallery.appendChild(item);
         }
+    } catch (error) {
+        console.error("Error loading gallery:", error);
+        document.getElementById('gallery').innerHTML = "<p class='col-span-3 text-center text-red-400'>Error loading paintings. Please check your Google Sheet link.</p>";
+    }
+}
 
-        function openModal(title, images, material, desc) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-material').innerText = material;
-            document.getElementById('modal-desc').innerText = desc;
-            
-            const imgContainer = document.getElementById('modal-images');
-            imgContainer.innerHTML = '';
-            images.forEach(src => {
-                imgContainer.innerHTML += `<img src="${src.trim()}" class="w-full shadow-lg">`;
-            });
-
-            document.getElementById('modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
-        loadData();
+// Keep your openModal and closeModal functions here...
+loadData();
     </script>
 </body>
 </html>

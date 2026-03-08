@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Artist Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        .modal { display: none; background: rgba(255,255,255,0.98); }
+        .modal.active { display: flex; }
+    </style>
+</head>
+<body class="bg-white text-zinc-800">
+
+    <nav class="fixed top-0 w-full bg-white/80 backdrop-blur-md z-50 border-b border-zinc-100">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-xl tracking-widest uppercase font-light">Your Name</h1>
+            <div class="space-x-8 text-sm uppercase tracking-wider font-medium">
+                <a href="#paintings" class="hover:text-zinc-500">Paintings</a>
+                <a href="#about" class="hover:text-zinc-500">About</a>
+                <a href="#contact" class="hover:text-zinc-500">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="paintings" class="pt-32 pb-20 max-w-7xl mx-auto px-6">
+        <div id="gallery" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            </div>
+    </section>
+
+    <section id="about" class="py-20 bg-zinc-50">
+        <div class="max-w-3xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-light mb-8 uppercase tracking-widest">About the Artist</h2>
+            <p class="text-lg leading-relaxed text-zinc-600">
+                [Insert your story here. Describe your technique, your passion for color, and what drives your creative process.]
+            </p>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20">
+        <div class="max-w-xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-light mb-8 uppercase tracking-widest">Contact</h2>
+            <p class="mb-6">For inquiries or commissions:</p>
+            <a href="mailto:your@email.com" class="text-xl border-b border-zinc-900 pb-1 hover:text-zinc-500 hover:border-zinc-500 transition">your@email.com</a>
+        </div>
+    </section>
+
+    <div id="modal" class="modal fixed inset-0 z-[100] p-6 flex-col items-center overflow-y-auto">
+        <button onclick="closeModal()" class="fixed top-8 right-8 text-3xl font-light">&times;</button>
+        <div class="max-w-4xl w-full mt-20">
+            <div id="modal-images" class="space-y-6 mb-12"></div>
+            <div class="border-t pt-8 pb-20">
+                <h2 id="modal-title" class="text-4xl font-light mb-2"></h2>
+                <p id="modal-material" class="text-zinc-400 italic mb-4"></p>
+                <p id="modal-desc" class="text-lg leading-relaxed max-w-2xl"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sheetURL = 'YOUR_CSV_URL_HERE'; 
+
+        async function loadData() {
+            const response = await fetch(sheetURL);
+            const data = await response.text();
+            const rows = data.split('\n').slice(1);
+            const gallery = document.getElementById('gallery');
+
+            rows.forEach((row, index) => {
+                // Split by comma but handle potential quotes
+                const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                if (cols.length < 2) return;
+
+                const [title, images, material, desc, year] = cols;
+                const imageArray = images.replace(/"/g, '').split(',');
+                const mainImg = imageArray[0].trim();
+
+                const item = document.createElement('div');
+                item.className = "cursor-pointer group";
+                item.onclick = () => openModal(title, imageArray, material, desc);
+                item.innerHTML = `
+                    <div class="aspect-[4/5] overflow-hidden bg-zinc-100">
+                        <img src="${mainImg}" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                    </div>
+                    <div class="mt-4">
+                        <h3 class="text-lg font-medium">${title}</h3>
+                        <p class="text-sm text-zinc-400">${material}</p>
+                    </div>
+                `;
+                gallery.appendChild(item);
+            });
+        }
+
+        function openModal(title, images, material, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-material').innerText = material;
+            document.getElementById('modal-desc').innerText = desc;
+            
+            const imgContainer = document.getElementById('modal-images');
+            imgContainer.innerHTML = '';
+            images.forEach(src => {
+                imgContainer.innerHTML += `<img src="${src.trim()}" class="w-full shadow-lg">`;
+            });
+
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        loadData();
+    </script>
+</body>
+</html>

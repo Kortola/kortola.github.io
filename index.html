@@ -12,12 +12,15 @@
         /* Navigation */
         nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #f4f4f5; }
         .nav-container { max-width: 1200px; margin: 0 auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
-      .logo { 
-    font-size: 1.8rem; 
-    font-family: 'Playfair Display', serif;
+     .logo { 
+    font-family: 'Cormorant Garamond', serif; /* Or use 'Montserrat', sans-serif */
+    font-size: 2.8rem; 
+    font-weight: 300;
     font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
+    color: #000;
+    text-transform: none; /* Keeps it from being all caps if you prefer */
+    line-height: 1;
 }
         .nav-links a { text-decoration: none; color: #18181b; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-left: 2rem; transition: color 0.3s; font-weight: 500; }
         .nav-links a:hover { color: #a1a1aa; }
@@ -46,6 +49,7 @@
             #gallery { grid-template-columns: 1fr; margin-top: 7rem; }
             .nav-links { display: none; }
         }
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Montserrat:wght@200&display=swap" rel="stylesheet">
     </style>
 </head>
 <body>
@@ -234,6 +238,7 @@
     </script>
 </body>
 </html>
+
 
 
 

@@ -96,81 +96,49 @@
         const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
         const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/gviz/tq?tqx=out:csv';
 
-        async function loadData() {
-            try {
-                const response = await fetch(sheetURL + '&cb=' + Date.now());
-                const csvText = await response.text();
-                
-                // Advanced parser for Google Sheets CSV format
-                const rows = csvText.split(/\r?\n/).map(line => {
-                    const result = [];
-                    let cell = '', inQuotes = false;
-                    for (let char of line) {
-                        if (char === '"') inQuotes = !inQuotes;
-                        else if (char === ',' && !inQuotes) { result.push(cell); cell = ''; }
-                        else cell += char;
-                    }
-                    result.push(cell);
-                    return result;
-                }).slice(1);
+       async function loadData() {
+    const gallery = document.getElementById('gallery');
+    // We are putting the FULL URL here to avoid any variable errors
+    const fullURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/gviz/tq?tqx=out:csv&cb=' + Date.now();
 
-                const gallery = document.getElementById('gallery');
-                gallery.innerHTML = '';
+    try {
+        const response = await fetch(fullURL);
+        const csvText = await response.text();
+        
+        // This is a "brute force" parser to ensure we get data
+        const rows = csvText.split(/\r?\n/).map(line => line.split(',')).slice(1);
 
-                rows.forEach((row, index) => {
-                    const title = (row[0] || 'Untitled').replace(/^"|"$/g, '');
-                    const imagesStr = (row[1] || '').replace(/^"|"$/g, '');
-                    const material = (row[2] || '').replace(/^"|"$/g, '');
-                    const desc = (row[3] || '').replace(/^"|"$/g, '');
+        gallery.innerHTML = '';
 
-                    if (!imagesStr) return;
+        rows.forEach((row, index) => {
+            const title = (row[0] || 'Untitled').replace(/"/g, '');
+            const imgLink = (row[1] || '').replace(/"/g, '');
+            const material = (row[2] || '').replace(/"/g, '');
 
-                    // Use semicolon (;) in your sheet to separate multiple image links
-                    const imageArray = imagesStr.split(';').map(s => s.trim());
-                    const mainImg = imageArray[0];
+            if (!imgLink) return;
 
-                    const card = document.createElement('div');
-                    card.className = 'art-card';
-                    card.style.animationDelay = (index * 0.1) + 's';
-                    card.onclick = () => openModal(title, imageArray, material, desc);
-                    card.innerHTML = `
-                        <div class="img-container">
-                            <img src="${mainImg}" alt="${title}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Image+Link'">
-                        </div>
-                        <div class="art-info">
-                            <h3 class="art-title">${title}</h3>
-                            <p class="art-material">${material}</p>
-                        </div>
-                    `;
-                    gallery.appendChild(card);
-                });
-            } catch (e) {
-                console.error("Gallery Error:", e);
-                document.getElementById('gallery').innerHTML = "<p>Unable to load gallery. Please check your connection.</p>";
-            }
-        }
-
-        function openModal(title, images, material, desc) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-material').innerText = material;
-            document.getElementById('modal-desc').innerText = desc;
-            const container = document.getElementById('modal-images');
-            container.innerHTML = '';
-            images.forEach(src => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.className = "modal-image";
-                container.appendChild(img);
-            });
-            document.getElementById('modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
+            const card = document.createElement('div');
+            card.className = 'art-card';
+            card.innerHTML = `
+                <div class="img-container">
+                    <img src="${imgLink.trim()}" onerror="this.src='https://via.placeholder.com/600x800?text=Link+Check'">
+                </div>
+                <div class="art-info">
+                    <h3 class="art-title">${title}</h3>
+                    <p class="art-material">${material}</p>
+                </div>
+            `;
+            // This makes the card clickable for the details
+            card.onclick = () => openModal(title, [imgLink], material, (row[3] || ''));
+            gallery.appendChild(card);
+        });
+        
+        console.log("Success! Images processed.");
+    } catch (e) {
+        console.error("The error is:", e);
+        gallery.innerHTML = "<p>Data found, but images couldn't load. Error: " + e.message + "</p>";
+    }
+}
         window.onload = loadData;
     </script>
 </body>

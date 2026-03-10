@@ -6,18 +6,15 @@
     <title>Kortola | Artist Portfolio</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
-
         /* Modern Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: #ffffff; color: #18181b; line-height: 1.6; }
-
         /* Navigation */
         nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #f4f4f5; }
         .nav-container { max-width: 1200px; margin: 0 auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.3em; text-transform: uppercase; }
         .nav-links a { text-decoration: none; color: #18181b; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-left: 2rem; transition: color 0.3s; font-weight: 500; }
         .nav-links a:hover { color: #a1a1aa; }
-
         /* Gallery Grid */
         #gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 4rem; max-width: 1200px; margin: 9rem auto 5rem; padding: 0 2rem; }
         .art-card { cursor: pointer; opacity: 0; transform: translateY(20px); animation: fadeIn 0.8s ease forwards; }
@@ -27,12 +24,10 @@
         .art-info { margin-top: 1.5rem; text-align: left; }
         .art-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; margin-bottom: 0.5rem; }
         .art-material { font-size: 11px; color: #71717a; font-style: italic; font-weight: 300; }
-
         /* Sections */
         section { padding: 6rem 2rem; border-top: 1px solid #f4f4f5; text-align: center; }
         .section-title { font-size: 1.4rem; font-weight: 300; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 3rem; }
         .about-text { max-width: 650px; margin: 0 auto; color: #52525b; font-weight: 300; font-size: 1.1rem; }
-
         /* Full-Screen Modal */
         #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; padding: 0; }
         #modal.active { display: block; }
@@ -41,7 +36,6 @@
         .modal-image { width: 100%; margin-bottom: 3rem; display: block; }
         
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
-
         @media (max-width: 768px) {
             #gallery { grid-template-columns: 1fr; margin-top: 7rem; }
             .nav-links { display: none; }
@@ -49,7 +43,6 @@
     </style>
 </head>
 <body>
-
     <nav>
         <div class="nav-container">
             <div class="logo">Kortola</div>
@@ -60,21 +53,17 @@
             </div>
         </div>
     </nav>
-
     <main id="gallery">
         <p style="text-align: center; grid-column: 1/-1;">Loading gallery...</p>
     </main>
-
     <section id="about">
         <h2 class="section-title">About the Artist</h2>
         <p class="about-text">Exploring light and texture through a modern lens.</p>
     </section>
-
     <section id="contact">
         <h2 class="section-title">Contact</h2>
         <a href="mailto:your-email@example.com" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b;">Email the Studio</a>
     </section>
-
     <div id="modal">
         <button class="close-btn" onclick="closeModal()">&times;</button>
         <div class="modal-content">
@@ -86,43 +75,105 @@
             </div>
         </div>
     </div>
-
     <script>
-        // 1. YOUR SPREADSHEET ID
+        // YOUR SPREADSHEET ID
         const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
-        const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/pub?output=csv';
-
+        
+        // Using CORS proxy to bypass CORS restrictions
+        const corsProxy = 'https://corsproxy.io/?';
+        const sheetURL = corsProxy + encodeURIComponent('https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv');
+        // Better CSV parsing function
+        function parseCSV(text) {
+            const rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        currentCell += '"';
+                        i++; // Skip next quote
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    currentRow.push(currentCell.trim());
+                    currentCell = '';
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    if (currentCell || currentRow.length > 0) {
+                        currentRow.push(currentCell.trim());
+                        rows.push(currentRow);
+                        currentRow = [];
+                        currentCell = '';
+                    }
+                    if (char === '\r' && nextChar === '\n') {
+                        i++; // Skip \n in \r\n
+                    }
+                } else {
+                    currentCell += char;
+                }
+            }
+            
+            // Add last row if exists
+            if (currentCell || currentRow.length > 0) {
+                currentRow.push(currentCell.trim());
+                rows.push(currentRow);
+            }
+            
+            return rows;
+        }
         async function loadData() {
             const gallery = document.getElementById('gallery');
+            
             try {
-                const response = await fetch(sheetURL + '&cb=' + Date.now());
+                console.log('Fetching from:', sheetURL);
+                const response = await fetch(sheetURL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.text();
-                const rows = data.split('\n').map(row => row.split(','));
+                console.log('Data received, length:', data.length);
+                
+                const rows = parseCSV(data);
+                console.log('Parsed rows:', rows.length);
                 
                 gallery.innerHTML = ''; 
-
+                // Skip header row (index 0) and process data rows
                 for (let i = 1; i < rows.length; i++) {
                     const row = rows[i];
                     if (row.length < 2) continue;
-
-                    const title = row[0].replace(/"/g, '').trim();
-                    let imgUrl = row[1].replace(/"/g, '').trim();
-                    const material = (row[2] || '').replace(/"/g, '').trim();
-                    const desc = (row[3] || '').replace(/"/g, '').trim();
-
+                    const title = row[0] || '';
+                    let imgUrl = row[1] || '';
+                    const material = row[2] || '';
+                    const desc = row[3] || '';
                     if (!imgUrl) continue;
-
-                    // --- AUTOMATIC LINK REPAIR ---
+                    // Automatic GitHub link repair
                     if (imgUrl.includes('github.com') && imgUrl.includes('/blob/')) {
                         imgUrl = imgUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
                     }
-
+                    
+                    // Fix Google Drive links if needed
+                    if (imgUrl.includes('drive.google.com/file/d/')) {
+                        const fileId = imgUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
+                        if (fileId) {
+                            imgUrl = `https://drive.google.com/uc?export=view&id=${fileId[1]}`;
+                        }
+                    }
                     const card = document.createElement('div');
                     card.className = 'art-card';
+                    card.style.animationDelay = `${i * 0.1}s`;
                     card.onclick = () => openModal(title, [imgUrl], material, desc);
                     card.innerHTML = `
                         <div class="img-container">
-                            <img src="${imgUrl}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Link'">
+                            <img src="${imgUrl}" alt="${title}" 
+                                 loading="lazy"
+                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/600x800/fafafa/a1a1aa?text=Image+Not+Found';">
                         </div>
                         <div class="art-info">
                             <h3 class="art-title">${title}</h3>
@@ -131,11 +182,27 @@
                     `;
                     gallery.appendChild(card);
                 }
+                
+                if (gallery.children.length === 0) {
+                    gallery.innerHTML = '<p style="grid-column: 1/-1;">No images found in spreadsheet. Please check your data.</p>';
+                }
+                
             } catch (error) {
-                gallery.innerHTML = `<p style="grid-column: 1/-1;">Error: ${error.message}</p>`;
+                console.error('Error loading data:', error);
+                gallery.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center;">
+                        <p style="color: #ef4444; margin-bottom: 1rem;">Error loading gallery: ${error.message}</p>
+                        <p style="color: #71717a; font-size: 0.9rem;">Please ensure your Google Sheet is published to web:</p>
+                        <ol style="text-align: left; max-width: 500px; margin: 1rem auto; color: #71717a; font-size: 0.9rem;">
+                            <li>Open your Google Sheet</li>
+                            <li>Go to File → Share → Publish to web</li>
+                            <li>Select "Entire Document" and "CSV" format</li>
+                            <li>Click "Publish"</li>
+                        </ol>
+                    </div>
+                `;
             }
         }
-
         function openModal(title, images, material, desc) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-material').innerText = material;
@@ -146,19 +213,18 @@
                 const img = document.createElement('img');
                 img.src = src;
                 img.className = "modal-image";
+                img.alt = title;
                 container.appendChild(img);
             });
             document.getElementById('modal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
-
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
             document.body.style.overflow = 'auto';
         }
-
-        window.onload = loadData;
+        // Load data when page loads
+        window.addEventListener('load', loadData);
     </script>
 </body>
 </html>
-

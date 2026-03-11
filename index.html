@@ -83,158 +83,88 @@
         </div>
     </div>
     <script>
-        // YOUR SPREADSHEET ID
-        const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
-        
-        // Using CORS proxy to bypass CORS restrictions
-        const corsProxy = 'https://corsproxy.io/?';
-        const sheetURL = corsProxy + encodeURIComponent('https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv');
-        // Better CSV parsing function
-        function parseCSV(text) {
-            const rows = [];
-            let currentRow = [];
-            let currentCell = '';
-            let inQuotes = false;
+    const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
+    const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
+
+    async function loadData() {
+        const gallery = document.getElementById('gallery');
+        try {
+            const response = await fetch(sheetURL + '&cb=' + Date.now());
+            const data = await response.text();
+            const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
             
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const nextChar = text[i + 1];
-                
-                if (char === '"') {
-                    if (inQuotes && nextChar === '"') {
-                        currentCell += '"';
-                        i++; // Skip next quote
-                    } else {
-                        inQuotes = !inQuotes;
+            gallery.innerHTML = ''; 
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const title = (row[0] || "").replace(/"/g, '').trim();
+                let imgRaw = (row[1] || "").replace(/"/g, '').trim();
+                const material = (row[2] || "").replace(/"/g, '').trim();
+                const desc = (row[3] || "").replace(/"/g, '').trim();
+
+                if (!imgRaw) continue;
+
+                // --- THE SEMICOLON FIX ---
+                // This creates an "Array" (list) of links
+                let imgList = imgRaw.split(';').map(link => {
+                    let cleanLink = link.trim();
+                    if (cleanLink.includes('github.com') && cleanLink.includes('/blob/')) {
+                        return cleanLink.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
                     }
-                } else if (char === ',' && !inQuotes) {
-                    currentRow.push(currentCell.trim());
-                    currentCell = '';
-                } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                    if (currentCell || currentRow.length > 0) {
-                        currentRow.push(currentCell.trim());
-                        rows.push(currentRow);
-                        currentRow = [];
-                        currentCell = '';
-                    }
-                    if (char === '\r' && nextChar === '\n') {
-                        i++; // Skip \n in \r\n
-                    }
-                } else {
-                    currentCell += char;
-                }
-            }
-            
-            // Add last row if exists
-            if (currentCell || currentRow.length > 0) {
-                currentRow.push(currentCell.trim());
-                rows.push(currentRow);
-            }
-            
-            return rows;
-        }
-        async function loadData() {
-            const gallery = document.getElementById('gallery');
-            
-            try {
-                console.log('Fetching from:', sheetURL);
-                const response = await fetch(sheetURL);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.text();
-                console.log('Data received, length:', data.length);
-                
-                const rows = parseCSV(data);
-                console.log('Parsed rows:', rows.length);
-                
-                gallery.innerHTML = ''; 
-                // Skip header row (index 0) and process data rows
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i];
-                    if (row.length < 2) continue;
-                    const title = row[0] || '';
-                    let imgUrl = row[1] || '';
-                    const material = row[2] || '';
-                    const desc = row[3] || '';
-                    if (!imgUrl) continue;
-                    // Automatic GitHub link repair
-                    if (imgUrl.includes('github.com') && imgUrl.includes('/blob/')) {
-                        imgUrl = imgUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-                    }
-                    
-                    // Fix Google Drive links if needed
-                    if (imgUrl.includes('drive.google.com/file/d/')) {
-                        const fileId = imgUrl.match(/\/d\/([a-zA-Z0-9-_]+)/);
-                        if (fileId) {
-                            imgUrl = `https://drive.google.com/uc?export=view&id=${fileId[1]}`;
-                        }
-                    }
-                    const card = document.createElement('div');
-                    card.className = 'art-card';
-                    card.style.animationDelay = `${i * 0.1}s`;
-                    card.onclick = () => openModal(title, [imgUrl], material, desc);
-                    card.innerHTML = `
-                        <div class="img-container">
-                            <img src="${imgUrl}" alt="${title}" 
-                                 loading="lazy"
-                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/600x800/fafafa/a1a1aa?text=Image+Not+Found';">
-                        </div>
-                        <div class="art-info">
-                            <h3 class="art-title">${title}</h3>
-                            <p class="art-material">${material}</p>
-                        </div>
-                    `;
-                    gallery.appendChild(card);
-                }
-                
-                if (gallery.children.length === 0) {
-                    gallery.innerHTML = '<p style="grid-column: 1/-1;">No images found in spreadsheet. Please check your data.</p>';
-                }
-                
-            } catch (error) {
-                console.error('Error loading data:', error);
-                gallery.innerHTML = `
-                    <div style="grid-column: 1/-1; text-align: center;">
-                        <p style="color: #ef4444; margin-bottom: 1rem;">Error loading gallery: ${error.message}</p>
-                        <p style="color: #71717a; font-size: 0.9rem;">Please ensure your Google Sheet is published to web:</p>
-                        <ol style="text-align: left; max-width: 500px; margin: 1rem auto; color: #71717a; font-size: 0.9rem;">
-                            <li>Open your Google Sheet</li>
-                            <li>Go to File → Share → Publish to web</li>
-                            <li>Select "Entire Document" and "CSV" format</li>
-                            <li>Click "Publish"</li>
-                        </ol>
+                    return cleanLink;
+                });
+
+                const mainImg = imgList[0]; // The first image is the thumbnail
+
+                const card = document.createElement('div');
+                card.className = 'art-card';
+                // We pass the WHOLE list to the modal
+                card.onclick = () => openModal(title, imgList, material, desc);
+                card.innerHTML = `
+                    <div class="img-container">
+                        <img src="${mainImg}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Link'">
+                    </div>
+                    <div class="art-info">
+                        <h3 class="art-title">${title}</h3>
+                        <p class="art-material">${material}</p>
                     </div>
                 `;
+                gallery.appendChild(card);
             }
+        } catch (error) {
+            gallery.innerHTML = `<p style="grid-column: 1/-1;">Error: ${error.message}</p>`;
         }
-        function openModal(title, images, material, desc) {
-            document.getElementById('modal-title').innerText = title;
-            document.getElementById('modal-material').innerText = material;
-            document.getElementById('modal-desc').innerText = desc;
-            const container = document.getElementById('modal-images');
-            container.innerHTML = '';
-            images.forEach(src => {
-                const img = document.createElement('img');
-                img.src = src;
-                img.className = "modal-image";
-                img.alt = title;
-                container.appendChild(img);
-            });
-            document.getElementById('modal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-        // Load data when page loads
-        window.addEventListener('load', loadData);
-    </script>
+    }
+
+    function openModal(title, images, material, desc) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-material').innerText = material;
+        document.getElementById('modal-desc').innerText = desc;
+        const container = document.getElementById('modal-images');
+        container.innerHTML = '';
+        
+        // This loops through all images in your semicolon list
+        images.forEach(src => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.className = "modal-image";
+            container.appendChild(img);
+        });
+        
+        document.getElementById('modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    window.onload = loadData;
+</script>
 </body>
 </html>
+
 
 
 

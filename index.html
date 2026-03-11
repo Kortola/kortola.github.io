@@ -110,4 +110,76 @@
     </div>
 
     <script>
-        const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig
+        const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
+        const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
+
+        async function loadData() {
+            const gallery = document.getElementById('gallery');
+            try {
+                const response = await fetch(sheetURL + '&cb=' + Date.now());
+                const data = await response.text();
+                const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
+                
+                gallery.innerHTML = ''; 
+
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    const title = (row[0] || "").replace(/"/g, '').trim();
+                    let imgRaw = (row[1] || "").replace(/"/g, '').trim();
+                    const material = (row[2] || "").replace(/"/g, '').trim();
+                    const desc = (row[3] || "").replace(/"/g, '').trim();
+
+                    if (!imgRaw) continue;
+
+                    let imgList = imgRaw.split(';').map(link => {
+                        let cleanLink = link.trim();
+                        if (cleanLink.includes('github.com') && cleanLink.includes('/blob/')) {
+                            return cleanLink.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+                        }
+                        return cleanLink;
+                    });
+
+                    const card = document.createElement('div');
+                    card.className = 'art-card';
+                    card.onclick = () => openModal(title, imgList, material, desc);
+                    card.innerHTML = `
+                        <div class="img-container">
+                            <img src="${imgList[0]}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Link'">
+                        </div>
+                        <div class="art-info">
+                            <h3 class="art-title">${title}</h3>
+                            <p class="art-material">${material}</p>
+                        </div>
+                    `;
+                    gallery.appendChild(card);
+                }
+            } catch (error) {
+                gallery.innerHTML = `<p style="grid-column: 1/-1;">Error: ${error.message}</p>`;
+            }
+        }
+
+        function openModal(title, images, material, desc) {
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-material').innerText = material;
+            document.getElementById('modal-desc').innerText = desc;
+            const container = document.getElementById('modal-images');
+            container.innerHTML = '';
+            images.forEach(src => {
+                const img = document.createElement('img');
+                img.src = src;
+                img.className = "modal-image";
+                container.appendChild(img);
+            });
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>

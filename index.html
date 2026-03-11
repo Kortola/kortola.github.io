@@ -43,9 +43,14 @@
         
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
-            #gallery { grid-template-columns: 1fr; margin-top: 7rem; }
-            .nav-links { display: none; }
-        }
+           #gallery { 
+    gap: 6rem; /* Increases the "Gallery Wall" feel */
+}
+
+.img-container {
+    background: #ffffff; /* Makes the "box" invisible until the image loads */
+    border: none;        /* Removes the outline for a "floating" look */
+}
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Montserrat:wght@200&display=swap" rel="stylesheet">
     </style>
 </head>
@@ -164,6 +169,7 @@
 </script>
 </body>
 </html>
+
 
 
 

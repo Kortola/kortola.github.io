@@ -43,13 +43,48 @@
         
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
         @media (max-width: 768px) {
-           #gallery { 
-    gap: 6rem; /* Increases the "Gallery Wall" feel */
+           /* Increased spacing for the 'White Cube' look */
+#gallery { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); 
+    gap: 6rem; /* Wide gutters make the art feel more valuable */
+    max-width: 1300px; 
+    margin: 10rem auto 8rem; 
+    padding: 0 3rem; 
 }
 
-.img-container {
-    background: #ffffff; /* Makes the "box" invisible until the image loads */
-    border: none;        /* Removes the outline for a "floating" look */
+.art-card { 
+    cursor: pointer; 
+    opacity: 0; 
+    /* The 1.2s duration creates a more graceful, high-end feel */
+    animation: museumFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+}
+
+/* The "Drift" effect: Image starts slightly lower and floats up */
+@keyframes museumFadeIn { 
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    } 
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    } 
+}
+
+.img-container { 
+    aspect-ratio: 4/5; 
+    overflow: hidden; 
+    background: #ffffff; /* Removed grey background for a floating look */
+    border: none; 
+}
+
+.img-container img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; 
+    /* Very slow zoom-in on hover */
+    transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); 
 }
         <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Montserrat:wght@200&display=swap" rel="stylesheet">
     </style>
@@ -169,6 +204,7 @@
 </script>
 </body>
 </html>
+
 
 
 

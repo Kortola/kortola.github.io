@@ -50,10 +50,22 @@
         }
         .art-card:hover img { transform: scale(1.1); }
 
+        /* The Standard Status Badge (e.g., Private Collection) */
         .status-badge {
-            position: absolute; top: 1rem; left: 1rem; background: rgba(255, 255, 255, 0.9);
-            padding: 6px 12px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em;
-            z-index: 10;
+            position: absolute; top: 1rem; left: 1rem; 
+            background: rgba(255, 255, 255, 0.95);
+            padding: 6px 12px; font-size: 9px; 
+            text-transform: uppercase; letter-spacing: 0.15em;
+            z-index: 10; font-weight: 500;
+            color: #18181b; /* Charcoal */
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        /* The NEW "Available" Specific Styling */
+        .status-badge.available-tag {
+            color: #166534; /* Elegant Moss Green */
+            border: 1px solid #d1fae5; /* Very pale green edge */
+            background: rgba(240, 253, 244, 0.98); /* Faint green background */
         }
 
         .art-info { margin-top: 1.5rem; text-align: left; }
@@ -63,7 +75,7 @@
         /* Modal */
         #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; }
         #modal.active { display: block; }
-        .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; }
+        .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; z-index: 210; }
         .modal-content { max-width: 1000px; margin: 6rem auto; padding: 0 2rem; display: flex; flex-direction: column; align-items: center; }
         #modal-images { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 50px; margin-bottom: 4rem; }
         .modal-image { display: block; width: auto; max-width: 85%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
@@ -137,7 +149,6 @@
             const response = await fetch(sheetURL + '&cb=' + Date.now());
             const data = await response.text();
             
-            // Standard CSV splitting (Reliable for your current data)
             const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
             
             gallery.innerHTML = ''; 
@@ -145,7 +156,6 @@
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                // Clean up the data by removing quotes
                 const title = (row[0] || "").replace(/"/g, '').trim();
                 const imgRaw = (row[1] || "").replace(/"/g, '').trim();
                 const material = (row[2] || "").replace(/"/g, '').trim();
@@ -172,14 +182,23 @@
                     return cleanLink;
                 });
 
-                const isSold = status.toLowerCase() === 'private collection' || status.toLowerCase() === 'sold';
                 const card = document.createElement('div');
-                card.className = `art-card ${isSold ? 'sold-out' : ''}`;
+                card.className = 'art-card';
                 card.onclick = () => openModal(title, imgList, material, desc, price, status);
                 
+                // Show badge if status contains any text (Available, Sold, Private Collection, etc.)
+                let badgeHTML = "";
+                if (status) {
+                    // Check if the status is exactly "Available" (case-insensitive)
+                    const isAvailable = status.trim().toLowerCase() === 'available';
+                    
+                    // Add the 'available-tag' class only if it matches
+                    badgeHTML = `<div class="status-badge ${isAvailable ? 'available-tag' : ''}">${status}</div>`;
+                }
+
                 card.innerHTML = `
                     <div class="img-container">
-                        ${isSold ? `<div class="status-badge">${status}</div>` : ''}
+                        ${badgeHTML}
                         <img src="${imgList[0]}">
                     </div>
                     <div class="art-info">
@@ -208,7 +227,8 @@
             container.appendChild(img);
         });
 
-        const isSold = (status || "").toLowerCase() === 'private collection' || (status || "").toLowerCase() === 'sold';
+        const statusLower = (status || "").toLowerCase();
+        const isSold = statusLower === 'private collection' || statusLower === 'sold';
         const detailsContainer = document.getElementById('inquiry-box-container');
         
         if (isSold) {

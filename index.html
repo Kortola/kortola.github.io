@@ -22,7 +22,7 @@
             border-bottom: 1px solid #f4f4f5; 
         }
         .nav-container { 
-            max-width: 1000px; /* SYNCED WITH GALLERY */
+            max-width: 1000px; 
             margin: 0 auto; 
             padding: 1.2rem 2rem; 
             display: flex; 
@@ -53,7 +53,7 @@
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
             gap: 4rem; 
             max-width: 1000px; 
-            margin: 7rem auto 5rem; 
+            margin: 7.5rem auto 5rem; 
             padding: 0 2rem; 
         }
 
@@ -64,7 +64,7 @@
             font-weight: 300; 
             letter-spacing: 0.4em; 
             text-transform: uppercase; 
-            margin: 3.5rem 0 1rem; 
+            margin: 4rem 0 1rem; 
             padding-bottom: 0.8rem; 
             border-bottom: 1px solid #f4f4f5; 
             text-align: left; 
@@ -74,6 +74,7 @@
             cursor: pointer; 
             opacity: 0; 
             animation: museumFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            position: relative;
         }
 
         @keyframes museumFadeIn { 
@@ -83,7 +84,7 @@
 
         /* Square Preview & Zoom Effect */
         .img-container { 
-            aspect-ratio: 1/1; /* Forced Square */
+            aspect-ratio: 1/1; 
             overflow: hidden; 
             background: #fafafa; 
             position: relative;
@@ -91,11 +92,32 @@
         .img-container img { 
             width: 100%; 
             height: 100%; 
-            object-fit: cover; /* Art-safe square crop */
-            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); 
+            object-fit: cover; 
+            transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1); 
         }
         .art-card:hover img { 
-            transform: scale(1.1); /* Subtle Slow Zoom */
+            transform: scale(1.12); 
+        }
+
+        /* Status Badge */
+        .status-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 6px 12px;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 500;
+            color: #18181b;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sold-out img {
+            filter: grayscale(20%);
+            opacity: 0.9;
         }
 
         .art-info { margin-top: 1.5rem; text-align: left; }
@@ -111,7 +133,6 @@
         .modal-image { display: block; width: auto; max-width: 85%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
         .modal-details { width: 100%; max-width: 600px; text-align: center; margin: 0 auto; padding-bottom: 8rem; }
         
-        /* Updated Price & Inquiry Button */
         .modal-price { font-size: 13px; color: #8a8a8e; font-weight: 400; margin-top: 1.5rem; letter-spacing: 0.1em; }
         .inquiry-btn { 
             display: inline-block; 
@@ -191,19 +212,23 @@
         try {
             const response = await fetch(sheetURL + '&cb=' + Date.now());
             const data = await response.text();
-            const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
+            // This safely splits rows while handling commas in quotes
+            const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => {
+                return row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g).map(val => val.replace(/"/g, ''));
+            });
             
             gallery.innerHTML = ''; 
             let currentSeries = ""; 
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                const title = (row[0] || "").replace(/"/g, '').trim();
-                let imgRaw = (row[1] || "").replace(/"/g, '').trim();
-                const material = (row[2] || "").replace(/"/g, '').trim();
-                const desc = (row[3] || "").replace(/"/g, '').trim();
-                const price = (row[4] || "").replace(/"/g, '').trim(); 
-                const series = (row[5] || "").replace(/"/g, '').trim(); 
+                const title = row[0] || "";
+                const imgRaw = row[1] || "";
+                const material = row[2] || "";
+                const desc = row[3] || "";
+                const price = row[4] || ""; 
+                const series = row[5] || ""; 
+                const status = row[6] || ""; 
 
                 if (!imgRaw) continue;
 
@@ -223,11 +248,14 @@
                     return cleanLink;
                 });
 
+                const isSold = status.toLowerCase() === 'private collection' || status.toLowerCase() === 'sold';
                 const card = document.createElement('div');
-                card.className = 'art-card';
-                card.onclick = () => openModal(title, imgList, material, desc, price);
+                card.className = `art-card ${isSold ? 'sold-out' : ''}`;
+                card.onclick = () => openModal(title, imgList, material, desc, price, status);
+                
                 card.innerHTML = `
                     <div class="img-container">
+                        ${isSold ? `<div class="status-badge">${status}</div>` : ''}
                         <img src="${imgList[0]}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Link'">
                     </div>
                     <div class="art-info">
@@ -238,11 +266,11 @@
                 gallery.appendChild(card);
             }
         } catch (error) {
-            gallery.innerHTML = `<p style="grid-column: 1/-1;">Error: ${error.message}</p>`;
+            gallery.innerHTML = `<p style="grid-column: 1/-1;">Error loading gallery. Check Google Sheet structure.</p>`;
         }
     }
 
-    function openModal(title, images, material, desc, price) {
+    function openModal(title, images, material, desc, price, status) {
         document.getElementById('modal-title').innerText = title;
         document.getElementById('modal-material').innerText = material;
         document.getElementById('modal-desc').innerText = desc;
@@ -256,13 +284,19 @@
             container.appendChild(img);
         });
 
+        const isSold = status.toLowerCase() === 'private collection' || status.toLowerCase() === 'sold';
         const detailsContainer = document.getElementById('inquiry-box-container');
-        detailsContainer.innerHTML = `
-            <p class="modal-price">${price ? '$' + price : 'Price on Request'}</p>
-            <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${title}" class="inquiry-btn">
-                Request Acquisition Details
-            </a>
-        `;
+        
+        if (isSold) {
+            detailsContainer.innerHTML = `<p class="modal-price" style="color:#18181b; font-weight:500; text-transform:uppercase; letter-spacing:0.2em;">${status}</p>`;
+        } else {
+            detailsContainer.innerHTML = `
+                <p class="modal-price">${price ? '$' + price : 'Price on Request'}</p>
+                <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${title}" class="inquiry-btn">
+                    Request Acquisition Details
+                </a>
+            `;
+        }
 
         document.getElementById('modal').classList.add('active');
         document.body.style.overflow = 'hidden';

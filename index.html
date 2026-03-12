@@ -5,118 +5,139 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karina Ortolá | Artist Portfolio</title>
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap');
 
-    /* Modern Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Inter', sans-serif; background: #ffffff; color: #18181b; line-height: 1.6; }
+        /* Modern Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #ffffff; color: #18181b; line-height: 1.6; }
 
-    /* Navigation - Aligned to Gallery */
-    nav { 
-        position: fixed; 
-        top: 0; 
-        width: 100%; 
-        background: rgba(255,255,255,0.95); 
-        backdrop-filter: blur(10px); 
-        z-index: 100; 
-        border-bottom: 1px solid #f4f4f5; 
-    }
-    .nav-container { 
-        max-width: 1000px; /* SYNCED WITH GALLERY */
-        margin: 0 auto; 
-        padding: 1.2rem 2rem; 
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center; 
-    }
-    .logo { 
-        font-size: 1.2rem; 
-        font-weight: 300; 
-        letter-spacing: 0.3em; 
-        text-transform: uppercase; 
-    }
-    .nav-links a { 
-        text-decoration: none; 
-        color: #18181b; 
-        font-size: 10px; 
-        text-transform: uppercase; 
-        letter-spacing: 0.2em; 
-        margin-left: 2rem; 
-        transition: color 0.3s; 
-        font-weight: 500; 
-    }
-    .nav-links a:hover { color: #a1a1aa; }
+        /* Navigation - Aligned to Gallery */
+        nav { 
+            position: fixed; 
+            top: 0; 
+            width: 100%; 
+            background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(10px); 
+            z-index: 100; 
+            border-bottom: 1px solid #f4f4f5; 
+        }
+        .nav-container { 
+            max-width: 1000px; /* SYNCED WITH GALLERY */
+            margin: 0 auto; 
+            padding: 1.2rem 2rem; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .logo { 
+            font-size: 1.2rem; 
+            font-weight: 300; 
+            letter-spacing: 0.3em; 
+            text-transform: uppercase; 
+        }
+        .nav-links a { 
+            text-decoration: none; 
+            color: #18181b; 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.2em; 
+            margin-left: 2rem; 
+            transition: color 0.3s; 
+            font-weight: 500; 
+        }
+        .nav-links a:hover { color: #a1a1aa; }
 
-    /* Gallery Grid - Squeezed for better sizing */
-    #gallery { 
-        display: grid; 
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* SMALLER IMAGES */
-        gap: 4rem; 
-        max-width: 1000px; /* SYNCED WITH NAV */
-        margin: 7rem auto 5rem; /* SMALLER GAP AT TOP */
-        padding: 0 2rem; 
-    }
+        /* Gallery Grid */
+        #gallery { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 4rem; 
+            max-width: 1000px; 
+            margin: 7rem auto 5rem; 
+            padding: 0 2rem; 
+        }
 
-    /* Series Headings - Perfectly Aligned */
-    .series-heading { 
-        grid-column: 1 / -1; 
-        font-size: 11px; 
-        font-weight: 300; 
-        letter-spacing: 0.4em; 
-        text-transform: uppercase; 
-        margin: 3rem 0 1rem; 
-        padding-bottom: 0.8rem; 
-        border-bottom: 1px solid #f4f4f5; 
-        text-align: left; 
-    }
+        /* Series Headings */
+        .series-heading { 
+            grid-column: 1 / -1; 
+            font-size: 11px; 
+            font-weight: 300; 
+            letter-spacing: 0.4em; 
+            text-transform: uppercase; 
+            margin: 3.5rem 0 1rem; 
+            padding-bottom: 0.8rem; 
+            border-bottom: 1px solid #f4f4f5; 
+            text-align: left; 
+        }
 
-    .art-card { 
-        cursor: pointer; 
-        opacity: 0; 
-        animation: museumFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
-    }
+        .art-card { 
+            cursor: pointer; 
+            opacity: 0; 
+            animation: museumFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+        }
 
-    @keyframes museumFadeIn { 
-        from { opacity: 0; transform: translateY(30px); } 
-        to { opacity: 1; transform: translateY(0); } 
-    }
+        @keyframes museumFadeIn { 
+            from { opacity: 0; transform: translateY(30px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
 
-    .img-container { aspect-ratio: 4/5; overflow: hidden; background: #fafafa; }
-    .img-container img { 
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; /* This creates the 'Square Preview' effect */
-    transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); 
-}
-    .art-card:hover img { transform: scale(1.06); }
+        /* Square Preview & Zoom Effect */
+        .img-container { 
+            aspect-ratio: 1/1; /* Forced Square */
+            overflow: hidden; 
+            background: #fafafa; 
+            position: relative;
+        }
+        .img-container img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; /* Art-safe square crop */
+            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .art-card:hover img { 
+            transform: scale(1.1); /* Subtle Slow Zoom */
+        }
 
-    .art-info { margin-top: 1.5rem; text-align: left; }
-    .art-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; margin-bottom: 0.5rem; }
-    .art-material { font-size: 10px; color: #71717a; font-style: italic; font-weight: 300; }
+        .art-info { margin-top: 1.5rem; text-align: left; }
+        .art-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; margin-bottom: 0.5rem; }
+        .art-material { font-size: 10px; color: #71717a; font-style: italic; font-weight: 300; }
 
-    /* Modal Styling */
-    #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; }
-    #modal.active { display: block; }
-    .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; z-index: 210; }
-    .modal-content { max-width: 1000px; margin: 6rem auto; padding: 0 2rem; display: flex; flex-direction: column; align-items: center; }
-    #modal-images { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 50px; margin-bottom: 4rem; }
-    .modal-image { display: block; width: auto; max-width: 85%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
-    .modal-details { width: 100%; max-width: 600px; text-align: center; margin: 0 auto; padding-bottom: 8rem; }
-    .modal-price { font-size: 13px; color: #8a8a8e; font-weight: 400; margin-top: 1.5rem; letter-spacing: 0.1em; }
-    .inquiry-btn { display: inline-block; padding: 12px 24px; border: 1px solid #18181b; text-decoration: none; color: #18181b; font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-top: 1.5rem; transition: all 0.3s; }
-    .inquiry-btn:hover { background: #18181b; color: #fff; }
+        /* Modal Styling */
+        #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; }
+        #modal.active { display: block; }
+        .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; z-index: 210; }
+        .modal-content { max-width: 1000px; margin: 6rem auto; padding: 0 2rem; display: flex; flex-direction: column; align-items: center; }
+        #modal-images { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 50px; margin-bottom: 4rem; }
+        .modal-image { display: block; width: auto; max-width: 85%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
+        .modal-details { width: 100%; max-width: 600px; text-align: center; margin: 0 auto; padding-bottom: 8rem; }
+        
+        /* Updated Price & Inquiry Button */
+        .modal-price { font-size: 13px; color: #8a8a8e; font-weight: 400; margin-top: 1.5rem; letter-spacing: 0.1em; }
+        .inquiry-btn { 
+            display: inline-block; 
+            padding: 12px 24px; 
+            border: 1px solid #18181b; 
+            text-decoration: none; 
+            color: #18181b; 
+            font-size: 10px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.2em; 
+            margin-top: 1.5rem; 
+            transition: all 0.3s ease; 
+        }
+        .inquiry-btn:hover { background: #18181b; color: #fff; }
 
-    /* Footer Sections */
-    section { padding: 6rem 2rem; border-top: 1px solid #f4f4f5; text-align: center; }
-    .section-title { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 3rem; }
-    .about-text { max-width: 600px; margin: 0 auto; color: #52525b; font-weight: 300; font-size: 1rem; }
+        /* Footer Sections */
+        section { padding: 6rem 2rem; border-top: 1px solid #f4f4f5; text-align: center; }
+        .section-title { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 3rem; }
+        .about-text { max-width: 600px; margin: 0 auto; color: #52525b; font-weight: 300; font-size: 1rem; }
 
-    /* Mobile Logic */
-    @media (max-width: 768px) { 
-        #gallery { grid-template-columns: 1fr; gap: 4rem; margin-top: 7rem; } 
-        .nav-links { display: none; } 
-    }
-</style>
+        /* Mobile Logic */
+        @media (max-width: 768px) { 
+            #gallery { grid-template-columns: 1fr; gap: 4rem; margin-top: 7rem; } 
+            .nav-links { display: none; } 
+        }
+    </style>
 </head>
 <body>
 
@@ -141,12 +162,12 @@
     </section>
 
     <section id="contact">
-    <h2 class="section-title">Connect</h2>
-    <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
-        <a href="mailto:your-email@example.com" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Email the Studio</a>
-        <a href="https://instagram.com/karinaortola.art" target="_blank" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Follow on Instagram</a>
-    </div>
-</section>
+        <h2 class="section-title">Connect</h2>
+        <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+            <a href="mailto:karinaortola.art@gmail.com" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Email the Studio</a>
+            <a href="https://instagram.com/karinaortola.art" target="_blank" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Follow on Instagram</a>
+        </div>
+    </section>
 
     <div id="modal">
         <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -156,12 +177,13 @@
                 <h2 id="modal-title" class="section-title" style="margin-bottom:1rem;"></h2>
                 <p id="modal-material" style="color:#71717a; margin-bottom:1.5rem;"></p>
                 <p id="modal-desc" class="about-text" style="margin:0;"></p>
+                <div id="inquiry-box-container"></div>
             </div>
         </div>
     </div>
 
     <script>
-        const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
+    const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig'; 
     const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
 
     async function loadData() {
@@ -169,7 +191,6 @@
         try {
             const response = await fetch(sheetURL + '&cb=' + Date.now());
             const data = await response.text();
-            // This handles the CSV data and removes quotes
             const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
             
             gallery.innerHTML = ''; 
@@ -177,8 +198,6 @@
 
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
-                
-                // 1. DATA COLLECTION
                 const title = (row[0] || "").replace(/"/g, '').trim();
                 let imgRaw = (row[1] || "").replace(/"/g, '').trim();
                 const material = (row[2] || "").replace(/"/g, '').trim();
@@ -188,7 +207,6 @@
 
                 if (!imgRaw) continue;
 
-                // 2. SERIES HEADING LOGIC
                 if (series && series !== currentSeries) {
                     const heading = document.createElement('div');
                     heading.className = 'series-heading';
@@ -197,7 +215,6 @@
                     currentSeries = series;
                 }
 
-                // 3. IMAGE LIST LOGIC
                 let imgList = imgRaw.split(';').map(link => {
                     let cleanLink = link.trim();
                     if (cleanLink.includes('github.com') && cleanLink.includes('/blob/')) {
@@ -206,10 +223,8 @@
                     return cleanLink;
                 });
 
-                // 4. CARD CREATION
                 const card = document.createElement('div');
                 card.className = 'art-card';
-                // Pass all collected data to the modal
                 card.onclick = () => openModal(title, imgList, material, desc, price);
                 card.innerHTML = `
                     <div class="img-container">
@@ -234,8 +249,6 @@
         
         const container = document.getElementById('modal-images');
         container.innerHTML = '';
-        
-        // Add all images to the pop-up
         images.forEach(src => {
             const img = document.createElement('img');
             img.src = src;
@@ -243,21 +256,13 @@
             container.appendChild(img);
         });
 
-        // Add Price & Inquiry Button Section
-        const detailsContainer = document.querySelector('.modal-details');
-        const oldInquiry = document.getElementById('inquiry-box');
-        if (oldInquiry) oldInquiry.remove();
-
-        const inquiryBox = document.createElement('div');
-        inquiryBox.id = 'inquiry-box';
-        inquiryBox.style.marginTop = '2rem';
-        inquiryBox.innerHTML = `
+        const detailsContainer = document.getElementById('inquiry-box-container');
+        detailsContainer.innerHTML = `
             <p class="modal-price">${price ? '$' + price : 'Price on Request'}</p>
             <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${title}" class="inquiry-btn">
                 Request Acquisition Details
             </a>
         `;
-        detailsContainer.appendChild(inquiryBox);
 
         document.getElementById('modal').classList.add('active');
         document.body.style.overflow = 'hidden';
@@ -272,9 +277,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-

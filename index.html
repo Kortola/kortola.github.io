@@ -82,7 +82,12 @@
     }
 
     .img-container { aspect-ratio: 4/5; overflow: hidden; background: #fafafa; }
-    .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); }
+    .img-container img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* This creates the 'Square Preview' effect */
+    transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1); 
+}
     .art-card:hover img { transform: scale(1.06); }
 
     .art-info { margin-top: 1.5rem; text-align: left; }
@@ -267,6 +272,7 @@
     </script>
 </body>
 </html>
+
 
 
 

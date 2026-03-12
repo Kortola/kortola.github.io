@@ -79,13 +79,54 @@
 #contact a:hover {
     opacity: 0.5;
 }
+
+        /* Styling for the Series Headings */
+.series-heading {
+    grid-column: 1 / -1;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    margin: 6rem auto 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #f4f4f5;
+    width: 100%;
+    max-width: 1300px;
+}
+
+/* Styling for the Price and Inquiry Button */
+.modal-price {
+    font-size: 14px;
+    color: #8a8a8e;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.1em;
+}
+
+.inquiry-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    border: 1px solid #18181b;
+    text-decoration: none;
+    color: #18181b;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.inquiry-btn:hover {
+    background: #18181b;
+    color: #ffffff;
+}
     </style>
 </head>
 <body>
 
     <nav>
         <div class="nav-container">
-            <div class="logo">Karina Ortola</div>
+            <div class="logo">Karina Ortolá</div>
             <div class="nav-links">
                 <a href="#gallery">Paintings</a>
                 <a href="#about">About</a>
@@ -107,7 +148,7 @@
     <h2 class="section-title">Connect</h2>
     <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
         <a href="mailto:your-email@example.com" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Email the Studio</a>
-        <a href="https://instagram.com/yourusername" target="_blank" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Follow on Instagram</a>
+        <a href="https://instagram.com/karinaortola.art" target="_blank" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Follow on Instagram</a>
     </div>
 </section>
 
@@ -128,52 +169,66 @@
         const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
 
         async function loadData() {
-            const gallery = document.getElementById('gallery');
-            try {
-                const response = await fetch(sheetURL + '&cb=' + Date.now());
-                const data = await response.text();
-                const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
-                
-                gallery.innerHTML = ''; 
+    const gallery = document.getElementById('gallery');
+    try {
+        const response = await fetch(sheetURL + '&cb=' + Date.now());
+        const data = await response.text();
+        const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
+        
+        gallery.innerHTML = ''; 
+        let currentSeries = ""; // <--- New: Keeps track of the current group
 
-                for (let i = 1; i < rows.length; i++) {
-                    const row = rows[i];
-                    if (row.length < 2) continue;
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            
+            // 1. DATA COLLECTION (Including the new Price and Series columns)
+            const title = (row[0] || "").replace(/"/g, '').trim();
+            let imgRaw = (row[1] || "").replace(/"/g, '').trim();
+            const material = (row[2] || "").replace(/"/g, '').trim();
+            const desc = (row[3] || "").replace(/"/g, '').trim();
+            const price = (row[4] || "").replace(/"/g, '').trim(); // Column E
+            const series = (row[5] || "").replace(/"/g, '').trim(); // Column F
 
-                    const title = (row[0] || "").replace(/"/g, '').trim();
-                    let imgRaw = (row[1] || "").replace(/"/g, '').trim();
-                    const material = (row[2] || "").replace(/"/g, '').trim();
-                    const desc = (row[3] || "").replace(/"/g, '').trim();
+            if (!imgRaw) continue;
 
-                    if (!imgRaw) continue;
-
-                    let imgList = imgRaw.split(';').map(link => {
-                        let cleanLink = link.trim();
-                        if (cleanLink.includes('github.com') && cleanLink.includes('/blob/')) {
-                            return cleanLink.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
-                        }
-                        return cleanLink;
-                    });
-
-                    const card = document.createElement('div');
-                    card.className = 'art-card';
-                    card.onclick = () => openModal(title, imgList, material, desc);
-                    card.innerHTML = `
-                        <div class="img-container">
-                            <img src="${imgList[0]}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Link'">
-                        </div>
-                        <div class="art-info">
-                            <h3 class="art-title">${title}</h3>
-                            <p class="art-material">${material}</p>
-                        </div>
-                    `;
-                    gallery.appendChild(card);
-                }
-            } catch (error) {
-                gallery.innerHTML = `<p style="grid-column: 1/-1;">Error: ${error.message}</p>`;
+            // 2. SERIES HEADING LOGIC (New: Inserts a title if the series name changes)
+            if (series && series !== currentSeries) {
+                const heading = document.createElement('div');
+                heading.className = 'series-heading';
+                heading.innerText = series;
+                gallery.appendChild(heading);
+                currentSeries = series;
             }
-        }
 
+            // 3. IMAGE LIST LOGIC
+            let imgList = imgRaw.split(';').map(link => {
+                let cleanLink = link.trim();
+                if (cleanLink.includes('github.com') && cleanLink.includes('/blob/')) {
+                    return cleanLink.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
+                }
+                return cleanLink;
+            });
+
+            // 4. CARD CREATION (Passing the price to the openModal function)
+            function openModal(title, images, material, desc, price) {
+            const card = document.createElement('div');
+            card.className = 'art-card';
+            card.onclick = () => openModal(title, imgList, material, desc, price);
+            card.innerHTML = `
+                <div class="img-container">
+                    <img src="${imgList[0]}" onerror="this.src='https://via.placeholder.com/600x800?text=Check+Link'">
+                </div>
+                <div class="art-info">
+                    <h3 class="art-title">${title}</h3>
+                    <p class="art-material">${material}</p>
+                </div>
+            `;
+            gallery.appendChild(card);
+        }
+    } catch (error) {
+        gallery.innerHTML = `<p style="grid-column: 1/-1;">Error: ${error.message}</p>`;
+    }
+}
         function openModal(title, images, material, desc) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-material').innerText = material;
@@ -199,4 +254,5 @@
     </script>
 </body>
 </html>
+
 

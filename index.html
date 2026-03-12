@@ -68,6 +68,17 @@
             #gallery { grid-template-columns: 1fr; gap: 4rem; margin-top: 7rem; }
             .nav-links { display: none; }
         }
+
+        #contact a {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    transition: opacity 0.3s ease;
+}
+
+#contact a:hover {
+    opacity: 0.5;
+}
     </style>
 </head>
 <body>
@@ -93,9 +104,12 @@
     </section>
 
     <section id="contact">
-        <h2 class="section-title">Contact</h2>
-        <a href="mailto:your-email@example.com" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b;">Email the Studio</a>
-    </section>
+    <h2 class="section-title">Connect</h2>
+    <div style="display: flex; flex-direction: column; gap: 1.5rem; align-items: center;">
+        <a href="mailto:your-email@example.com" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Email the Studio</a>
+        <a href="https://instagram.com/yourusername" target="_blank" style="color:#18181b; text-decoration: none; border-bottom: 1px solid #18181b; font-weight: 300;">Follow on Instagram</a>
+    </div>
+</section>
 
     <div id="modal">
         <button class="close-btn" onclick="closeModal()">&times;</button>
@@ -185,3 +199,4 @@
     </script>
 </body>
 </html>
+

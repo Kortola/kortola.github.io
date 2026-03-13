@@ -9,7 +9,11 @@
 
         /* Modern Reset */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #ffffff; color: #18181b; line-height: 1.6; }
+        body { 
+            font-family: 'Inter', sans-serif; background: #ffffff; color: #18181b; line-height: 1.6; 
+            /* Prevents text selection across the site to protect descriptions */
+            -webkit-user-select: none; -ms-user-select: none; user-select: none; 
+        }
 
         /* Navigation */
         nav { 
@@ -43,44 +47,55 @@
         .art-card { cursor: pointer; opacity: 0; animation: museumFadeIn 1.2s forwards; position: relative; }
         @keyframes museumFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .img-container { aspect-ratio: 1/1; overflow: hidden; background: #fafafa; position: relative; }
+        /* The Image Guard: Transparent Overlay */
+        .img-container { 
+            aspect-ratio: 1/1; overflow: hidden; background: #fafafa; position: relative; 
+        }
+        .img-container::after {
+            content: "";
+            position: absolute; inset: 0;
+            z-index: 5;
+            background: rgba(0,0,0,0); /* Invisible shield */
+        }
         .img-container img { 
             width: 100%; height: 100%; object-fit: cover; 
             transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1); 
+            pointer-events: none; /* Prevents dragging the image itself */
         }
         .art-card:hover img { transform: scale(1.1); }
 
-        /* The Standard Status Badge (e.g., Private Collection) */
         .status-badge {
-            position: absolute; top: 1rem; left: 1rem; 
-            background: rgba(255, 255, 255, 0.95);
-            padding: 6px 12px; font-size: 9px; 
-            text-transform: uppercase; letter-spacing: 0.15em;
+            position: absolute; top: 1rem; left: 1rem; background: rgba(255, 255, 255, 0.95);
+            padding: 6px 12px; font-size: 9px; text-transform: uppercase; letter-spacing: 0.15em;
             z-index: 10; font-weight: 500;
-            color: #18181b; /* Charcoal */
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-
-        /* The NEW "Available" Specific Styling */
-        .status-badge.available-tag {
-            color: #166534; /* Elegant Moss Green */
-            border: 1px solid #d1fae5; /* Very pale green edge */
-            background: rgba(240, 253, 244, 0.98); /* Faint green background */
-        }
+        .status-badge.available-tag { color: #166534; background: rgba(240, 253, 244, 0.98); border: 1px solid #d1fae5; }
 
         .art-info { margin-top: 1.5rem; text-align: left; }
         .art-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; margin-bottom: 0.5rem; }
         .art-material { font-size: 10px; color: #71717a; font-style: italic; font-weight: 300; }
 
-        /* Modal */
+        /* Modal Art Protection */
         #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; }
         #modal.active { display: block; }
         .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; z-index: 210; }
         .modal-content { max-width: 1000px; margin: 6rem auto; padding: 0 2rem; display: flex; flex-direction: column; align-items: center; }
-        #modal-images { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 50px; margin-bottom: 4rem; }
-        .modal-image { display: block; width: auto; max-width: 85%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); }
-        .modal-details { width: 100%; max-width: 600px; text-align: center; margin-bottom: 8rem; }
         
+        #modal-images { 
+            display: flex; flex-direction: column; align-items: center; width: 100%; gap: 50px; margin-bottom: 4rem; 
+            position: relative;
+        }
+        /* Shield for Modal images */
+        .modal-img-wrapper { position: relative; display: inline-block; }
+        .modal-img-wrapper::after {
+            content: ""; position: absolute; inset: 0; z-index: 5;
+        }
+        .modal-image { 
+            display: block; width: auto; max-width: 85%; max-height: 80vh; object-fit: contain; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.08); pointer-events: none;
+        }
+
+        .modal-details { width: 100%; max-width: 600px; text-align: center; margin-bottom: 8rem; }
         .modal-price { font-size: 13px; color: #8a8a8e; margin-top: 1.5rem; letter-spacing: 0.1em; }
         .inquiry-btn { 
             display: inline-block; padding: 12px 24px; border: 1px solid #18181b; 
@@ -93,12 +108,12 @@
         .section-title { font-size: 1.2rem; font-weight: 300; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 3rem; }
         .about-text { max-width: 600px; margin: 0 auto; color: #52525b; font-size: 1rem; }
 
+        footer { padding: 4rem 2rem; text-align: center; font-size: 10px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.2em; border-top: 1px solid #f4f4f5; }
+
         @media (max-width: 768px) { #gallery { grid-template-columns: 1fr; margin-top: 7rem; } .nav-links { display: none; } }
     </style>
 </head>
-<body>
-
-    <nav>
+<body oncontextmenu="return false;"> <nav>
         <div class="nav-container">
             <div class="logo">Karina Ortolá</div>
             <div class="nav-links">
@@ -126,6 +141,10 @@
         </div>
     </section>
 
+    <footer>
+        &copy; 2026 Karina Ortolá. All images and content are the sole property of the artist. Unauthorized reproduction is strictly prohibited.
+    </footer>
+
     <div id="modal">
         <button class="close-btn" onclick="closeModal()">&times;</button>
         <div class="modal-content">
@@ -148,9 +167,7 @@
         try {
             const response = await fetch(sheetURL + '&cb=' + Date.now());
             const data = await response.text();
-            
             const rows = data.split(/\r?\n/).filter(row => row.trim() !== "").map(row => row.split(','));
-            
             gallery.innerHTML = ''; 
             let currentSeries = ""; 
 
@@ -186,20 +203,16 @@
                 card.className = 'art-card';
                 card.onclick = () => openModal(title, imgList, material, desc, price, status);
                 
-                // Show badge if status contains any text (Available, Sold, Private Collection, etc.)
                 let badgeHTML = "";
                 if (status) {
-                    // Check if the status is exactly "Available" (case-insensitive)
                     const isAvailable = status.trim().toLowerCase() === 'available';
-                    
-                    // Add the 'available-tag' class only if it matches
                     badgeHTML = `<div class="status-badge ${isAvailable ? 'available-tag' : ''}">${status}</div>`;
                 }
 
                 card.innerHTML = `
                     <div class="img-container">
                         ${badgeHTML}
-                        <img src="${imgList[0]}">
+                        <img src="${imgList[0]}" draggable="false">
                     </div>
                     <div class="art-info">
                         <h3 class="art-title">${title}</h3>
@@ -221,10 +234,14 @@
         const container = document.getElementById('modal-images');
         container.innerHTML = '';
         images.forEach(src => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'modal-img-wrapper';
             const img = document.createElement('img');
             img.src = src;
             img.className = "modal-image";
-            container.appendChild(img);
+            img.setAttribute('draggable', 'false');
+            wrapper.appendChild(img);
+            container.appendChild(wrapper);
         });
 
         const statusLower = (status || "").toLowerCase();

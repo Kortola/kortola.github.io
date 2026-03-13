@@ -46,15 +46,11 @@
         .art-card { cursor: pointer; opacity: 0; animation: museumFadeIn 1.2s forwards; position: relative; }
         @keyframes museumFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* The Image Guard: Transparent Overlay */
         .img-container { 
             aspect-ratio: 1/1; overflow: hidden; background: #fafafa; position: relative; 
         }
         .img-container::after {
-            content: "";
-            position: absolute; inset: 0;
-            z-index: 5;
-            background: rgba(0,0,0,0);
+            content: ""; position: absolute; inset: 0; z-index: 5; background: rgba(0,0,0,0);
         }
         .img-container img { 
             width: 100%; height: 100%; object-fit: cover; 
@@ -74,46 +70,31 @@
         .art-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.15em; font-weight: 500; margin-bottom: 0.5rem; }
         .art-material { font-size: 10px; color: #71717a; font-style: italic; font-weight: 300; }
 
-        /* Modal Art Protection & Centering FIX */
+        /* Custom Paintings Section */
+        .custom-section { background: #fafafa; padding: 8rem 2rem; }
+        .custom-grid { 
+            max-width: 800px; margin: 0 auto; display: grid; 
+            grid-template-columns: repeat(3, 1fr); gap: 3rem; text-align: center; 
+        }
+        .step h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; color: #a1a1aa; }
+        .step p { font-size: 13px; color: #52525b; font-weight: 300; }
+
+        /* Modal Centering Fix */
         #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; }
         #modal.active { display: block; }
         .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; z-index: 210; }
-        
-        .modal-content { 
-            max-width: 1000px; margin: 6rem auto; padding: 0 2rem; 
-            display: flex; flex-direction: column; align-items: center; 
-            text-align: center;
-        }
-        
-        #modal-images { 
-            display: flex; flex-direction: column; align-items: center; 
-            width: 100%; gap: 50px; margin-bottom: 4rem; 
-        }
-
-        .modal-img-wrapper { 
-            position: relative; 
-            display: flex; 
-            justify-content: center; 
-            width: 100%; 
-        }
-        
-        /* Shield for Modal images */
-        .modal-img-wrapper::after {
-            content: ""; position: absolute; inset: 0; z-index: 5;
-        }
-
-        .modal-image { 
-            display: block; width: auto; max-width: 100%; max-height: 80vh; 
-            object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); 
-            pointer-events: none;
-        }
-
+        .modal-content { max-width: 1000px; margin: 6rem auto; padding: 0 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        #modal-images { display: flex; flex-direction: column; align-items: center; width: 100%; gap: 50px; margin-bottom: 4rem; }
+        .modal-img-wrapper { position: relative; display: flex; justify-content: center; width: 100%; }
+        .modal-img-wrapper::after { content: ""; position: absolute; inset: 0; z-index: 5; }
+        .modal-image { display: block; width: auto; max-width: 100%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); pointer-events: none; }
         .modal-details { width: 100%; max-width: 600px; margin: 0 auto 8rem auto; }
-        .modal-price { font-size: 13px; color: #8a8a8e; margin-top: 1.5rem; letter-spacing: 0.1em; }
+        
+        /* Buttons & Links */
         .inquiry-btn { 
             display: inline-block; padding: 12px 24px; border: 1px solid #18181b; 
             text-decoration: none; color: #18181b; font-size: 10px; text-transform: uppercase; 
-            letter-spacing: 0.2em; margin-top: 1.5rem; transition: 0.3s; 
+            letter-spacing: 0.2em; margin-top: 2rem; transition: 0.3s; 
         }
         .inquiry-btn:hover { background: #18181b; color: #fff; }
 
@@ -123,7 +104,11 @@
 
         footer { padding: 4rem 2rem; text-align: center; font-size: 10px; color: #a1a1aa; text-transform: uppercase; letter-spacing: 0.2em; border-top: 1px solid #f4f4f5; }
 
-        @media (max-width: 768px) { #gallery { grid-template-columns: 1fr; margin-top: 7rem; } .nav-links { display: none; } }
+        @media (max-width: 768px) { 
+            #gallery { grid-template-columns: 1fr; } 
+            .custom-grid { grid-template-columns: 1fr; gap: 4rem; }
+            .nav-links { display: none; } 
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -133,6 +118,7 @@
             <div class="logo">Karina Ortolá</div>
             <div class="nav-links">
                 <a href="#gallery">Paintings</a>
+                <a href="#custom">Custom</a>
                 <a href="#about">About</a>
                 <a href="#contact">Contact</a>
             </div>
@@ -142,6 +128,25 @@
     <main id="gallery">
         <p style="text-align: center; grid-column: 1/-1;">Loading gallery...</p>
     </main>
+
+    <section id="custom" class="custom-section">
+        <h2 class="section-title">Custom Paintings</h2>
+        <div class="custom-grid">
+            <div class="step">
+                <h4>01. Consult</h4>
+                <p>We discuss your vision, preferred color palette, and the space where the piece will live.</p>
+            </div>
+            <div class="step">
+                <h4>02. Create</h4>
+                <p>A collaborative process with updates provided as your unique piece comes to life.</p>
+            </div>
+            <div class="step">
+                <h4>03. Deliver</h4>
+                <p>Once finalized, your custom work is professionally packaged and shipped to your home.</p>
+            </div>
+        </div>
+        <a href="mailto:karinaortola.art@gmail.com?subject=Custom Painting Inquiry" class="inquiry-btn">Start a Conversation</a>
+    </section>
 
     <section id="about">
         <h2 class="section-title">About the Artist</h2>
@@ -157,7 +162,7 @@
     </section>
 
     <footer>
-        &copy; 2026 Karina Ortolá. All images and content are the sole property of the artist. Unauthorized reproduction is strictly prohibited.
+        &copy; 2026 Karina Ortolá. All images and content are property of the artist. Unauthorized reproduction prohibited.
     </footer>
 
     <div id="modal">
@@ -287,4 +292,3 @@
     </script>
 </body>
 </html>
-

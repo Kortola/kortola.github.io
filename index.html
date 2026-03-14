@@ -46,12 +46,8 @@
         .art-card { cursor: pointer; opacity: 0; animation: museumFadeIn 1.2s forwards; position: relative; }
         @keyframes museumFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .img-container { 
-            aspect-ratio: 1/1; overflow: hidden; background: #fafafa; position: relative; 
-        }
-        .img-container::after {
-            content: ""; position: absolute; inset: 0; z-index: 5; background: rgba(0,0,0,0);
-        }
+        .img-container { aspect-ratio: 1/1; overflow: hidden; background: #fafafa; position: relative; }
+        .img-container::after { content: ""; position: absolute; inset: 0; z-index: 5; background: rgba(0,0,0,0); }
         .img-container img { 
             width: 100%; height: 100%; object-fit: cover; 
             transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1); 
@@ -131,7 +127,7 @@
 
     <section id="custom" class="custom-section">
         <h2 class="section-title">Custom Paintings</h2>
-        <p class="custom-intro">Transform a beautiful moment into a lasting work of art. I specialize in expressive landscapes that capture the essence of a place or memory.</p>
+        <p class="custom-intro">Transform a beautiful moment into a lasting work of art. I specialize in expressive landscapes that capture the essence of a place or memory through color and light.</p>
         
         <div class="custom-grid">
             <div class="step">
@@ -140,11 +136,11 @@
             </div>
             <div class="step">
                 <h4>02. Artistic Study</h4>
-                <p>I interpret your image through my lens of texture and light, creating a unique color study.</p>
+                <p>I interpret your image through my lens of color and atmosphere, creating a unique study.</p>
             </div>
             <div class="step">
                 <h4>03. Final Reveal</h4>
-                <p>Your custom acrylic painting is completed, dried, and shipped directly to your collection.</p>
+                <p>Your custom acrylic painting is completed and shipped directly to your collection.</p>
             </div>
         </div>
         
@@ -153,7 +149,9 @@
 
     <section id="about">
         <h2 class="section-title">About the Artist</h2>
-        <p class="about-text">Exploring light and texture through a modern lens.</p>
+        <p class="about-text">
+            Karina Ortolá is a contemporary painter known for her vibrant, light-filled interpretations of the natural world. Working in acrylics on canvas and wood panel, her style is characterized by a rhythmic use of color and a focus on atmospheric perspective. By prioritizing the luminous quality of the sky and the shifting energy of the horizon, she creates landscapes that feel both familiar and ethereal.
+        </p>
     </section>
 
     <section id="contact">

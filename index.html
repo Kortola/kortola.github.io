@@ -71,15 +71,16 @@
         .art-material { font-size: 10px; color: #71717a; font-style: italic; font-weight: 300; }
 
         /* Custom Paintings Section */
-        .custom-section { background: #fafafa; padding: 8rem 2rem; }
+        .custom-section { background: #fafafa; padding: 8rem 2rem; border-top: 1px solid #f4f4f5; }
+        .custom-intro { max-width: 600px; margin: 0 auto 4rem; text-align: center; color: #52525b; font-weight: 300; }
         .custom-grid { 
-            max-width: 800px; margin: 0 auto; display: grid; 
+            max-width: 900px; margin: 0 auto; display: grid; 
             grid-template-columns: repeat(3, 1fr); gap: 3rem; text-align: center; 
         }
-        .step h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; color: #a1a1aa; }
-        .step p { font-size: 13px; color: #52525b; font-weight: 300; }
+        .step h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.2em; margin-bottom: 1rem; color: #18181b; }
+        .step p { font-size: 13px; color: #71717a; font-weight: 300; }
 
-        /* Modal Centering Fix */
+        /* Modal Art Protection */
         #modal { display: none; position: fixed; inset: 0; background: #ffffff; z-index: 200; overflow-y: auto; }
         #modal.active { display: block; }
         .close-btn { position: fixed; top: 2rem; right: 2rem; font-size: 2.5rem; border: none; background: none; cursor: pointer; z-index: 210; }
@@ -90,7 +91,6 @@
         .modal-image { display: block; width: auto; max-width: 100%; max-height: 80vh; object-fit: contain; box-shadow: 0 20px 50px rgba(0,0,0,0.08); pointer-events: none; }
         .modal-details { width: 100%; max-width: 600px; margin: 0 auto 8rem auto; }
         
-        /* Buttons & Links */
         .inquiry-btn { 
             display: inline-block; padding: 12px 24px; border: 1px solid #18181b; 
             text-decoration: none; color: #18181b; font-size: 10px; text-transform: uppercase; 
@@ -131,21 +131,24 @@
 
     <section id="custom" class="custom-section">
         <h2 class="section-title">Custom Paintings</h2>
+        <p class="custom-intro">Transform a beautiful moment into a lasting work of art. I specialize in expressive landscapes that capture the essence of a place or memory. Please note that to maintain the integrity of my artistic style, I do not paint portraits of people.</p>
+        
         <div class="custom-grid">
             <div class="step">
-                <h4>01. Consult</h4>
-                <p>We discuss your vision, preferred color palette, and the space where the piece will live.</p>
+                <h4>01. Your Reference</h4>
+                <p>Share a high-quality photograph of a landscape or a special moment that moves you.</p>
             </div>
             <div class="step">
-                <h4>02. Create</h4>
-                <p>A collaborative process with updates provided as your unique piece comes to life.</p>
+                <h4>02. Artistic Study</h4>
+                <p>I interpret your image through my lens of texture and light, creating a unique color study.</p>
             </div>
             <div class="step">
-                <h4>03. Deliver</h4>
-                <p>Once finalized, your custom work is professionally packaged and shipped to your home.</p>
+                <h4>03. Final Reveal</h4>
+                <p>Your custom oil painting is completed, dried, and shipped directly to your collection.</p>
             </div>
         </div>
-        <a href="mailto:karinaortola.art@gmail.com?subject=Custom Painting Inquiry" class="inquiry-btn">Start a Conversation</a>
+        
+        <a href="mailto:karinaortola.art@gmail.com?subject=Custom Landscape Inquiry" class="inquiry-btn">Inquire About a Custom Work</a>
     </section>
 
     <section id="about">

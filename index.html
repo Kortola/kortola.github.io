@@ -254,15 +254,18 @@
                 }
 
                 card.innerHTML = `
-                    <div class="img-container">
-                        ${badgeHTML}
-                        <img src="${imgList[0]}" draggable="false">
-                    </div>
-                    <div class="art-info">
-                        <h3 class="art-title">${title}</h3>
-                        <p class="art-material">${material}</p>
-                    </div>
-                `;
+    <div class="img-container">
+        ${badgeHTML}
+        <img src="${imgList[0]}" 
+             draggable="false" 
+             loading="lazy" 
+             decodings="async">
+    </div>
+    <div class="art-info">
+        <h3 class="art-title">${title}</h3>
+        <p class="art-material">${material}</p>
+    </div>
+`;
                 gallery.appendChild(card);
             }
         } catch (error) {

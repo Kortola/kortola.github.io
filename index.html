@@ -12,7 +12,7 @@ html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:#fff;color:#18181b;line-height:1.6;-webkit-user-select:none;user-select:none;}
 
 /* NAV */
-nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.70);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
+nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
 .nav-container{max-width:1000px;margin:0 auto;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:1.1rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;}
 .nav-links a{text-decoration:none;color:#71717a;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-left:2rem;transition:color .3s;font-weight:500;}
@@ -76,10 +76,10 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.70);backdrop-f
 
 /* ABOUT */
 #about{padding:8rem 2rem;border-top:1px solid #f4f4f5;}
-.about-container{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:center;}
+.about-container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:5rem;align-items:start;}
 .about-photo-wrapper{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#fafafa;}
 .about-photo-wrapper img{width:100%;height:100%;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,.05);}
-.about-content{color:#52525b;font-size:.95rem;font-weight:300;line-height:1.9;}
+.about-content{color:#52525b;font-size:.75rem;font-weight:300;line-height:2;}
 .about-content h2{margin-bottom:1.5rem;font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:#18181b;}
 
 /* CONTACT */
@@ -157,7 +157,6 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 
 <!-- GALLERY -->
 <main id="gallery">
-  <!-- Skeleton placeholders -->
   <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
   <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
   <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
@@ -220,7 +219,6 @@ Today I paint the landscapes that surround me, the places I have visited, and th
 const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig';
 const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
 
-// Proper CSV parser — handles commas inside quoted fields
 function parseCSV(text) {
   const rows = [];
   for (const line of text.split(/\r?\n/)) {
@@ -298,7 +296,6 @@ async function loadData() {
       delay += 80;
     }
 
-    // Staggered fade-in via IntersectionObserver
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
     }, { threshold: 0.1 });
@@ -343,13 +340,11 @@ function closeModal() {
   document.body.style.overflow = '';
 }
 
-// Close modal on ESC or clicking outside content
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
-// Mobile nav
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 hamburger.addEventListener('click', () => {

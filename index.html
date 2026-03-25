@@ -35,17 +35,17 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-#gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:3rem;max-width:1000px;margin:6rem auto 5rem;padding:0 2rem;}
-.series-heading{grid-column:1/-1;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
+#gallery{display:flex;flex-wrap:wrap;gap:1.5rem;max-width:1000px;margin:6rem auto 5rem;padding:0 2rem;align-items:flex-start;}
+.series-heading{flex:0 0 100%;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
 .skeleton-card{opacity:1;}
 .skeleton-img{aspect-ratio:1/1;background:#f4f4f5;animation:shimmer 1.4s ease infinite;}
 .skeleton-line{height:10px;background:#f4f4f5;margin-top:1.5rem;width:60%;animation:shimmer 1.4s ease .1s infinite;}
 .skeleton-line.short{width:40%;margin-top:.6rem;animation-delay:.2s;}
-.art-card{cursor:pointer;opacity:0;position:relative;}
+.art-card{cursor:pointer;opacity:0;position:relative;height:280px;flex:1 1 auto;}
 .art-card.visible{animation:fadeUp .8s forwards;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.img-container{aspect-ratio:1/1;overflow:hidden;background:#fafafa;position:relative;}
+.img-container{width:100%;height:100%;overflow:hidden;background:#fafafa;position:relative;}
 .img-container img{width:100%;height:100%;object-fit:cover;transition:transform 2.5s cubic-bezier(.16,1,.3,1);pointer-events:none;}
 .art-card:hover img{transform:scale(1.06);}
 .img-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#a1a1aa;letter-spacing:.15em;text-transform:uppercase;}
@@ -121,7 +121,8 @@ section{padding:6rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
 
 @media(max-width:768px){
-  #gallery{grid-template-columns:1fr;}
+  #gallery{gap:1rem;}
+  .art-card{height:200px;flex:1 1 calc(50% - .5rem);min-width:140px;}
   .custom-grid{grid-template-columns:1fr;gap:3rem;}
   .about-container{grid-template-columns:1fr;gap:2rem;text-align:center;}
   .about-content h2{text-align:center;}

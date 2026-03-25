@@ -37,13 +37,11 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 
 #gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:3rem;max-width:1000px;margin:6rem auto 5rem;padding:0 2rem;}
 .series-heading{grid-column:1/-1;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
-
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
 .skeleton-card{opacity:1;}
 .skeleton-img{aspect-ratio:1/1;background:#f4f4f5;animation:shimmer 1.4s ease infinite;}
 .skeleton-line{height:10px;background:#f4f4f5;margin-top:1.5rem;width:60%;animation:shimmer 1.4s ease .1s infinite;}
 .skeleton-line.short{width:40%;margin-top:.6rem;animation-delay:.2s;}
-
 .art-card{cursor:pointer;opacity:0;position:relative;}
 .art-card.visible{animation:fadeUp .8s forwards;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
@@ -83,38 +81,37 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
 
-/* Zoom */
-.zoom-wrapper{
-  position:relative;width:100%;
-  overflow:hidden;
-  display:flex;justify-content:center;align-items:center;
-  touch-action:none;
+/* Loupe wrapper */
+.loupe-wrapper{
+  position:relative;
+  display:inline-block;
+  cursor:crosshair;
+  line-height:0;
 }
-.zoom-wrapper.can-drag{cursor:grab;}
-.zoom-wrapper.dragging{cursor:grabbing;}
 .modal-image{
-  display:block;max-width:100%;max-height:80vh;
+  display:block;
+  max-width:100%;
+  max-height:75vh;
   object-fit:contain;
   box-shadow:0 20px 50px rgba(0,0,0,.08);
-  pointer-events:none;user-select:none;
-  transform-origin:top left;
+  pointer-events:none;
 }
-.zoom-hint{
-  position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);
-  font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  color:#52525b;background:rgba(255,255,255,.9);padding:5px 14px;
-  pointer-events:none;white-space:nowrap;
-  transition:opacity .5s;
-}
-.zoom-hint.hidden{opacity:0;}
-.zoom-reset{
-  position:absolute;top:.8rem;right:.8rem;
-  background:rgba(255,255,255,.9);border:1px solid #e4e4e7;
-  font-size:9px;letter-spacing:.15em;text-transform:uppercase;
-  padding:5px 10px;cursor:pointer;
-  font-family:'Inter',sans-serif;color:#18181b;
+/* The loupe lens */
+.loupe{
+  position:absolute;
+  width:180px; height:180px;
+  border-radius:50%;
+  border:2px solid rgba(255,255,255,.8);
+  box-shadow:0 4px 24px rgba(0,0,0,.25);
+  pointer-events:none;
   display:none;
+  overflow:hidden;
+  z-index:10;
+  background-repeat:no-repeat;
+  /* background-image and background-size set via JS */
 }
+.loupe-wrapper:hover .loupe{ display:block; }
+
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
 .inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
@@ -130,6 +127,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   .about-content h2{text-align:center;}
   .nav-links{display:none;}
   .hamburger{display:flex;}
+  .loupe{display:none !important;}
 }
 </style>
 </head>
@@ -223,7 +221,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 </div>
 
 <script>
-const sheetID = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig';
+const sheetID  = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig';
 const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
 
 function parseCSV(text) {
@@ -242,7 +240,7 @@ function parseCSV(text) {
   }
   return rows;
 }
-function clean(s) { return (s||'').replace(/^"|"$/g,'').trim(); }
+function clean(s){ return (s||'').replace(/^"|"$/g,'').trim(); }
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
@@ -254,14 +252,12 @@ async function loadData() {
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       if (!clean(row[1])) continue;
-      const title=clean(row[0]), imgRaw=clean(row[1]), material=clean(row[2]),
-            desc=clean(row[3]),  price=clean(row[4]),  series=clean(row[5]), status=clean(row[6]);
+      const title=clean(row[0]),imgRaw=clean(row[1]),material=clean(row[2]),
+            desc=clean(row[3]),price=clean(row[4]),series=clean(row[5]),status=clean(row[6]);
       if (series && series !== currentSeries) {
         const h = document.createElement('div');
-        h.className = 'series-heading';
-        h.textContent = series;
-        gallery.appendChild(h);
-        currentSeries = series;
+        h.className = 'series-heading'; h.textContent = series;
+        gallery.appendChild(h); currentSeries = series;
       }
       const imgList = imgRaw.split(';').map(l => {
         l = l.trim();
@@ -269,7 +265,7 @@ async function loadData() {
           ? l.replace('github.com','raw.githubusercontent.com').replace('/blob/','/')
           : l;
       });
-      const isAvail  = status.toLowerCase() === 'available';
+      const isAvail   = status.toLowerCase() === 'available';
       const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
       const card = document.createElement('div');
       card.className = 'art-card';
@@ -298,112 +294,54 @@ async function loadData() {
   }
 }
 
-/* ── ZOOM: one clean instance per image, no window listeners ── */
-function attachZoom(wrapper, img) {
-  let scale = 1, tx = 0, ty = 0;
-  let dragging = false, dragStartX, dragStartY, dragTx, dragTy;
-  let pinchDist = 0;
-  const MAX = 5;
-  const hint     = wrapper.querySelector('.zoom-hint');
-  const resetBtn = wrapper.querySelector('.zoom-reset');
+/* ── LOUPE ── */
+const LOUPE_SIZE   = 180; // px diameter
+const ZOOM_FACTOR  = 3;   // magnification
 
-  // Hide hint after 3 s
-  const hintTimer = setTimeout(() => hint.classList.add('hidden'), 3000);
+function attachLoupe(wrapper, img) {
+  const loupe = document.createElement('div');
+  loupe.className = 'loupe';
+  wrapper.appendChild(loupe);
 
-  function applyTransform() {
-    img.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
-    resetBtn.style.display = scale > 1 ? 'block' : 'none';
-    wrapper.classList.toggle('can-drag', scale > 1);
-  }
-
-  function clampOffset() {
-    if (scale <= 1) { tx = 0; ty = 0; return; }
-    const iw = img.offsetWidth  * scale;
-    const ih = img.offsetHeight * scale;
-    const ww = wrapper.offsetWidth;
-    const wh = wrapper.offsetHeight;
-    const maxTx = 0,                       minTx = Math.min(0, ww - iw);
-    const maxTy = 0,                       minTy = Math.min(0, wh - ih);
-    tx = Math.max(minTx, Math.min(maxTx, tx));
-    ty = Math.max(minTy, Math.min(maxTy, ty));
-  }
-
-  function resetZoom() { scale = 1; tx = 0; ty = 0; applyTransform(); }
-  resetBtn.addEventListener('click', e => { e.stopPropagation(); resetZoom(); });
-  wrapper.addEventListener('dblclick', resetZoom);
-
-  // ── Mouse wheel ──
-  wrapper.addEventListener('wheel', e => {
-    e.preventDefault();
-    e.stopPropagation();
-    const rect   = img.getBoundingClientRect();
-    const pivotX = e.clientX - rect.left;
-    const pivotY = e.clientY - rect.top;
-    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    const newScale = Math.min(MAX, Math.max(1, scale * factor));
-    if (newScale === scale) return;
-    tx -= pivotX * (newScale / scale - 1);
-    ty -= pivotY * (newScale / scale - 1);
-    scale = newScale;
-    clampOffset();
-    applyTransform();
-  }, {passive: false});
-
-  // ── Mouse drag — scoped to wrapper only ──
-  wrapper.addEventListener('mousedown', e => {
-    if (scale <= 1) return;
-    e.preventDefault();
-    dragging = true;
-    dragStartX = e.clientX; dragStartY = e.clientY;
-    dragTx = tx; dragTy = ty;
-    wrapper.classList.add('dragging');
-  });
   wrapper.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    tx = dragTx + (e.clientX - dragStartX);
-    ty = dragTy + (e.clientY - dragStartY);
-    clampOffset();
-    applyTransform();
+    const rect = img.getBoundingClientRect();
+
+    // Cursor position relative to the image
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Hide if outside image bounds
+    if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
+      loupe.style.display = 'none';
+      return;
+    }
+    loupe.style.display = 'block';
+
+    // Position the loupe centred on cursor, offset so it doesn't cover the spot
+    const offset = LOUPE_SIZE / 2 + 12;
+    let lx = x - LOUPE_SIZE / 2;
+    let ly = y - LOUPE_SIZE / 2 - offset;
+    // Keep inside wrapper
+    const wRect = wrapper.getBoundingClientRect();
+    lx = Math.max(0, Math.min(wRect.width  - LOUPE_SIZE, lx));
+    ly = Math.max(0, Math.min(wRect.height - LOUPE_SIZE, ly));
+    loupe.style.left = lx + 'px';
+    loupe.style.top  = ly + 'px';
+
+    // Background = same image, scaled up
+    const bgW = rect.width  * ZOOM_FACTOR;
+    const bgH = rect.height * ZOOM_FACTOR;
+    const bgX = -(x * ZOOM_FACTOR - LOUPE_SIZE / 2);
+    const bgY = -(y * ZOOM_FACTOR - LOUPE_SIZE / 2);
+
+    loupe.style.backgroundImage    = `url('${img.src}')`;
+    loupe.style.backgroundSize     = `${bgW}px ${bgH}px`;
+    loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
   });
-  wrapper.addEventListener('mouseup',   () => { dragging = false; wrapper.classList.remove('dragging'); });
-  wrapper.addEventListener('mouseleave',() => { dragging = false; wrapper.classList.remove('dragging'); });
 
-  // ── Touch pinch & pan ──
-  wrapper.addEventListener('touchstart', e => {
-    if (e.touches.length === 2) {
-      pinchDist  = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY);
-      dragTx = tx; dragTy = ty;
-    } else if (e.touches.length === 1 && scale > 1) {
-      dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
-      dragTx = tx; dragTy = ty;
-    }
-  }, {passive: true});
-
-  wrapper.addEventListener('touchmove', e => {
-    if (e.touches.length === 2) {
-      e.preventDefault();
-      const newDist = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY);
-      if (!pinchDist) return;
-      const rect = img.getBoundingClientRect();
-      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
-      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
-      const newScale = Math.min(MAX, Math.max(1, scale * (newDist / pinchDist)));
-      tx -= midX * (newScale / scale - 1);
-      ty -= midY * (newScale / scale - 1);
-      scale = newScale;
-      pinchDist = newDist;
-      clampOffset();
-      applyTransform();
-    } else if (e.touches.length === 1 && scale > 1) {
-      e.preventDefault();
-      tx = dragTx + (e.touches[0].clientX - dragStartX);
-      ty = dragTy + (e.touches[0].clientY - dragStartY);
-      clampOffset();
-      applyTransform();
-    }
-  }, {passive: false});
-
-  wrapper.addEventListener('touchend', () => { pinchDist = 0; });
+  wrapper.addEventListener('mouseleave', () => {
+    loupe.style.display = 'none';
+  });
 }
 
 function openModal(title, images, material, desc, price, status) {
@@ -415,16 +353,8 @@ function openModal(title, images, material, desc, price, status) {
   container.innerHTML = '';
 
   images.forEach(src => {
-    const wrapper  = document.createElement('div');
-    wrapper.className = 'zoom-wrapper';
-
-    const hint = document.createElement('div');
-    hint.className = 'zoom-hint';
-    hint.textContent = 'Scroll to zoom · Drag to pan · Double-click to reset';
-
-    const resetBtn = document.createElement('button');
-    resetBtn.className = 'zoom-reset';
-    resetBtn.textContent = 'Reset zoom';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'loupe-wrapper';
 
     const img = document.createElement('img');
     img.className = 'modal-image';
@@ -433,20 +363,18 @@ function openModal(title, images, material, desc, price, status) {
     img.onerror = () => wrapper.remove();
     img.src = src;
 
-    wrapper.appendChild(hint);
-    wrapper.appendChild(resetBtn);
     wrapper.appendChild(img);
     container.appendChild(wrapper);
 
-    // Attach zoom only after image has dimensions
-    if (img.complete) attachZoom(wrapper, img);
-    else img.addEventListener('load', () => attachZoom(wrapper, img), {once: true});
+    // Attach loupe once image has loaded so dimensions are correct
+    const init = () => attachLoupe(wrapper, img);
+    img.complete ? init() : img.addEventListener('load', init, {once: true});
   });
 
   const isSold = /private collection|sold/i.test(status);
   document.getElementById('inquiry-box-container').innerHTML = isSold
     ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
-    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$'+price : 'Price on Request'}</p>
+    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
        <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
 
   document.getElementById('modal').classList.add('active');

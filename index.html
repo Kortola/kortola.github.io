@@ -11,23 +11,20 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:#fff;color:#18181b;line-height:1.6;-webkit-user-select:none;user-select:none;}
 
-/* NAV */
 nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
 .nav-container{max-width:1000px;margin:0 auto;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:1.1rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;}
 .nav-links a{text-decoration:none;color:#71717a;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-left:2rem;transition:color .3s;font-weight:500;}
 .nav-links a:hover{color:#18181b;}
-
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
 .hamburger span{display:block;width:22px;height:1px;background:#18181b;transition:.3s;}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
 .hamburger.open span:nth-child(2){opacity:0;}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{display:none;flex-direction:column;gap:0;background:#fff;border-top:1px solid #f4f4f5;}
+.mobile-menu{display:none;flex-direction:column;background:#fff;border-top:1px solid #f4f4f5;}
 .mobile-menu a{padding:1rem 2rem;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;border-bottom:1px solid #f4f4f5;}
 .mobile-menu.open{display:flex;}
 
-/* HERO */
 #hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#fff;border-bottom:1px solid #f4f4f5;}
 .hero-inner{display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
 .hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.4em;color:#a1a1aa;}
@@ -38,7 +35,6 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* GALLERY */
 #gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:3rem;max-width:1000px;margin:6rem auto 5rem;padding:0 2rem;}
 .series-heading{grid-column:1/-1;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
 
@@ -61,14 +57,12 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
 .art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
 
-/* CUSTOM */
 .custom-section{background:#fafafa;padding:8rem 2rem;border-top:1px solid #f4f4f5;}
 .custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
 .custom-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;text-align:center;}
 .step h4{font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-bottom:1rem;color:#18181b;}
 .step p{font-size:13px;color:#71717a;font-weight:300;line-height:1.8;}
 
-/* ABOUT */
 #about{padding:8rem 2rem;border-top:1px solid #f4f4f5;}
 .about-container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:5rem;align-items:start;}
 .about-photo-wrapper{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#fafafa;}
@@ -77,7 +71,6 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .about-content p+p{margin-top:1.2rem;}
 .about-content h2{margin-bottom:1.5rem;font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:#18181b;}
 
-/* CONTACT */
 #contact{padding:8rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .contact-links{display:flex;flex-direction:column;gap:1.5rem;align-items:center;margin-top:1rem;}
 .contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
@@ -90,45 +83,38 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
 
-/* Zoom wrapper — only around each image */
+/* Zoom */
 .zoom-wrapper{
-  position:relative;
+  position:relative;width:100%;
   overflow:hidden;
-  display:inline-flex;
-  justify-content:center;
-  align-items:center;
-  width:100%;
-  cursor:grab;
+  display:flex;justify-content:center;align-items:center;
+  touch-action:none;
 }
+.zoom-wrapper.can-drag{cursor:grab;}
 .zoom-wrapper.dragging{cursor:grabbing;}
 .modal-image{
-  display:block;
-  max-width:100%;
-  max-height:80vh;
+  display:block;max-width:100%;max-height:80vh;
   object-fit:contain;
   box-shadow:0 20px 50px rgba(0,0,0,.08);
-  pointer-events:none;
-  transform-origin:0 0;
-  will-change:transform;
+  pointer-events:none;user-select:none;
+  transform-origin:top left;
 }
 .zoom-hint{
   position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);
   font-size:9px;letter-spacing:.2em;text-transform:uppercase;
-  color:#71717a;background:rgba(255,255,255,.92);padding:5px 12px;
-  pointer-events:none;white-space:nowrap;z-index:5;
-  transition:opacity .6s;
+  color:#52525b;background:rgba(255,255,255,.9);padding:5px 14px;
+  pointer-events:none;white-space:nowrap;
+  transition:opacity .5s;
 }
-.zoom-hint.hide{opacity:0;}
+.zoom-hint.hidden{opacity:0;}
 .zoom-reset{
   position:absolute;top:.8rem;right:.8rem;
-  background:rgba(255,255,255,.92);border:1px solid #e4e4e7;
+  background:rgba(255,255,255,.9);border:1px solid #e4e4e7;
   font-size:9px;letter-spacing:.15em;text-transform:uppercase;
-  padding:5px 10px;cursor:pointer;z-index:5;
+  padding:5px 10px;cursor:pointer;
   font-family:'Inter',sans-serif;color:#18181b;
-  opacity:0;pointer-events:none;transition:opacity .3s;
+  display:none;
 }
-.zoom-reset.show{opacity:1;pointer-events:auto;}
-
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
 .inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
@@ -247,11 +233,12 @@ function parseCSV(text) {
     const cells = []; let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       const c = line[i];
-      if (c === '"') { inQ = !inQ; }
+      if (c === '"') inQ = !inQ;
       else if (c === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
-      else { cur += c; }
+      else cur += c;
     }
-    cells.push(cur.trim()); rows.push(cells);
+    cells.push(cur.trim());
+    rows.push(cells);
   }
   return rows;
 }
@@ -260,27 +247,29 @@ function clean(s) { return (s||'').replace(/^"|"$/g,'').trim(); }
 async function loadData() {
   const gallery = document.getElementById('gallery');
   try {
-    const res = await fetch(sheetURL + '&cb=' + Date.now());
+    const res  = await fetch(sheetURL + '&cb=' + Date.now());
     const rows = parseCSV(await res.text());
     gallery.innerHTML = '';
     let currentSeries = '', delay = 0;
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       if (!clean(row[1])) continue;
-      const title=clean(row[0]),imgRaw=clean(row[1]),material=clean(row[2]),
-            desc=clean(row[3]),price=clean(row[4]),series=clean(row[5]),status=clean(row[6]);
+      const title=clean(row[0]), imgRaw=clean(row[1]), material=clean(row[2]),
+            desc=clean(row[3]),  price=clean(row[4]),  series=clean(row[5]), status=clean(row[6]);
       if (series && series !== currentSeries) {
         const h = document.createElement('div');
-        h.className = 'series-heading'; h.textContent = series;
-        gallery.appendChild(h); currentSeries = series;
+        h.className = 'series-heading';
+        h.textContent = series;
+        gallery.appendChild(h);
+        currentSeries = series;
       }
       const imgList = imgRaw.split(';').map(l => {
         l = l.trim();
-        return l.includes('github.com') && l.includes('/blob/')
+        return (l.includes('github.com') && l.includes('/blob/'))
           ? l.replace('github.com','raw.githubusercontent.com').replace('/blob/','/')
           : l;
       });
-      const isAvail = status.toLowerCase() === 'available';
+      const isAvail  = status.toLowerCase() === 'available';
       const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
       const card = document.createElement('div');
       card.className = 'art-card';
@@ -295,13 +284,13 @@ async function loadData() {
           <h3 class="art-title">${title}</h3>
           <p class="art-material">${material}</p>
         </div>`;
-      card.onclick = () => openModal(title, imgList, material, desc, price, status);
+      card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status));
       gallery.appendChild(card);
       delay += 80;
     }
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-    }, {threshold:0.1});
+    }, {threshold: 0.1});
     document.querySelectorAll('.art-card').forEach(c => obs.observe(c));
   } catch(err) {
     console.error(err);
@@ -309,102 +298,124 @@ async function loadData() {
   }
 }
 
-/* ── ZOOM & PAN (applied per image) ── */
+/* ── ZOOM: one clean instance per image, no window listeners ── */
 function attachZoom(wrapper, img) {
   let scale = 1, tx = 0, ty = 0;
-  let dragging = false, startX, startY, startTx, startTy;
+  let dragging = false, dragStartX, dragStartY, dragTx, dragTy;
+  let pinchDist = 0;
   const MAX = 5;
-  const hint  = wrapper.querySelector('.zoom-hint');
+  const hint     = wrapper.querySelector('.zoom-hint');
   const resetBtn = wrapper.querySelector('.zoom-reset');
-  let hintTimer = setTimeout(() => hint.classList.add('hide'), 3000);
 
-  function draw() {
+  // Hide hint after 3 s
+  const hintTimer = setTimeout(() => hint.classList.add('hidden'), 3000);
+
+  function applyTransform() {
     img.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
-    resetBtn.classList.toggle('show', scale > 1);
+    resetBtn.style.display = scale > 1 ? 'block' : 'none';
+    wrapper.classList.toggle('can-drag', scale > 1);
   }
 
-  function clamp() {
-    const iw = img.offsetWidth * scale, ih = img.offsetHeight * scale;
-    const ww = wrapper.offsetWidth,     wh = wrapper.offsetHeight;
-    // centre when smaller than container
-    const minX = iw < ww ? (ww - iw) / 2 : ww - iw;
-    const maxX = iw < ww ? (ww - iw) / 2 : 0;
-    const minY = ih < wh ? (wh - ih) / 2 : wh - ih;
-    const maxY = ih < wh ? (wh - ih) / 2 : 0;
-    tx = Math.min(maxX, Math.max(minX, tx));
-    ty = Math.min(maxY, Math.max(minY, ty));
+  function clampOffset() {
+    if (scale <= 1) { tx = 0; ty = 0; return; }
+    const iw = img.offsetWidth  * scale;
+    const ih = img.offsetHeight * scale;
+    const ww = wrapper.offsetWidth;
+    const wh = wrapper.offsetHeight;
+    const maxTx = 0,                       minTx = Math.min(0, ww - iw);
+    const maxTy = 0,                       minTy = Math.min(0, wh - ih);
+    tx = Math.max(minTx, Math.min(maxTx, tx));
+    ty = Math.max(minTy, Math.min(maxTy, ty));
   }
 
-  function reset() { scale = 1; tx = 0; ty = 0; draw(); }
-  resetBtn.addEventListener('click', e => { e.stopPropagation(); reset(); });
-  wrapper.addEventListener('dblclick', reset);
+  function resetZoom() { scale = 1; tx = 0; ty = 0; applyTransform(); }
+  resetBtn.addEventListener('click', e => { e.stopPropagation(); resetZoom(); });
+  wrapper.addEventListener('dblclick', resetZoom);
 
-  // Scroll to zoom
+  // ── Mouse wheel ──
   wrapper.addEventListener('wheel', e => {
     e.preventDefault();
     e.stopPropagation();
-    const rect = wrapper.getBoundingClientRect();
-    const mx = e.clientX - rect.left - tx;
-    const my = e.clientY - rect.top  - ty;
-    const factor = e.deltaY < 0 ? 1.15 : 1/1.15;
+    const rect   = img.getBoundingClientRect();
+    const pivotX = e.clientX - rect.left;
+    const pivotY = e.clientY - rect.top;
+    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
     const newScale = Math.min(MAX, Math.max(1, scale * factor));
-    tx -= mx * (newScale/scale - 1);
-    ty -= my * (newScale/scale - 1);
+    if (newScale === scale) return;
+    tx -= pivotX * (newScale / scale - 1);
+    ty -= pivotY * (newScale / scale - 1);
     scale = newScale;
-    clamp(); draw();
+    clampOffset();
+    applyTransform();
   }, {passive: false});
 
-  // Mouse drag
+  // ── Mouse drag — scoped to wrapper only ──
   wrapper.addEventListener('mousedown', e => {
     if (scale <= 1) return;
     e.preventDefault();
-    dragging = true; startX = e.clientX; startY = e.clientY; startTx = tx; startTy = ty;
+    dragging = true;
+    dragStartX = e.clientX; dragStartY = e.clientY;
+    dragTx = tx; dragTy = ty;
     wrapper.classList.add('dragging');
   });
-  window.addEventListener('mousemove', e => {
+  wrapper.addEventListener('mousemove', e => {
     if (!dragging) return;
-    tx = startTx + (e.clientX - startX);
-    ty = startTy + (e.clientY - startY);
-    clamp(); draw();
+    tx = dragTx + (e.clientX - dragStartX);
+    ty = dragTy + (e.clientY - dragStartY);
+    clampOffset();
+    applyTransform();
   });
-  window.addEventListener('mouseup', () => { dragging = false; wrapper.classList.remove('dragging'); });
+  wrapper.addEventListener('mouseup',   () => { dragging = false; wrapper.classList.remove('dragging'); });
+  wrapper.addEventListener('mouseleave',() => { dragging = false; wrapper.classList.remove('dragging'); });
 
-  // Pinch to zoom (touch)
-  let lastDist = 0, lastMidX = 0, lastMidY = 0, lastTx, lastTy, lastScale;
+  // ── Touch pinch & pan ──
   wrapper.addEventListener('touchstart', e => {
     if (e.touches.length === 2) {
-      lastDist  = Math.hypot(e.touches[1].clientX-e.touches[0].clientX, e.touches[1].clientY-e.touches[0].clientY);
-      lastMidX  = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-      lastMidY  = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-      lastTx = tx; lastTy = ty; lastScale = scale;
+      pinchDist  = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY);
+      dragTx = tx; dragTy = ty;
+    } else if (e.touches.length === 1 && scale > 1) {
+      dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
+      dragTx = tx; dragTy = ty;
     }
-  }, {passive:true});
+  }, {passive: true});
+
   wrapper.addEventListener('touchmove', e => {
-    if (e.touches.length !== 2) return;
-    e.preventDefault();
-    const dist = Math.hypot(e.touches[1].clientX-e.touches[0].clientX, e.touches[1].clientY-e.touches[0].clientY);
-    const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-    const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-    const rect  = wrapper.getBoundingClientRect();
-    const pivot = { x: lastMidX - rect.left - lastTx, y: lastMidY - rect.top - lastTy };
-    const newScale = Math.min(MAX, Math.max(1, lastScale * (dist / lastDist)));
-    tx = lastTx + (midX - lastMidX) - pivot.x * (newScale/lastScale - 1);
-    ty = lastTy + (midY - lastMidY) - pivot.y * (newScale/lastScale - 1);
-    scale = newScale;
-    clamp(); draw();
-  }, {passive:false});
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const newDist = Math.hypot(e.touches[1].clientX - e.touches[0].clientX, e.touches[1].clientY - e.touches[0].clientY);
+      if (!pinchDist) return;
+      const rect = img.getBoundingClientRect();
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2 - rect.left;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2 - rect.top;
+      const newScale = Math.min(MAX, Math.max(1, scale * (newDist / pinchDist)));
+      tx -= midX * (newScale / scale - 1);
+      ty -= midY * (newScale / scale - 1);
+      scale = newScale;
+      pinchDist = newDist;
+      clampOffset();
+      applyTransform();
+    } else if (e.touches.length === 1 && scale > 1) {
+      e.preventDefault();
+      tx = dragTx + (e.touches[0].clientX - dragStartX);
+      ty = dragTy + (e.touches[0].clientY - dragStartY);
+      clampOffset();
+      applyTransform();
+    }
+  }, {passive: false});
+
+  wrapper.addEventListener('touchend', () => { pinchDist = 0; });
 }
 
 function openModal(title, images, material, desc, price, status) {
-  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-title').textContent    = title;
   document.getElementById('modal-material').textContent = material;
-  document.getElementById('modal-desc').textContent = desc;
+  document.getElementById('modal-desc').textContent     = desc;
 
   const container = document.getElementById('modal-images');
   container.innerHTML = '';
 
   images.forEach(src => {
-    const wrapper = document.createElement('div');
+    const wrapper  = document.createElement('div');
     wrapper.className = 'zoom-wrapper';
 
     const hint = document.createElement('div');
@@ -417,7 +428,8 @@ function openModal(title, images, material, desc, price, status) {
 
     const img = document.createElement('img');
     img.className = 'modal-image';
-    img.setAttribute('draggable','false');
+    img.draggable = false;
+    img.alt = title;
     img.onerror = () => wrapper.remove();
     img.src = src;
 
@@ -426,13 +438,15 @@ function openModal(title, images, material, desc, price, status) {
     wrapper.appendChild(img);
     container.appendChild(wrapper);
 
-    attachZoom(wrapper, img);
+    // Attach zoom only after image has dimensions
+    if (img.complete) attachZoom(wrapper, img);
+    else img.addEventListener('load', () => attachZoom(wrapper, img), {once: true});
   });
 
   const isSold = /private collection|sold/i.test(status);
   document.getElementById('inquiry-box-container').innerHTML = isSold
     ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
-    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
+    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$'+price : 'Price on Request'}</p>
        <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
 
   document.getElementById('modal').classList.add('active');
@@ -449,15 +463,13 @@ document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
 
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-hamburger.addEventListener('click', () => {
-  hamburger.classList.toggle('open');
-  mobileMenu.classList.toggle('open');
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
 });
 function closeMobileMenu() {
-  hamburger.classList.remove('open');
-  mobileMenu.classList.remove('open');
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
 }
 
 window.onload = loadData;

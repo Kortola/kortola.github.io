@@ -44,7 +44,6 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .series-heading{grid-column:1/-1;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
 
 /* Skeleton loader */
-.skeleton{background:#f4f4f5;border-radius:0;animation:shimmer 1.4s ease infinite;}
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
 .skeleton-card{opacity:1;}
 .skeleton-img{aspect-ratio:1/1;background:#f4f4f5;animation:shimmer 1.4s ease infinite;}
@@ -90,17 +89,30 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .contact-links a:hover{border-color:#18181b;}
 
 /* MODAL */
-#modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
+#modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow:hidden;}
 #modal.active{display:block;}
-.modal-backdrop{position:fixed;inset:0;z-index:199;}
 .close-btn{position:fixed;top:2rem;right:2rem;font-size:2rem;border:none;background:none;cursor:pointer;z-index:210;color:#18181b;line-height:1;}
 .modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
+.modal-scroll-area{width:100%;height:calc(100vh - 6rem);overflow-y:auto;}
+
+/* Zoom container */
+.zoom-wrapper{position:relative;width:100%;display:flex;justify-content:center;overflow:hidden;background:#fff;}
+.zoom-hint{position:absolute;bottom:1rem;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#a1a1aa;background:rgba(255,255,255,.9);padding:6px 14px;pointer-events:none;transition:opacity .4s;white-space:nowrap;z-index:5;}
+.zoom-hint.hidden{opacity:0;}
+.zoom-canvas{display:flex;justify-content:center;align-items:center;width:100%;cursor:grab;touch-action:none;}
+.zoom-canvas.dragging{cursor:grabbing;}
+.modal-image{display:block;max-width:100%;max-height:80vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;transform-origin:0 0;}
+
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
 .modal-img-wrapper{position:relative;display:flex;justify-content:center;width:100%;}
-.modal-image{display:block;width:auto;max-width:100%;max-height:80vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
+
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
 .inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
+
+/* Reset zoom button */
+.zoom-reset{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.9);border:1px solid #e4e4e7;font-size:9px;letter-spacing:.15em;text-transform:uppercase;padding:6px 12px;cursor:pointer;z-index:5;opacity:0;transition:opacity .3s;font-family:'Inter',sans-serif;color:#18181b;}
+.zoom-reset.visible{opacity:1;}
 
 /* SHARED */
 section{padding:6rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
@@ -205,13 +217,15 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 <!-- MODAL -->
 <div id="modal">
   <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
-  <div class="modal-content">
-    <div id="modal-images"></div>
-    <div class="modal-details">
-      <h2 id="modal-title" class="section-title" style="margin-bottom:1rem;"></h2>
-      <p id="modal-material" style="color:#71717a;margin-bottom:1.5rem;font-size:13px;"></p>
-      <p id="modal-desc" style="color:#52525b;font-size:13px;font-weight:300;line-height:1.8;"></p>
-      <div id="inquiry-box-container"></div>
+  <div class="modal-scroll-area">
+    <div class="modal-content">
+      <div id="modal-images"></div>
+      <div class="modal-details">
+        <h2 id="modal-title" class="section-title" style="margin-bottom:1rem;"></h2>
+        <p id="modal-material" style="color:#71717a;margin-bottom:1.5rem;font-size:13px;"></p>
+        <p id="modal-desc" style="color:#52525b;font-size:13px;font-weight:300;line-height:1.8;"></p>
+        <div id="inquiry-box-container"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -251,21 +265,13 @@ async function loadData() {
     for (let i = 1; i < rows.length; i++) {
       const row = rows[i];
       if (!clean(row[1])) continue;
-
-      const title    = clean(row[0]);
-      const imgRaw   = clean(row[1]);
-      const material = clean(row[2]);
-      const desc     = clean(row[3]);
-      const price    = clean(row[4]);
-      const series   = clean(row[5]);
-      const status   = clean(row[6]);
+      const title = clean(row[0]), imgRaw = clean(row[1]), material = clean(row[2]),
+            desc  = clean(row[3]), price  = clean(row[4]), series   = clean(row[5]), status = clean(row[6]);
 
       if (series && series !== currentSeries) {
         const h = document.createElement('div');
-        h.className = 'series-heading';
-        h.textContent = series;
-        gallery.appendChild(h);
-        currentSeries = series;
+        h.className = 'series-heading'; h.textContent = series;
+        gallery.appendChild(h); currentSeries = series;
       }
 
       const imgList = imgRaw.split(';').map(l => {
@@ -276,9 +282,7 @@ async function loadData() {
       });
 
       const isAvail = status.toLowerCase() === 'available';
-      const badgeHTML = status
-        ? `<div class="status-badge ${isAvail ? 'available-tag' : ''}">${status}</div>`
-        : '';
+      const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
 
       const card = document.createElement('div');
       card.className = 'art-card';
@@ -286,7 +290,8 @@ async function loadData() {
       card.innerHTML = `
         <div class="img-container">
           ${badgeHTML}
-          <img src="${imgList[0]}" draggable="false" loading="lazy" decoding="async" alt="${title}" onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
+          <img src="${imgList[0]}" draggable="false" loading="lazy" decoding="async" alt="${title}"
+               onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
         </div>
         <div class="art-info">
           <h3 class="art-title">${title}</h3>
@@ -299,13 +304,113 @@ async function loadData() {
 
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-    }, { threshold: 0.1 });
+    }, {threshold: 0.1});
     document.querySelectorAll('.art-card').forEach(c => obs.observe(c));
 
-  } catch (err) {
+  } catch(err) {
     console.error(err);
     gallery.innerHTML = '<p style="grid-column:1/-1;color:#a1a1aa;font-size:13px;">Unable to load gallery. Check your Google Sheet columns (A–G).</p>';
   }
+}
+
+/* ── ZOOM & PAN ── */
+function makeZoomable(wrapper, img) {
+  let scale = 1, ox = 0, oy = 0;
+  let dragging = false, startX, startY, lastOx, lastOy;
+  const MIN = 1, MAX = 5;
+  const hint  = wrapper.querySelector('.zoom-hint');
+  const reset = wrapper.querySelector('.zoom-reset');
+  let hintTimer;
+
+  function applyTransform() {
+    img.style.transform = `translate(${ox}px, ${oy}px) scale(${scale})`;
+    img.style.transformOrigin = '0 0';
+    reset.classList.toggle('visible', scale > 1);
+  }
+
+  function clampPan() {
+    const r = img.getBoundingClientRect();
+    const wr = wrapper.getBoundingClientRect();
+    const W = img.naturalWidth  || img.offsetWidth;
+    const H = img.naturalHeight || img.offsetHeight;
+    const sw = W * scale, sh = H * scale;
+    const maxX = 0, minX = Math.min(0, wr.width  - sw);
+    const maxY = 0, minY = Math.min(0, wr.height - sh);
+    ox = Math.min(maxX, Math.max(minX, ox));
+    oy = Math.min(maxY, Math.max(minY, oy));
+  }
+
+  function showHint() {
+    if (!hint) return;
+    hint.classList.remove('hidden');
+    clearTimeout(hintTimer);
+    hintTimer = setTimeout(() => hint.classList.add('hidden'), 2500);
+  }
+
+  function resetZoom() { scale = 1; ox = 0; oy = 0; applyTransform(); }
+  reset.addEventListener('click', resetZoom);
+
+  // Scroll to zoom
+  wrapper.addEventListener('wheel', e => {
+    e.preventDefault();
+    const rect = img.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const delta = e.deltaY < 0 ? 1.15 : 1/1.15;
+    const newScale = Math.min(MAX, Math.max(MIN, scale * delta));
+    ox -= mx * (newScale - scale);
+    oy -= my * (newScale - scale);
+    scale = newScale;
+    clampPan(); applyTransform();
+  }, {passive: false});
+
+  // Drag to pan
+  wrapper.addEventListener('mousedown', e => {
+    if (scale <= 1) return;
+    dragging = true; startX = e.clientX; startY = e.clientY;
+    lastOx = ox; lastOy = oy;
+    wrapper.classList.add('dragging');
+  });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    ox = lastOx + (e.clientX - startX);
+    oy = lastOy + (e.clientY - startY);
+    clampPan(); applyTransform();
+  });
+  window.addEventListener('mouseup', () => { dragging = false; wrapper.classList.remove('dragging'); });
+
+  // Double-click to reset
+  wrapper.addEventListener('dblclick', resetZoom);
+
+  // Pinch to zoom (touch)
+  let lastDist = null, lastTouchOx, lastTouchOy, lastMidX, lastMidY;
+  wrapper.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+      lastDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      lastMidX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      lastMidY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      lastTouchOx = ox; lastTouchOy = oy;
+    }
+  }, {passive: true});
+  wrapper.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+      e.preventDefault();
+      const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+      const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+      const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+      const rect = img.getBoundingClientRect();
+      const pinchX = lastMidX - rect.left, pinchY = lastMidY - rect.top;
+      const newScale = Math.min(MAX, Math.max(MIN, scale * (dist / lastDist)));
+      ox += (midX - lastMidX) - pinchX * (newScale - scale);
+      oy += (midY - lastMidY) - pinchY * (newScale - scale);
+      scale = newScale; lastDist = dist;
+      clampPan(); applyTransform();
+    }
+  }, {passive: false});
+  wrapper.addEventListener('touchend', () => { lastDist = null; });
+
+  // Show hint when modal opens
+  img.addEventListener('load', showHint);
+  setTimeout(showHint, 400);
 }
 
 function openModal(title, images, material, desc, price, status) {
@@ -315,21 +420,45 @@ function openModal(title, images, material, desc, price, status) {
 
   const container = document.getElementById('modal-images');
   container.innerHTML = '';
+
   images.forEach(src => {
-    const w = document.createElement('div');
-    w.className = 'modal-img-wrapper';
+    const outer = document.createElement('div');
+    outer.className = 'modal-img-wrapper';
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'zoom-wrapper';
+    wrapper.style.cssText = 'position:relative;width:100%;display:flex;justify-content:center;overflow:hidden;';
+
+    const hint = document.createElement('div');
+    hint.className = 'zoom-hint';
+    hint.textContent = 'Scroll to zoom · Drag to pan · Double-click to reset';
+
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'zoom-reset';
+    resetBtn.textContent = 'Reset zoom';
+
+    const canvas = document.createElement('div');
+    canvas.className = 'zoom-canvas';
+
     const img = document.createElement('img');
     img.src = src; img.className = 'modal-image';
     img.setAttribute('draggable','false');
-    img.onerror = () => w.remove();
-    w.appendChild(img);
-    container.appendChild(w);
+    img.onerror = () => outer.remove();
+
+    canvas.appendChild(img);
+    wrapper.appendChild(hint);
+    wrapper.appendChild(resetBtn);
+    wrapper.appendChild(canvas);
+    outer.appendChild(wrapper);
+    container.appendChild(outer);
+
+    makeZoomable(canvas, img);
   });
 
   const isSold = /private collection|sold/i.test(status);
   document.getElementById('inquiry-box-container').innerHTML = isSold
     ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
-    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>
+    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$'+price : 'Price on Request'}</p>
        <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
 
   document.getElementById('modal').classList.add('active');

@@ -74,32 +74,17 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
 .contact-links a:hover{border-color:#18181b;}
 
-/* MODAL */
 #modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
 #modal.active{display:block;}
 .close-btn{position:fixed;top:2rem;right:2rem;font-size:2rem;border:none;background:none;cursor:pointer;z-index:210;color:#18181b;line-height:1;}
 .modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
 
-/* Loupe wrapper */
-.loupe-wrapper{
-  position:relative;
-  display:inline-block;
-  cursor:crosshair;
-  line-height:0;
-}
-.modal-image{
-  display:block;
-  max-width:100%;
-  max-height:75vh;
-  object-fit:contain;
-  box-shadow:0 20px 50px rgba(0,0,0,.08);
-  pointer-events:none;
-}
-/* The loupe lens */
+.loupe-wrapper{position:relative;display:inline-block;cursor:crosshair;line-height:0;}
+.modal-image{display:block;max-width:100%;max-height:75vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
 .loupe{
   position:absolute;
-  width:180px; height:180px;
+  width:110px;height:110px;
   border-radius:50%;
   border:2px solid rgba(255,255,255,.8);
   box-shadow:0 4px 24px rgba(0,0,0,.25);
@@ -108,9 +93,8 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
   overflow:hidden;
   z-index:10;
   background-repeat:no-repeat;
-  /* background-image and background-size set via JS */
 }
-.loupe-wrapper:hover .loupe{ display:block; }
+.loupe-wrapper:hover .loupe{display:block;}
 
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
 .inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
@@ -122,7 +106,8 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 
 @media(max-width:768px){
   #gallery{gap:1rem;}
-  .art-card{height:200px;flex:1 1 calc(50% - .5rem);min-width:140px;}
+  .art-card{flex:1 1 calc(50% - .5rem);min-width:140px;}
+  .img-container{height:200px;}
   .custom-grid{grid-template-columns:1fr;gap:3rem;}
   .about-container{grid-template-columns:1fr;gap:2rem;text-align:center;}
   .about-content h2{text-align:center;}
@@ -194,7 +179,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
       <p>I studied fine arts at the Escola Panamericana de Arte in São Paulo, Brazil, where the city itself was my first subject: urban, colorful, chaotic. It was where I found my voice as a painter.</p>
       <p>Moving to Indiana changed everything. Surrounded by open skies, still water, and the unhurried rhythm of a small Midwestern city, I discovered what I had been looking for all along: quiet. The chaos gave way to calm, the urban density to open horizon, the noise to light.</p>
       <p>Today I paint the landscapes that surround me, the places I have visited, and the quiet moments of everyday life. Always beginning with light, always with the same intention: to paint something that makes people stop, breathe, and feel at peace. People who see my paintings often tell me they feel calm just looking at them. That is the highest thing I could hope to achieve.</p>
-      <p>Based in Northwest Indiana and conveniently located near Chicago, I welcome local collectors and am happy to arrange personal delivery or ship artwork nationwide.<p>
+      <p>Based in Northwest Indiana and conveniently located near Chicago, I welcome local collectors and am happy to arrange personal delivery or ship artwork nationwide.</p>
     </div>
   </div>
 </section>
@@ -296,9 +281,8 @@ async function loadData() {
   }
 }
 
-/* ── LOUPE ── */
-const LOUPE_SIZE   = 180; // px diameter
-const ZOOM_FACTOR  = 3;   // magnification
+const LOUPE_SIZE  = 110;
+const ZOOM_FACTOR = 3;
 
 function attachLoupe(wrapper, img) {
   const loupe = document.createElement('div');
@@ -307,43 +291,30 @@ function attachLoupe(wrapper, img) {
 
   wrapper.addEventListener('mousemove', e => {
     const rect = img.getBoundingClientRect();
-
-    // Cursor position relative to the image
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-
-    // Hide if outside image bounds
     if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-      loupe.style.display = 'none';
-      return;
+      loupe.style.display = 'none'; return;
     }
     loupe.style.display = 'block';
-
-    // Position the loupe centred on cursor, offset so it doesn't cover the spot
     const offset = LOUPE_SIZE / 2 + 12;
+    const wRect  = wrapper.getBoundingClientRect();
     let lx = x - LOUPE_SIZE / 2;
     let ly = y - LOUPE_SIZE / 2 - offset;
-    // Keep inside wrapper
-    const wRect = wrapper.getBoundingClientRect();
     lx = Math.max(0, Math.min(wRect.width  - LOUPE_SIZE, lx));
     ly = Math.max(0, Math.min(wRect.height - LOUPE_SIZE, ly));
     loupe.style.left = lx + 'px';
     loupe.style.top  = ly + 'px';
-
-    // Background = same image, scaled up
     const bgW = rect.width  * ZOOM_FACTOR;
     const bgH = rect.height * ZOOM_FACTOR;
     const bgX = -(x * ZOOM_FACTOR - LOUPE_SIZE / 2);
     const bgY = -(y * ZOOM_FACTOR - LOUPE_SIZE / 2);
-
     loupe.style.backgroundImage    = `url('${img.src}')`;
     loupe.style.backgroundSize     = `${bgW}px ${bgH}px`;
     loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
   });
 
-  wrapper.addEventListener('mouseleave', () => {
-    loupe.style.display = 'none';
-  });
+  wrapper.addEventListener('mouseleave', () => { loupe.style.display = 'none'; });
 }
 
 function openModal(title, images, material, desc, price, status) {
@@ -353,22 +324,17 @@ function openModal(title, images, material, desc, price, status) {
 
   const container = document.getElementById('modal-images');
   container.innerHTML = '';
-
   images.forEach(src => {
     const wrapper = document.createElement('div');
     wrapper.className = 'loupe-wrapper';
-
     const img = document.createElement('img');
     img.className = 'modal-image';
     img.draggable = false;
     img.alt = title;
     img.onerror = () => wrapper.remove();
     img.src = src;
-
     wrapper.appendChild(img);
     container.appendChild(wrapper);
-
-    // Attach loupe once image has loaded so dimensions are correct
     const init = () => attachLoupe(wrapper, img);
     img.complete ? init() : img.addEventListener('load', init, {once: true});
   });
@@ -392,7 +358,6 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal()
 document.getElementById('modal').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
-
 document.getElementById('hamburger').addEventListener('click', () => {
   document.getElementById('hamburger').classList.toggle('open');
   document.getElementById('mobileMenu').classList.toggle('open');

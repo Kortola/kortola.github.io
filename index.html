@@ -6,8 +6,6 @@
 <!-- Preconnect to speed up external resources -->
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="preconnect" href="https://raw.githubusercontent.com"/>
-<link rel="dns-prefetch" href="https://docs.google.com"/>
 <title>Karina Ortolá | Artist Portfolio</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap');
@@ -237,12 +235,16 @@ async function loadData() {
         gallery.appendChild(h); currentSeries = series;
       }
 
-      // Convert any remaining github.com blob URLs just in case
+      // Convert full GitHub URLs to fast relative paths
       const imgList = images.map(l => {
         l = l.trim();
-        return (l.includes('github.com') && l.includes('/blob/'))
-          ? l.replace('github.com','raw.githubusercontent.com').replace('/blob/','/')
-          : l;
+        // Convert github.com blob URL → relative path
+        if (l.includes('github.com') && l.includes('/blob/main/'))
+          return '/' + l.split('/blob/main/')[1];
+        // Convert raw.githubusercontent.com URL → relative path
+        if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
+          return '/' + l.split('/main/')[1];
+        return l;
       });
 
       const isAvail   = status.toLowerCase() === 'available';

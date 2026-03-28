@@ -217,57 +217,41 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 </div>
 
 <script>
-const sheetID  = '1iJmTnFVTH3Gtr1iz4E9F4iF1a9KCju-5h7XMnzL5cig';
-const sheetURL = 'https://docs.google.com/spreadsheets/d/' + sheetID + '/export?format=csv&id=' + sheetID + '&gid=0';
-
-function parseCSV(text) {
-  const rows = [];
-  for (const line of text.split(/\r?\n/)) {
-    if (!line.trim()) continue;
-    const cells = []; let cur = '', inQ = false;
-    for (let i = 0; i < line.length; i++) {
-      const c = line[i];
-      if (c === '"') inQ = !inQ;
-      else if (c === ',' && !inQ) { cells.push(cur.trim()); cur = ''; }
-      else cur += c;
-    }
-    cells.push(cur.trim());
-    rows.push(cells);
-  }
-  return rows;
-}
-function clean(s){ return (s||'').replace(/^"|"$/g,'').trim(); }
+const JSON_URL = '/paintings.json';
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
   try {
-    const res  = await fetch(sheetURL + '&cb=' + Date.now());
-    const rows = parseCSV(await res.text());
+    const res      = await fetch(JSON_URL + '?cb=' + Date.now());
+    const paintings = await res.json();
     gallery.innerHTML = '';
     let currentSeries = '', delay = 0;
-    for (let i = 1; i < rows.length; i++) {
-      const row = rows[i];
-      if (!clean(row[1])) continue;
-      const title=clean(row[0]),imgRaw=clean(row[1]),material=clean(row[2]),
-            desc=clean(row[3]),price=clean(row[4]),series=clean(row[5]),status=clean(row[6]);
+
+    for (const p of paintings) {
+      const { title='', images=[], material='', desc='', price='', series='', status='' } = p;
+      if (!images.length) continue;
+
       if (series && series !== currentSeries) {
         const h = document.createElement('div');
         h.className = 'series-heading'; h.textContent = series;
         gallery.appendChild(h); currentSeries = series;
       }
-      const imgList = imgRaw.split(';').map(l => {
+
+      // Convert any remaining github.com blob URLs just in case
+      const imgList = images.map(l => {
         l = l.trim();
         return (l.includes('github.com') && l.includes('/blob/'))
           ? l.replace('github.com','raw.githubusercontent.com').replace('/blob/','/')
           : l;
       });
+
       const isAvail   = status.toLowerCase() === 'available';
       const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
       const card = document.createElement('div');
       card.className = 'art-card';
       card.style.animationDelay = delay + 'ms';
-      const img = `<img src="${imgList[0]}" 
-               draggable="false" 
+      const imgTag = `<img src="${imgList[0]}"
+               draggable="false"
                loading="${delay < 240 ? 'eager' : 'lazy'}"
                fetchpriority="${delay < 240 ? 'high' : 'low'}"
                decoding="${delay < 240 ? 'sync' : 'async'}"
@@ -277,7 +261,7 @@ async function loadData() {
       card.innerHTML = `
         <div class="img-container">
           ${badgeHTML}
-          ${img}
+          ${imgTag}
         </div>
         <div class="art-info">
           <h3 class="art-title">${title}</h3>
@@ -287,13 +271,15 @@ async function loadData() {
       gallery.appendChild(card);
       delay += 80;
     }
+
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
     }, {threshold: 0.1});
     document.querySelectorAll('.art-card').forEach(c => obs.observe(c));
+
   } catch(err) {
     console.error(err);
-    gallery.innerHTML = '<p style="grid-column:1/-1;color:#a1a1aa;font-size:13px;">Unable to load gallery. Check your Google Sheet columns (A–G).</p>';
+    gallery.innerHTML = '<p style="grid-column:1/-1;color:#a1a1aa;font-size:13px;">Unable to load gallery. Check that paintings.json exists in your repo.</p>';
   }
 }
 

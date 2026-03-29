@@ -1,402 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<!-- Preconnect to speed up external resources -->
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<title>Karina Ortolá | Artist Portfolio</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap');
-
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'Inter',sans-serif;background:#fff;color:#18181b;line-height:1.6;-webkit-user-select:none;user-select:none;}
-
-nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
-.nav-container{max-width:1000px;margin:0 auto;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
-.logo{font-size:1.1rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;}
-.nav-links a{text-decoration:none;color:#71717a;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-left:2rem;transition:color .3s;font-weight:500;}
-.nav-links a:hover{color:#18181b;}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
-.hamburger span{display:block;width:22px;height:1px;background:#18181b;transition:.3s;}
-.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
-.hamburger.open span:nth-child(2){opacity:0;}
-.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg);}
-.mobile-menu{display:none;flex-direction:column;background:#fff;border-top:1px solid #f4f4f5;}
-.mobile-menu a{padding:1rem 2rem;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;border-bottom:1px solid #f4f4f5;}
-.mobile-menu.open{display:flex;}
-
-#hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#fff;border-bottom:1px solid #f4f4f5;}
-.hero-inner{display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
-.hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.4em;color:#a1a1aa;}
-.hero-name{font-family:'EB Garamond',serif;font-size:clamp(3rem,10vw,7rem);font-weight:400;line-height:1;letter-spacing:-.01em;color:#18181b;}
-.hero-name em{font-style:italic;color:#71717a;}
-.hero-tagline{font-size:13px;color:#71717a;font-weight:300;max-width:400px;letter-spacing:.02em;}
-.hero-scroll-hint{margin-top:2rem;display:flex;flex-direction:column;align-items:center;gap:8px;color:#d4d4d8;font-size:9px;letter-spacing:.3em;text-transform:uppercase;animation:float 2.5s ease-in-out infinite;}
-.scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-
-#gallery{display:flex;flex-wrap:wrap;gap:1.5rem;max-width:1000px;margin:6rem auto 5rem;padding:0 2rem;align-items:flex-start;}
-.series-heading{flex:0 0 100%;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
-@keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
-.skeleton-card{opacity:1;}
-.skeleton-img{aspect-ratio:1/1;background:#f4f4f5;animation:shimmer 1.4s ease infinite;}
-.skeleton-line{height:10px;background:#f4f4f5;margin-top:1.5rem;width:60%;animation:shimmer 1.4s ease .1s infinite;}
-.skeleton-line.short{width:40%;margin-top:.6rem;animation-delay:.2s;}
-.art-card{cursor:pointer;opacity:0;position:relative;flex:0 0 auto;}
-.art-card.visible{animation:fadeUp .8s forwards;}
-@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-.img-container{height:380px;width:auto;overflow:hidden;background:#fafafa;position:relative;display:inline-block;}
-/* Image loading state */
-.img-container img{height:100%;width:auto;display:block;transition:transform 2.5s cubic-bezier(.16,1,.3,1),opacity .4s ease;pointer-events:none;opacity:0;}
-.img-container img.loaded{opacity:1;}
-.img-container::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#f4f4f5 25%,#ebebeb 50%,#f4f4f5 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;}
-.img-container img.loaded~*,.img-container:has(img.loaded)::before{display:none;}
-.art-card:hover img.loaded{transform:scale(1.06);}
-.img-fallback{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#a1a1aa;letter-spacing:.15em;text-transform:uppercase;}
-.status-badge{position:absolute;top:1rem;left:1rem;padding:6px 12px;font-size:9px;text-transform:uppercase;letter-spacing:.15em;z-index:10;font-weight:500;background:rgba(255,255,255,.95);}
-.status-badge.available-tag{color:#166534;background:rgba(240,253,244,.98);border:1px solid #d1fae5;}
-.art-info{margin-top:1.5rem;}
-.art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
-.art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
-
-.custom-section{background:#fafafa;padding:8rem 2rem;border-top:1px solid #f4f4f5;}
-.custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
-.custom-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;text-align:center;}
-.step h4{font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-bottom:1rem;color:#18181b;}
-.step p{font-size:13px;color:#71717a;font-weight:300;line-height:1.8;}
-
-#about{padding:8rem 2rem;border-top:1px solid #f4f4f5;}
-.about-container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:5rem;align-items:start;}
-.about-photo-wrapper{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#fafafa;}
-.about-photo-wrapper img{width:100%;height:100%;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,.05);}
-.about-content{color:#52525b;font-size:.82rem;font-weight:300;line-height:2;}
-.about-content p+p{margin-top:1.2rem;}
-.about-content h2{margin-bottom:1.5rem;font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:#18181b;}
-
-#contact{padding:8rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
-.contact-links{display:flex;flex-direction:column;gap:1.5rem;align-items:center;margin-top:1rem;}
-.contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
-.contact-links a:hover{border-color:#18181b;}
-
-#modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
-#modal.active{display:block;}
-.close-btn{position:fixed;top:2rem;right:2rem;font-size:2rem;border:none;background:none;cursor:pointer;z-index:210;color:#18181b;line-height:1;}
-.modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
-#modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
-
-.loupe-wrapper{position:relative;display:inline-block;cursor:crosshair;line-height:0;}
-.modal-image{display:block;max-width:100%;max-height:75vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
-.loupe{
-  position:absolute;
-  width:110px;height:110px;
-  border-radius:50%;
-  border:2px solid rgba(255,255,255,.8);
-  box-shadow:0 4px 24px rgba(0,0,0,.25);
-  pointer-events:none;
-  display:none;
-  overflow:hidden;
-  z-index:10;
-  background-repeat:no-repeat;
-}
-.loupe-wrapper:hover .loupe{display:block;}
-
-.modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
-.inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
-.inquiry-btn:hover{background:#18181b;color:#fff;}
-
-section{padding:6rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
-.section-title{font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin-bottom:3rem;}
-footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
-
-@media(max-width:768px){
-  /* Gallery — full width, natural proportions */
-  #gallery{gap:2rem;padding:0 1rem;margin:5rem auto 3rem;}
-  .art-card{flex:0 0 100%;width:100%;}
-  .img-container{height:auto;width:100%;display:block;}
-  .img-container img{height:auto;width:100%;object-fit:unset;}
-
-  /* Custom section */
-  .custom-grid{grid-template-columns:1fr;gap:3rem;}
-
-  /* About */
-  .about-container{grid-template-columns:1fr;gap:2rem;text-align:center;}
-  .about-photo-wrapper{aspect-ratio:3/2;max-width:340px;margin:0 auto;}
-  .about-content h2{text-align:center;}
-
-  /* Nav */
-  .nav-links{display:none;}
-  .hamburger{display:flex;}
-
-  /* Loupe — no hover on touch */
-  .loupe{display:none !important;}
-
-  /* Hero */
-  #hero{padding:1.5rem;}
-  .hero-name{font-size:clamp(2.5rem,14vw,5rem);}
-
-  /* Modal */
-  .modal-content{margin:4rem auto;padding:0 1rem;}
-  .close-btn{top:1rem;right:1rem;}
-}
-
-@media(max-width:480px){
-  .custom-section{padding:4rem 1rem;}
-  #about{padding:4rem 1rem;}
-  #contact{padding:4rem 1rem;}
-}
-</style>
-</head>
-<body oncontextmenu="return false;">
-
-<nav>
-  <div class="nav-container">
-    <div class="logo">Karina Ortolá</div>
-    <div class="nav-links">
-      <a href="#gallery">Paintings</a>
-      <a href="#custom">Custom</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-    </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#gallery" onclick="closeMobileMenu()">Paintings</a>
-    <a href="#custom" onclick="closeMobileMenu()">Custom</a>
-    <a href="#about" onclick="closeMobileMenu()">About</a>
-    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
-  </div>
-</nav>
-
-<section id="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">Original Paintings · Acrylics on Canvas</div>
-    <h1 class="hero-name">Karina<br><em>Ortolá</em></h1>
-    <p class="hero-tagline">Contemporary expressive painter of landscapes, still life, and quiet everyday scenes</p>
-    <a href="#gallery" style="text-decoration:none;">
-      <div class="hero-scroll-hint"><div class="scroll-line"></div>View works</div>
-    </a>
-  </div>
-</section>
-
-<main id="gallery">
-  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-  <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-</main>
-
-<section id="custom" class="custom-section">
-  <h2 class="section-title">Custom Paintings</h2>
-  <p class="custom-intro">Transform a beautiful moment into a lasting work of art. I specialize in expressive landscapes that capture the essence of a place or memory through a focus on color and light.</p>
-  <div class="custom-grid">
-    <div class="step"><h4>01 · Your Reference</h4><p>Share a photograph of a landscape or a special moment that moves you.</p></div>
-    <div class="step"><h4>02 · Artistic Study</h4><p>I translate your image into an original composition, focusing on the interplay of colour and atmosphere.</p></div>
-    <div class="step"><h4>03 · Final Reveal</h4><p>Your custom acrylic painting is completed and shipped directly to your collection.</p></div>
-  </div>
-  <a href="mailto:karinaortola.art@gmail.com?subject=Custom Landscape Inquiry" class="inquiry-btn" style="display:inline-block;margin-top:4rem;">Inquire About a Custom Work</a>
-</section>
-
-<section id="about" style="padding:8rem 2rem;text-align:left;">
-  <div class="about-container">
-    <div class="about-photo-wrapper">
-      <img src="https://via.placeholder.com/600x800?text=Studio+Photo" alt="Karina Ortolá" draggable="false">
-    </div>
-    <div class="about-content">
-      <h2>About the Artist</h2>
-      <p>I am a painter working in acrylics on large canvas and intimate wood panels. Born into a family with deep Valencian roots, my connection to the Mediterranean tradition of light and color only became clear when I discovered the work of Joaquín Sorolla, the great painter of Valencia, Spain. His fearless use of color, his expressive brushstrokes, and his beautiful interpretation of quotidian scenes guide and inspire my work in ways I am still discovering.</p>
-      <p>I studied fine arts at the Escola Panamericana de Arte in São Paulo, Brazil, where the city itself was my first subject: urban, colorful, chaotic. It was where I found my voice as a painter.</p>
-      <p>Moving to Indiana changed everything. Surrounded by open skies, still water, and the unhurried rhythm of a small Midwestern city, I discovered what I had been looking for all along: quiet. The chaos gave way to calm, the urban density to open horizon, the noise to light.</p>
-      <p>Today I paint the landscapes that surround me, the places I have visited, and the quiet moments of everyday life. Always beginning with light, always with the same intention: to paint something that makes people stop, breathe, and feel at peace. People who see my paintings often tell me they feel calm just looking at them. That is the highest thing I could hope to achieve.</p>
-      <p>Based in Northwest Indiana and conveniently located near Chicago, I welcome local collectors and am happy to arrange personal delivery or ship artwork nationwide.</p>
-    </div>
-  </div>
-</section>
-
-<section id="contact">
-  <h2 class="section-title">Connect</h2>
-  <div class="contact-links">
-    <a href="mailto:karinaortola.art@gmail.com">Email the Studio</a>
-    <a href="https://instagram.com/karinaortola.art" target="_blank">Follow on Instagram</a>
-  </div>
-</section>
-
-<footer>&copy; 2026 Karina Ortolá. All images and content property of the artist.</footer>
-
-<div id="modal">
-  <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
-  <div class="modal-content">
-    <div id="modal-images"></div>
-    <div class="modal-details">
-      <h2 id="modal-title" class="section-title" style="margin-bottom:1rem;"></h2>
-      <p id="modal-material" style="color:#71717a;margin-bottom:1.5rem;font-size:13px;"></p>
-      <p id="modal-desc" style="color:#52525b;font-size:13px;font-weight:300;line-height:1.8;"></p>
-      <div id="inquiry-box-container"></div>
-    </div>
-  </div>
-</div>
-
-<script>
-const JSON_URL = '/paintings.json';
-
-async function loadData() {
-  const gallery = document.getElementById('gallery');
-  try {
-    const res      = await fetch(JSON_URL);
-    const paintings = await res.json();
-    gallery.innerHTML = '';
-    let currentSeries = '', delay = 0;
-
-    for (const p of paintings) {
-      const { title='', images=[], material='', desc='', price='', series='', status='' } = p;
-      if (!images.length) continue;
-
-      if (series && series !== currentSeries) {
-        const h = document.createElement('div');
-        h.className = 'series-heading'; h.textContent = series;
-        gallery.appendChild(h); currentSeries = series;
-      }
-
-      // Convert full GitHub URLs to fast relative paths
-      const imgList = images.map(l => {
-        l = l.trim();
-        // Convert github.com blob URL → relative path
-        if (l.includes('github.com') && l.includes('/blob/main/'))
-          return '/' + l.split('/blob/main/')[1];
-        // Convert raw.githubusercontent.com URL → relative path
-        if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
-          return '/' + l.split('/main/')[1];
-        return l;
-      });
-
-      const isAvail   = status.toLowerCase() === 'available';
-      const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
-      const card = document.createElement('div');
-      card.className = 'art-card';
-      card.style.animationDelay = delay + 'ms';
-      const imgTag = `<img src="${imgList[0]}"
-               draggable="false"
-               loading="${delay < 240 ? 'eager' : 'lazy'}"
-               fetchpriority="${delay < 240 ? 'high' : 'low'}"
-               decoding="${delay < 240 ? 'sync' : 'async'}"
-               alt="${title}"
-               onload="this.classList.add('loaded')"
-               onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">`;
-      card.innerHTML = `
-        <div class="img-container">
-          ${badgeHTML}
-          ${imgTag}
-        </div>
-        <div class="art-info">
-          <h3 class="art-title">${title}</h3>
-          <p class="art-material">${material}</p>
-        </div>`;
-      card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status));
-      gallery.appendChild(card);
-      delay += 80;
-    }
-
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-    }, {threshold: 0.1});
-    document.querySelectorAll('.art-card').forEach(c => obs.observe(c));
-
-  } catch(err) {
-    console.error(err);
-    gallery.innerHTML = '<p style="grid-column:1/-1;color:#a1a1aa;font-size:13px;">Unable to load gallery. Check that paintings.json exists in your repo.</p>';
+[
+  {
+    "title": "Fall Feelings",
+    "images": [
+      "/fallfeelings.webp"
+    ],
+    "material": "Acrylic on Canvas 48\" x 36\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Another Calm Place",
+    "images": [
+      "/anothercalmplace.webp"
+    ],
+    "material": "Acrylic on Canvas 36\" x 24\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Calm Place",
+    "images": [
+      "/calmplace.webp"
+    ],
+    "material": "Acrylic on Canvas 48\" x 36\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "I65",
+    "images": [
+      "/i65.webp"
+    ],
+    "material": "Acrylic on Canvas 48\" x 36\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Little Landscape",
+    "images": [
+      "/littlelandscape1.webp"
+    ],
+    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Pocket Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Little Landscape",
+    "images": [
+      "/littlelandscape2.webp"
+    ],
+    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Pocket Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Little Landscape",
+    "images": [
+      "/littlelandscape3.webp"
+    ],
+    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Pocket Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Little Landscape",
+    "images": [
+      "/littlelandscape4.webp"
+    ],
+    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Pocket Landscapes",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Mama's Garden",
+    "images": [
+      "/mamasgarden.webp"
+    ],
+    "material": "Acrylic on Canvas 36\" x 24\"",
+    "desc": "A Garden in Mexico",
+    "price": "",
+    "series": "Quiet Moments",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Oranges",
+    "images": [
+      "/oranges.jpg"
+    ],
+    "material": "Acrylic on Canvas 12\" x 12\"",
+    "desc": "Oranges",
+    "price": "",
+    "series": "Quiet Moments",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Plants",
+    "images": [
+      "/plants.webp"
+    ],
+    "material": "Acrylic on Canvas 12\" x 12\"",
+    "desc": "Vases",
+    "price": "",
+    "series": "Quiet Moments",
+    "status": "Private Collection"
+  },
+  {
+    "title": "Cappuccino",
+    "images": [
+      "/cappuccino.webp"
+    ],
+    "material": "Acrylic on Canvas 6 x 4\"",
+    "desc": "Cappuccino",
+    "price": "",
+    "series": "Quiet Moments",
+    "status": "Private Collection"
   }
-}
-
-const LOUPE_SIZE  = 110;
-const ZOOM_FACTOR = 3;
-
-function attachLoupe(wrapper, img) {
-  const loupe = document.createElement('div');
-  loupe.className = 'loupe';
-  wrapper.appendChild(loupe);
-
-  wrapper.addEventListener('mousemove', e => {
-    const rect = img.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    if (x < 0 || y < 0 || x > rect.width || y > rect.height) {
-      loupe.style.display = 'none'; return;
-    }
-    loupe.style.display = 'block';
-    const offset = LOUPE_SIZE / 2 + 12;
-    const wRect  = wrapper.getBoundingClientRect();
-    let lx = x - LOUPE_SIZE / 2;
-    let ly = y - LOUPE_SIZE / 2 - offset;
-    lx = Math.max(0, Math.min(wRect.width  - LOUPE_SIZE, lx));
-    ly = Math.max(0, Math.min(wRect.height - LOUPE_SIZE, ly));
-    loupe.style.left = lx + 'px';
-    loupe.style.top  = ly + 'px';
-    const bgW = rect.width  * ZOOM_FACTOR;
-    const bgH = rect.height * ZOOM_FACTOR;
-    const bgX = -(x * ZOOM_FACTOR - LOUPE_SIZE / 2);
-    const bgY = -(y * ZOOM_FACTOR - LOUPE_SIZE / 2);
-    loupe.style.backgroundImage    = `url('${img.src}')`;
-    loupe.style.backgroundSize     = `${bgW}px ${bgH}px`;
-    loupe.style.backgroundPosition = `${bgX}px ${bgY}px`;
-  });
-
-  wrapper.addEventListener('mouseleave', () => { loupe.style.display = 'none'; });
-}
-
-function openModal(title, images, material, desc, price, status) {
-  document.getElementById('modal-title').textContent    = title;
-  document.getElementById('modal-material').textContent = material;
-  document.getElementById('modal-desc').textContent     = desc;
-
-  const container = document.getElementById('modal-images');
-  container.innerHTML = '';
-  images.forEach(src => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'loupe-wrapper';
-    const img = document.createElement('img');
-    img.className = 'modal-image';
-    img.draggable = false;
-    img.alt = title;
-    img.onerror = () => wrapper.remove();
-    img.src = src;
-    wrapper.appendChild(img);
-    container.appendChild(wrapper);
-    const init = () => attachLoupe(wrapper, img);
-    img.complete ? init() : img.addEventListener('load', init, {once: true});
-  });
-
-  const isSold = /private collection|sold/i.test(status);
-  document.getElementById('inquiry-box-container').innerHTML = isSold
-    ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
-    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
-       <a href="mailto:karinaortola.art@gmail.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
-
-  document.getElementById('modal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-document.getElementById('modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobileMenu').classList.toggle('open');
-});
-function closeMobileMenu() {
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('mobileMenu').classList.remove('open');
-}
-
-window.onload = loadData;
-</script>
-</body>
-</html>
+]

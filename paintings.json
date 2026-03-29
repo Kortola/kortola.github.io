@@ -44,6 +44,17 @@
     "status": "Private Collection"
   },
   {
+    "title": "Llutxent",
+    "images": [
+      "/lluxent.webp"
+    ],
+    "material": "Digital Painting",
+    "desc": "Lutxent, Valencia",
+    "price": "",
+    "series": "Landscapes",
+    "status": "Private Collection"
+  },
+  {
     "title": "Little Landscape",
     "images": [
       "/littlelandscape1.webp"

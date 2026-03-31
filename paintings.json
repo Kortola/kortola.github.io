@@ -99,6 +99,17 @@
     "status": "Private Collection"
   },
   {
+    "title": "Little Landscape",
+    "images": [
+      "/littlelandscape5.webp"
+    ],
+    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "desc": "A beautiful landscape",
+    "price": "",
+    "series": "Pocket Landscapes",
+    "status": "Private Collection"
+  },
+  {
     "title": "Mama's Garden",
     "images": [
       "/mamasgarden.webp"

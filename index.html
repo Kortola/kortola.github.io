@@ -81,7 +81,16 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 
 #modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
 #modal.active{display:block;}
-.close-btn{position:fixed;top:2rem;right:2rem;font-size:2rem;border:none;background:none;cursor:pointer;z-index:210;color:#18181b;line-height:1;}
+.close-btn{
+  position:fixed;top:1.5rem;right:1.5rem;
+  display:flex;align-items:center;gap:8px;
+  padding:8px 18px;
+  background:#18181b;color:#fff;
+  font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  border:none;cursor:pointer;z-index:210;
+  transition:background .3s;
+}
+.close-btn:hover{background:#444;}
 .modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
 
@@ -200,7 +209,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 <footer>&copy; 2026 Karina Ortolá. All images and content property of the artist.</footer>
 
 <div id="modal">
-  <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
+  <button class="close-btn" onclick="closeModal()" aria-label="Close">← Back to Gallery</button>
   <div class="modal-content">
     <div id="modal-images"></div>
     <div class="modal-details">

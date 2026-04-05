@@ -130,7 +130,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   #hero{padding:1.5rem;}
   .hero-name{font-size:clamp(2.5rem,14vw,5rem);}
   .modal-content{margin:4rem auto;padding:0 1rem;}
-  .close-btn{top:1rem;right:1rem;}
+  .close-btn{top:1rem;right:1rem;padding:6px 12px;}
 }
 @media(max-width:480px){
   .custom-section{padding:4rem 1rem;}
@@ -227,8 +227,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 </div>
 
 <script>
-// Use full absolute URL to avoid GitHub Pages routing issues
-const JSON_URL = './paintings.json';
+const JSON_URL = 'https://kortola.github.io/paintings.json';
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
@@ -249,14 +248,12 @@ async function loadData() {
         gallery.appendChild(h); currentSeries = series;
       }
 
-      // Normalise image URLs to relative paths served by GitHub Pages
       const imgList = images.map(l => {
         l = l.trim();
         if (l.includes('github.com') && l.includes('/blob/main/'))
           return 'https://kortola.github.io/' + l.split('/blob/main/')[1];
         if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
           return 'https://kortola.github.io/' + l.split('/main/')[1];
-        // Already a relative path — make absolute
         if (l.startsWith('/'))
           return 'https://kortola.github.io' + l;
         return l;
@@ -349,6 +346,9 @@ function openModal(title, images, material, desc, price, status) {
     ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
     : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
        <a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
+
+  // Push a new history state so back button closes the modal
+  history.pushState({ modal: true }, '', '#painting');
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -356,7 +356,17 @@ function openModal(title, images, material, desc, price, status) {
 function closeModal() {
   document.getElementById('modal').classList.remove('active');
   document.body.style.overflow = '';
+  // Only go back in history if we pushed a modal state
+  if (location.hash === '#painting') history.back();
 }
+
+// Handle browser back button — closes modal instead of leaving site
+window.addEventListener('popstate', e => {
+  if (document.getElementById('modal').classList.contains('active')) {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
 
 document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
 document.getElementById('modal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });

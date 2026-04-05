@@ -130,7 +130,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   #hero{padding:1.5rem;}
   .hero-name{font-size:clamp(2.5rem,14vw,5rem);}
   .modal-content{margin:4rem auto;padding:0 1rem;}
-  .close-btn{top:1rem;right:1rem;padding:6px 12px;}
+  .close-btn{top:1rem;right:1rem;}
 }
 @media(max-width:480px){
   .custom-section{padding:4rem 1rem;}
@@ -227,7 +227,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 </div>
 
 <script>
-const JSON_URL = 'https://kortola.github.io/paintings.json';
+const JSON_URL = './paintings.json';
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
@@ -347,7 +347,7 @@ function openModal(title, images, material, desc, price, status) {
     : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
        <a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
 
-  // Push a new history state so back button closes the modal
+  // Push history state so browser back button closes modal instead of leaving site
   history.pushState({ modal: true }, '', '#painting');
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -356,12 +356,11 @@ function openModal(title, images, material, desc, price, status) {
 function closeModal() {
   document.getElementById('modal').classList.remove('active');
   document.body.style.overflow = '';
-  // Only go back in history if we pushed a modal state
   if (location.hash === '#painting') history.back();
 }
 
-// Handle browser back button — closes modal instead of leaving site
-window.addEventListener('popstate', e => {
+// Browser back button closes modal instead of leaving site
+window.addEventListener('popstate', () => {
   if (document.getElementById('modal').classList.contains('active')) {
     document.getElementById('modal').classList.remove('active');
     document.body.style.overflow = '';

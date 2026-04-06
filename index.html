@@ -45,13 +45,21 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-#gallery{display:flex;flex-wrap:wrap;gap:1.5rem;max-width:1000px;margin:3rem auto 5rem;padding:0 2rem;align-items:flex-start;}
+/* FILTERS */
+.filter-bar{max-width:1000px;margin:3rem auto 1.5rem;padding:0 2rem;display:flex;flex-wrap:wrap;gap:.6rem;}
+.filter-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid #e4e4e7;background:#fff;color:#71717a;cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:#18181b;color:#18181b;}
+.filter-btn.active{background:#18181b;color:#fff;border-color:#18181b;}
+
+#gallery{display:flex;flex-wrap:wrap;gap:1.5rem;max-width:1000px;margin:0 auto 2rem;padding:0 2rem;align-items:flex-start;}
 .series-heading{flex:0 0 100%;font-size:11px;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin:3rem 0 1rem;padding-bottom:.8rem;border-bottom:1px solid #f4f4f5;}
+
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
 .skeleton-card{opacity:1;}
 .skeleton-img{aspect-ratio:1/1;background:#f4f4f5;animation:shimmer 1.4s ease infinite;}
 .skeleton-line{height:10px;background:#f4f4f5;margin-top:1.5rem;width:60%;animation:shimmer 1.4s ease .1s infinite;}
 .skeleton-line.short{width:40%;margin-top:.6rem;animation-delay:.2s;}
+
 .art-card{cursor:pointer;opacity:0;position:relative;flex:0 0 auto;}
 .art-card.visible{animation:fadeUp .8s forwards;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
@@ -67,6 +75,13 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-info{margin-top:1.5rem;}
 .art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
 .art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
+
+/* LOAD MORE */
+.load-more-wrap{max-width:1000px;margin:0 auto 5rem;padding:0 2rem;text-align:center;}
+.load-more-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:12px 32px;border:1px solid #18181b;background:#fff;color:#18181b;cursor:pointer;transition:all .3s;}
+.load-more-btn:hover{background:#18181b;color:#fff;}
+.load-more-btn:disabled{border-color:#e4e4e7;color:#a1a1aa;cursor:default;}
+.load-more-btn:disabled:hover{background:#fff;color:#a1a1aa;}
 
 .custom-section{background:#fafafa;padding:8rem 2rem;border-top:1px solid #f4f4f5;}
 .custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
@@ -89,24 +104,14 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 
 #modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
 #modal.active{display:block;}
-.close-btn{
-  position:fixed;top:1.5rem;right:1.5rem;
-  display:flex;align-items:center;gap:8px;
-  padding:8px 18px;
-  background:#18181b;color:#fff;
-  font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;
-  border:none;cursor:pointer;z-index:210;
-  transition:background .3s;
-}
+.close-btn{position:fixed;top:1.5rem;right:1.5rem;display:flex;align-items:center;gap:8px;padding:8px 18px;background:#18181b;color:#fff;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;z-index:210;transition:background .3s;}
 .close-btn:hover{background:#444;}
 .modal-content{max-width:1000px;margin:6rem auto;padding:0 2rem;display:flex;flex-direction:column;align-items:center;text-align:center;}
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
-
 .loupe-wrapper{position:relative;display:inline-block;cursor:crosshair;line-height:0;}
 .modal-image{display:block;max-width:100%;max-height:75vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
 .loupe{position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid rgba(255,255,255,.8);box-shadow:0 4px 24px rgba(0,0,0,.25);pointer-events:none;display:none;overflow:hidden;z-index:10;background-repeat:no-repeat;}
 .loupe-wrapper:hover .loupe{display:block;}
-
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
 .inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
@@ -116,7 +121,8 @@ section{padding:6rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
 
 @media(max-width:768px){
-  #gallery{gap:2rem;padding:0 1rem;margin:5rem auto 3rem;}
+  .filter-bar{margin:2rem auto 1rem;gap:.5rem;}
+  #gallery{gap:2rem;padding:0 1rem;}
   .art-card{flex:0 0 100%;width:100%;}
   .img-container{height:auto;width:100%;display:block;}
   .img-container img{height:auto;width:100%;object-fit:unset;}
@@ -173,11 +179,19 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   </div>
 </section>
 
+<!-- Filter buttons -->
+<div class="filter-bar" id="filterBar"></div>
+
 <main id="gallery">
   <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
   <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
   <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
 </main>
+
+<!-- Load more -->
+<div class="load-more-wrap">
+  <button class="load-more-btn" id="loadMoreBtn" style="display:none;">Load more paintings</button>
+</div>
 
 <section id="custom" class="custom-section">
   <h2 class="section-title">Custom Paintings</h2>
@@ -227,69 +241,28 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 </div>
 
 <script>
-const JSON_URL = './paintings.json';
+const JSON_URL   = './paintings.json';
+const PAGE_SIZE  = 12; // paintings shown per batch
+
+let allPaintings   = [];  // full list
+let filtered       = [];  // current filter subset
+let shownCount     = 0;   // how many are rendered
+let activeFilter   = 'All';
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
   try {
     const res = await fetch(JSON_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);
-    const paintings = await res.json();
-    gallery.innerHTML = '';
-    let currentSeries = '', delay = 0;
+    allPaintings = await res.json();
 
-    for (const p of paintings) {
-      const { title='', images=[], material='', desc='', price='', series='', status='' } = p;
-      if (!images.length) continue;
+    // Build filter buttons from unique series
+    buildFilters();
 
-      if (series && series !== currentSeries) {
-        const h = document.createElement('div');
-        h.className = 'series-heading'; h.textContent = series;
-        gallery.appendChild(h); currentSeries = series;
-      }
-
-      const imgList = images.map(l => {
-        l = l.trim();
-        if (l.includes('github.com') && l.includes('/blob/main/'))
-          return 'https://kortola.github.io/' + l.split('/blob/main/')[1];
-        if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
-          return 'https://kortola.github.io/' + l.split('/main/')[1];
-        if (l.startsWith('/'))
-          return 'https://kortola.github.io' + l;
-        return l;
-      });
-
-      const isAvail   = status.toLowerCase() === 'available';
-      const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
-      const card = document.createElement('div');
-      card.className = 'art-card';
-      card.style.animationDelay = delay + 'ms';
-      const imgTag = `<img src="${imgList[0]}"
-               draggable="false"
-               loading="${delay < 240 ? 'eager' : 'lazy'}"
-               fetchpriority="${delay < 240 ? 'high' : 'low'}"
-               decoding="${delay < 240 ? 'sync' : 'async'}"
-               alt="${title}"
-               onload="this.classList.add('loaded')"
-               onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">`;
-      card.innerHTML = `
-        <div class="img-container">
-          ${badgeHTML}
-          ${imgTag}
-        </div>
-        <div class="art-info">
-          <h3 class="art-title">${title}</h3>
-          <p class="art-material">${material}</p>
-        </div>`;
-      card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status));
-      gallery.appendChild(card);
-      delay += 80;
-    }
-
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-    }, {threshold: 0.1});
-    document.querySelectorAll('.art-card').forEach(c => obs.observe(c));
+    // Initial render
+    filtered = allPaintings;
+    shownCount = 0;
+    renderBatch();
 
   } catch(err) {
     console.error('Gallery error:', err);
@@ -297,6 +270,93 @@ async function loadData() {
   }
 }
 
+function buildFilters() {
+  const bar = document.getElementById('filterBar');
+  const series = ['All', ...new Set(allPaintings.map(p => p.series).filter(Boolean))];
+  bar.innerHTML = '';
+  series.forEach(s => {
+    const btn = document.createElement('button');
+    btn.className = 'filter-btn' + (s === 'All' ? ' active' : '');
+    btn.textContent = s;
+    btn.addEventListener('click', () => applyFilter(s));
+    bar.appendChild(btn);
+  });
+}
+
+function applyFilter(series) {
+  activeFilter = series;
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent === series);
+  });
+  filtered   = series === 'All' ? allPaintings : allPaintings.filter(p => p.series === series);
+  shownCount = 0;
+  document.getElementById('gallery').innerHTML = '';
+  renderBatch();
+}
+
+function renderBatch() {
+  const gallery  = document.getElementById('gallery');
+  const btn      = document.getElementById('loadMoreBtn');
+  const batch    = filtered.slice(shownCount, shownCount + PAGE_SIZE);
+  let delay      = 0;
+
+  batch.forEach(p => {
+    const { title='', images=[], material='', desc='', price='', series='', status='' } = p;
+    if (!images.length) return;
+
+    const imgList = images.map(l => {
+      l = l.trim();
+      if (l.includes('github.com') && l.includes('/blob/main/'))
+        return 'https://kortola.github.io/' + l.split('/blob/main/')[1];
+      if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
+        return 'https://kortola.github.io/' + l.split('/main/')[1];
+      if (l.startsWith('/'))
+        return 'https://kortola.github.io' + l;
+      return l;
+    });
+
+    const isAvail   = status.toLowerCase() === 'available';
+    const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
+    const card      = document.createElement('div');
+    card.className  = 'art-card';
+    card.style.animationDelay = delay + 'ms';
+    card.innerHTML  = `
+      <div class="img-container">
+        ${badgeHTML}
+        <img src="${imgList[0]}"
+             draggable="false"
+             loading="${shownCount < 3 ? 'eager' : 'lazy'}"
+             fetchpriority="${shownCount < 3 ? 'high' : 'low'}"
+             decoding="async"
+             alt="${title}"
+             onload="this.classList.add('loaded')"
+             onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">${title}</h3>
+        <p class="art-material">${material}</p>
+      </div>`;
+    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status));
+    gallery.appendChild(card);
+    delay += 80;
+  });
+
+  shownCount += batch.length;
+
+  // Fade-in observer
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, {threshold: 0.1});
+  document.querySelectorAll('.art-card:not(.visible)').forEach(c => obs.observe(c));
+
+  // Show/hide load more button
+  btn.style.display = shownCount < filtered.length ? 'inline-block' : 'none';
+}
+
+document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
+
+/* ── LOUPE ── */
 const LOUPE_SIZE  = 110;
 const ZOOM_FACTOR = 3;
 
@@ -310,10 +370,8 @@ function attachLoupe(wrapper, img) {
     if (x < 0 || y < 0 || x > rect.width || y > rect.height) { loupe.style.display='none'; return; }
     loupe.style.display = 'block';
     const wRect = wrapper.getBoundingClientRect();
-    let lx = Math.max(0, Math.min(wRect.width  - LOUPE_SIZE, x - LOUPE_SIZE/2));
-    let ly = Math.max(0, Math.min(wRect.height - LOUPE_SIZE, y - LOUPE_SIZE/2 - LOUPE_SIZE/2 - 12));
-    loupe.style.left = lx + 'px';
-    loupe.style.top  = ly + 'px';
+    loupe.style.left = Math.max(0, Math.min(wRect.width  - LOUPE_SIZE, x - LOUPE_SIZE/2)) + 'px';
+    loupe.style.top  = Math.max(0, Math.min(wRect.height - LOUPE_SIZE, y - LOUPE_SIZE/2 - LOUPE_SIZE/2 - 12)) + 'px';
     loupe.style.backgroundImage    = `url('${img.src}')`;
     loupe.style.backgroundSize     = `${rect.width*ZOOM_FACTOR}px ${rect.height*ZOOM_FACTOR}px`;
     loupe.style.backgroundPosition = `${-(x*ZOOM_FACTOR - LOUPE_SIZE/2)}px ${-(y*ZOOM_FACTOR - LOUPE_SIZE/2)}px`;
@@ -346,8 +404,6 @@ function openModal(title, images, material, desc, price, status) {
     ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
     : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
        <a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
-
-  // Push history state so browser back button closes modal instead of leaving site
   history.pushState({ modal: true }, '', '#painting');
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -359,7 +415,6 @@ function closeModal() {
   if (location.hash === '#painting') history.back();
 }
 
-// Browser back button closes modal instead of leaving site
 window.addEventListener('popstate', () => {
   if (document.getElementById('modal').classList.contains('active')) {
     document.getElementById('modal').classList.remove('active');

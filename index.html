@@ -266,6 +266,7 @@ let allPaintings = [], filtered = [], shownCount = 0;
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
+  gallery.innerHTML = ''; // clear skeleton cards immediately
   try {
     const res = await fetch(JSON_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);

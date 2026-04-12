@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DMB3MPYLK4"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -47,12 +46,12 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 /* FILTERS */
-.filter-bar{max-width:1000px;margin:3rem auto 1.5rem;padding:0 2rem;display:flex;flex-wrap:wrap;gap:.6rem;}
+.filter-bar{max-width:1000px;margin:1.5rem auto 1.5rem;padding:0 2rem;display:flex;flex-wrap:wrap;gap:.6rem;}
 .filter-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid #e4e4e7;background:#fff;color:#71717a;cursor:pointer;transition:all .2s;}
 .filter-btn:hover{border-color:#18181b;color:#18181b;}
 .filter-btn.active{background:#18181b;color:#fff;border-color:#18181b;}
 
-/* GALLERY — fixed-height rows, top-aligned */
+/* GALLERY */
 #gallery{
   max-width:1000px;margin:0 auto 2rem;padding:0 2rem;
   display:flex;flex-wrap:wrap;
@@ -70,7 +69,6 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-card{
   cursor:pointer;opacity:0;
   position:relative;flex:0 0 auto;
-  /* Force consistent vertical structure */
   display:flex;flex-direction:column;
 }
 .art-card.visible{animation:fadeUp .8s forwards;}
@@ -98,26 +96,27 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
 .art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
 
-/* LOAD MORE */
-.load-more-wrap{max-width:1000px;margin:0 auto 5rem;padding:0 2rem;text-align:center;}
+/* LOAD MORE - Reduced bottom margin to prevent dead space */
+.load-more-wrap{max-width:1000px;margin:0 auto 2rem;padding:0 2rem;text-align:center;}
 .load-more-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:12px 32px;border:1px solid #18181b;background:#fff;color:#18181b;cursor:pointer;transition:all .3s;}
 .load-more-btn:hover{background:#18181b;color:#fff;}
 
-.custom-section{background:#fafafa;padding:8rem 2rem;border-top:1px solid #f4f4f5;}
+/* SECTIONS - Using clamp() for responsive vertical spacing */
+.custom-section{background:#fafafa;padding:clamp(4rem, 10vh, 7rem) 2rem;border-top:1px solid #f4f4f5;}
 .custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
 .custom-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;text-align:center;}
 .step h4{font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-bottom:1rem;color:#18181b;}
 .step p{font-size:13px;color:#71717a;font-weight:300;line-height:1.8;}
 
-#about{padding:8rem 2rem;border-top:1px solid #f4f4f5;}
-.about-container{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 2.5fr;gap:5rem;align-items:start;}
+#about{padding:clamp(4rem, 10vh, 7rem) 2rem;border-top:1px solid #f4f4f5;text-align:left;}
+.about-container{max-width:800px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:2rem;align-items:start;}
 .about-photo-wrapper{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#fafafa;}
 .about-photo-wrapper img{width:100%;height:100%;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,.05);}
 .about-content{color:#52525b;font-size:.82rem;font-weight:300;line-height:2;}
 .about-content p+p{margin-top:1.2rem;}
 .about-content h2{margin-bottom:1.5rem;font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:#18181b;}
 
-#contact{padding:8rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
+#contact{padding:clamp(4rem, 10vh, 7rem) 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .contact-links{display:flex;flex-direction:column;gap:1.5rem;align-items:center;margin-top:1rem;}
 .contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
 .contact-links a:hover{border-color:#18181b;}
@@ -130,12 +129,10 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 #modal-images{display:flex;flex-direction:column;align-items:center;width:100%;gap:50px;margin-bottom:4rem;}
 .loupe-wrapper{position:relative;display:inline-block;cursor:default;line-height:0;}
 .modal-image{display:block;max-width:100%;max-height:75vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
-.loupe{display:none !important;}
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
 .inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
 
-section{padding:6rem 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .section-title{font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin-bottom:3rem;}
 footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
 
@@ -197,7 +194,6 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   </div>
 </section>
 
-<!-- Shared wrapper guarantees filter bar and gallery share the same left edge -->
 <div class="gallery-wrap">
   <div class="filter-bar" id="filterBar"></div>
   <main id="gallery">
@@ -222,8 +218,8 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   <a href="mailto:hello@karinaortola.com?subject=Custom Landscape Inquiry" class="inquiry-btn" style="display:inline-block;margin-top:4rem;">Inquire About a Custom Work</a>
 </section>
 
-<section id="about" style="padding:8rem 2rem;text-align:left;">
-  <div class="about-container" style="grid-template-columns:1fr;max-width:800px;">
+<section id="about">
+  <div class="about-container">
     <div class="about-content">
       <h2>About the Artist</h2>
       <p>I am a painter working in acrylics on large canvas and intimate wood panels. Born into a family with deep Valencian roots, my connection to the Mediterranean tradition of light and color only became clear when I discovered the work of Joaquín Sorolla, the great painter of Valencia, Spain. His fearless use of color, his expressive brushstrokes, and his beautiful interpretation of quotidian scenes guide and inspire my work in ways I am still discovering.</p>
@@ -266,7 +262,7 @@ let allPaintings = [], filtered = [], shownCount = 0;
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
-  gallery.innerHTML = ''; // clear skeleton cards immediately
+  gallery.innerHTML = ''; 
   try {
     const res = await fetch(JSON_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);

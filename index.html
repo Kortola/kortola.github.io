@@ -21,6 +21,7 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:#fff;color:#18181b;line-height:1.6;-webkit-user-select:none;user-select:none;}
 
+/* Navigation */
 nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
 .nav-container{max-width:1000px;margin:0 auto;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:1.1rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;}
@@ -35,6 +36,7 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .mobile-menu a{padding:1rem 2rem;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;border-bottom:1px solid #f4f4f5;}
 .mobile-menu.open{display:flex;}
 
+/* Hero */
 #hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#fff;border-bottom:1px solid #f4f4f5;}
 .hero-inner{display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
 .hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.4em;color:#a1a1aa;}
@@ -45,13 +47,13 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* FILTERS */
+/* Filters */
 .filter-bar{max-width:1000px;margin:1.5rem auto 1.5rem;padding:0 2rem;display:flex;flex-wrap:wrap;gap:.6rem;}
 .filter-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid #e4e4e7;background:#fff;color:#71717a;cursor:pointer;transition:all .2s;}
 .filter-btn:hover{border-color:#18181b;color:#18181b;}
 .filter-btn.active{background:#18181b;color:#fff;border-color:#18181b;}
 
-/* GALLERY — Back to original Flex Layout */
+/* Gallery - Flexbox Restored */
 #gallery{
   max-width:1000px;margin:0 auto 2rem;padding:0 2rem;
   display:flex;flex-wrap:wrap;
@@ -70,22 +72,23 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
   cursor:pointer;opacity:0;
   position:relative;flex:0 0 auto;
   display:flex;flex-direction:column;
-  max-width: 100%; /* Fix for iPad Pro cutting */
+  max-width: 100%;
 }
 .art-card.visible{animation:fadeUp .8s forwards;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
 .img-container{
   height:380px;width:auto;
+  max-width: 100%;
   overflow:hidden;background:#fafafa;
   position:relative;display:block;
   flex-shrink:0;
 }
 .img-container img{
   height:100%;width:auto;display:block;
+  max-width: 100%;
   transition:transform 2.5s cubic-bezier(.16,1,.3,1),opacity .4s ease;
   pointer-events:none;opacity:0;
-  max-width: 100%; /* Prevents horizontal cutting on smaller screens */
   object-fit: contain;
 }
 .img-container img.loaded{opacity:1;}
@@ -99,13 +102,18 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
 .art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
 
-/* LOAD MORE */
+/* Load More */
 .load-more-wrap{max-width:1000px;margin:0 auto 2rem;padding:0 2rem;text-align:center;}
 .load-more-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:12px 32px;border:1px solid #18181b;background:#fff;color:#18181b;cursor:pointer;transition:all .3s;}
 .load-more-btn:hover{background:#18181b;color:#fff;}
 
-/* SECTIONS — Fixed Whitespace */
-.custom-section{background:#fafafa;padding:clamp(4rem, 8vh, 8rem) 2rem;border-top:1px solid #f4f4f5;}
+/* Content Sections */
+.custom-section{
+  background:#fafafa;
+  padding:clamp(4rem, 8vh, 8rem) 2rem;
+  border-top:1px solid #f4f4f5;
+  text-align: center; /* Ensures the button and content are centered */
+}
 .custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
 .custom-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;text-align:center;}
 .step h4{font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-bottom:1rem;color:#18181b;}
@@ -124,6 +132,7 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
 .contact-links a:hover{border-color:#18181b;}
 
+/* Modal & Inquiry Buttons */
 #modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
 #modal.active{display:block;}
 .close-btn{position:fixed;top:1.5rem;right:1.5rem;display:flex;align-items:center;gap:8px;padding:8px 18px;background:#18181b;color:#fff;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;z-index:210;transition:background .3s;}
@@ -133,11 +142,30 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .loupe-wrapper{position:relative;display:inline-block;cursor:default;line-height:0;}
 .modal-image{display:block;max-width:100%;max-height:75vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
-.inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
+
+.inquiry-btn{
+  display:inline-block;
+  padding:12px 24px;
+  border:1px solid #18181b;
+  text-decoration:none;
+  color:#18181b;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.2em;
+  margin-top:4rem;
+  transition:.3s;
+}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
 
 .section-title{font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin-bottom:3rem;}
 footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
+
+/* Responsiveness */
+@media(max-width:1024px){
+  .art-card { flex: 0 1 auto; }
+  .img-container { height: auto; max-height: 45vh; }
+  .img-container img { width: auto; max-width: 100%; }
+}
 
 @media(max-width:768px){
   .filter-bar{margin:2rem auto 1rem;gap:.5rem;}
@@ -157,9 +185,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   .close-btn{top:1rem;right:1rem;}
 }
 @media(max-width:480px){
-  .custom-section{padding:4rem 1rem;}
-  #about{padding:4rem 1rem;}
-  #contact{padding:4rem 1rem;}
+  .custom-section, #about, #contact{padding:4rem 1rem;}
 }
 </style>
 </head>
@@ -218,7 +244,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
     <div class="step"><h4>02 · Artistic Study</h4><p>I translate your image into an original composition, focusing on the interplay of colour and atmosphere.</p></div>
     <div class="step"><h4>03 · Final Reveal</h4><p>Your custom acrylic painting is completed and shipped directly to your collection.</p></div>
   </div>
-  <a href="mailto:hello@karinaortola.com?subject=Custom Landscape Inquiry" class="inquiry-btn" style="display:inline-block;margin-top:4rem;">Inquire About a Custom Work</a>
+  <a href="mailto:hello@karinaortola.com?subject=Custom Landscape Inquiry" class="inquiry-btn">Inquire About a Custom Work</a>
 </section>
 
 <section id="about">
@@ -381,7 +407,7 @@ function openModal(title, images, material, desc, price, status) {
   document.getElementById('inquiry-box-container').innerHTML = isSold
     ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
     : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
-       <a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Acquisition Details</a>`;
+       <a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn" style="margin-top: 2rem;">Request Acquisition Details</a>`;
   history.pushState({ modal: true }, '', '#painting');
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';

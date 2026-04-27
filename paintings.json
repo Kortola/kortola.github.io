@@ -22,6 +22,17 @@
     "status": "Available"
   },
   {
+    "title": "Mexico",
+    "images": [
+      "/Mexico.webp"
+    ],
+    "material": "Acrylic on Canvas 48\" x 36\"",
+    "desc": "A beautiful day in Mexico.",
+    "price": "",
+    "series": "",
+    "status": ""
+  },
+  {
     "title": "Before Rain",
     "images": [
       "/anothercalmplace.webp"

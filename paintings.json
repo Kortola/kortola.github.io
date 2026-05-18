@@ -28,8 +28,8 @@
     ],
     "material": "Acrylic on Canvas 48\" x 36\"",
     "desc": "A beautiful day in Mexico.",
-    "price": "",
-    "series": "",
+    "price": "245",
+    "series": "Landscapes",
     "status": ""
   },
   {
@@ -72,7 +72,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "A path leading somewhere green and quiet. An invitation to slow down and follow.",
-    "price": "225",
+    "price": "195",
     "series": "Pocket Landscapes",
     "status": "Available"
   },
@@ -83,7 +83,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "Summer light breaking through the trees, that luminous moment when everything feels alive and still at the same time.",
-    "price": "225",
+    "price": "195",
     "series": "Pocket Landscapes",
     "status": "Available"
   },
@@ -94,7 +94,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "A wide open Indiana field under a sky full of possibility. The simplest and most honest kind of beauty.",
-    "price": "225",
+    "price": "195",
     "series": "Pocket Landscapes",
     "status": "Available"
   },
@@ -105,7 +105,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "A path that curves and disappears into the trees, taking the eye and the heart somewhere just out of sight.",
-    "price": "225",
+    "price": "195",
     "series": "Pocket Landscapes",
     "status": "Available"
   },
@@ -116,7 +116,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "An Indiana summer morning with flowers that took over the foreground and refused to be ignored.",
-    "price": "225",
+    "price": "195",
     "series": "Pocket Landscapes",
     "status": "Available"
   },
@@ -138,7 +138,7 @@
     ],
     "material": "Acrylic on Canvas 12\" x 12\"",
     "desc": "Two oranges on a branch, painted against a cool turquoise background. A simple moment of color and light.",
-    "price": "225",
+    "price": "195",
     "series": "Quiet Moments",
     "status": "Available"
   },
@@ -149,7 +149,7 @@
     ],
     "material": "Acrylic on Canvas 12\" x 12\"",
     "desc": "Two houseplants in the morning light of a quiet room. A small reminder that beauty lives in the everyday.",
-    "price": "225",
+    "price": "195",
     "series": "Quiet Moments",
     "status": "Available"
   },

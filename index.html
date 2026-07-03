@@ -45,9 +45,7 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* Gallery wrapper — single container anchors filter + gallery to same left edge */
 .gallery-wrap{max-width:1000px;margin:3rem auto 0;padding:0 2rem;}
-
 .filter-bar{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem;}
 .filter-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid #e4e4e7;background:#fff;color:#71717a;cursor:pointer;transition:all .2s;}
 .filter-btn:hover{border-color:#18181b;color:#18181b;}
@@ -283,8 +281,16 @@ function renderBatch() {
   let delay = 0;
 
   batch.forEach(p => {
-    const { title='', images=[], material='', desc='', price='', status='' } = p;
+    const title    = p.title    || '';
+    const images   = p.images   || [];
+    const material = p.material || '';
+    const desc     = p.desc     || '';
+    const price    = p.price    || '';
+    const status   = p.status   || '';
+    const payLink  = p.payment_link || '';
+
     if (!images.length) return;
+
     const imgList   = images.map(normaliseUrl);
     const isAvail   = status.toLowerCase() === 'available';
     const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
@@ -306,8 +312,7 @@ function renderBatch() {
         <h3 class="art-title">${title}</h3>
         <p class="art-material">${material}</p>
       </div>`;
-    const payLink = p.payment_link || '';
-  card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
+    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
     gallery.appendChild(card);
     delay += 80;
   });
@@ -324,11 +329,11 @@ function renderBatch() {
 
 document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
 
-function openModal(title, images, material, desc, price, status, payLink='') {
-  images._paymentLink = payLink;
+function openModal(title, images, material, desc, price, status, payLink) {
   document.getElementById('modal-title').textContent    = title;
   document.getElementById('modal-material').textContent = material;
   document.getElementById('modal-desc').textContent     = desc;
+
   const container = document.getElementById('modal-images');
   container.innerHTML = '';
   images.forEach(src => {
@@ -343,19 +348,19 @@ function openModal(title, images, material, desc, price, status, payLink='') {
     wrapper.appendChild(img);
     container.appendChild(wrapper);
   });
+
+  const box    = document.getElementById('inquiry-box-container');
   const isSold = /private collection|sold/i.test(status);
-  let boxHTML = '';
+  const priceHTML = `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>`;
+
   if (isSold) {
-    boxHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
+    box.innerHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
+  } else if (payLink) {
+    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="${payLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;">Buy Now</a></div>`;
   } else {
-    const priceTag = price ? `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price}</p>` : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">Price on Request</p>`;
-    const buyBtn   = images._paymentLink
-      ? `<a href="${images._paymentLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;margin-right:.8rem;">Buy Now</a>`
-      : '';
-    const inquireBtn = `<a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a>`;
-    boxHTML = priceTag + `<div style="margin-top:1.5rem;display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;">${buyBtn}${inquireBtn}</div>`;
+    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a></div>`;
   }
-  document.getElementById('inquiry-box-container').innerHTML = boxHTML;
+
   history.pushState({ modal: true }, '', '#painting');
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';

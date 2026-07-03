@@ -136,9 +136,13 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
     <div class="logo">Karina Ortolá</div>
     <div class="nav-links">
       <a href="#gallery">Paintings</a>
+      <a href="#shop">Shop</a>
       <a href="#custom">Custom</a>
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
+      <a href="#shop" class="cart-icon" aria-label="Shop">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </a>
     </div>
     <button class="hamburger" id="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -171,6 +175,14 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 <div class="load-more-wrap">
   <button class="load-more-btn" id="loadMoreBtn" style="display:none;">Load more paintings</button>
 </div>
+
+<!-- SHOP -->
+<section id="shop">
+  <div style="max-width:1000px;margin:0 auto;">
+    <h2 class="section-title" style="text-align:center;">Shop</h2>
+    <div class="shop-grid" id="shopGrid"></div>
+  </div>
+</section>
 
 <section id="custom" class="custom-section">
   <h2 class="section-title">Custom Paintings</h2>
@@ -233,6 +245,7 @@ async function loadData() {
     if (!res.ok) throw new Error('HTTP ' + res.status);
     allPaintings = await res.json();
     buildFilters();
+    buildShop();
     filtered = allPaintings;
     shownCount = 0;
     renderBatch();
@@ -274,7 +287,152 @@ function normaliseUrl(l) {
   return l;
 }
 
-function renderBatch() {
+function buildShop() {
+  const grid = document.getElementById('shopGrid');
+  const available = allPaintings.filter(p => (p.status || '').toLowerCase() === 'available');
+  if (!available.length) { grid.innerHTML = '<p style="color:#a1a1aa;font-size:13px;">No paintings currently available.</p>'; return; }
+  grid.innerHTML = '';
+  available.forEach(p => {
+    const img     = normaliseUrl((p.images || [])[0] || '');
+    const payLink = p.payment_link || '';
+    const btn     = payLink
+      ? `<a href="${payLink}" target="_blank" class="shop-btn buy">Buy Now — ${p.price}</a>`
+      : `<a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(p.title)}" class="shop-btn">Request Details</a>`;
+    const card = document.createElement('div');
+    card.className = 'shop-card';
+    card.innerHTML = `
+      <div class="shop-img-wrap"><img src="${img}" alt="${p.title}" loading="lazy" decoding="async" draggable="false"></div>
+      <div class="shop-info">
+        <div class="shop-title">${p.title}</div>
+        <div class="shop-material">${p.material}</div>
+        <div class="shop-price">${p.price ? '
+  const gallery = document.getElementById('gallery');
+  const btn     = document.getElementById('loadMoreBtn');
+  const batch   = filtered.slice(shownCount, shownCount + PAGE_SIZE);
+  let delay = 0;
+
+  batch.forEach(p => {
+    const title    = p.title    || '';
+    const images   = p.images   || [];
+    const material = p.material || '';
+    const desc     = p.desc     || '';
+    const price    = p.price    || '';
+    const status   = p.status   || '';
+    const payLink  = p.payment_link || '';
+
+    if (!images.length) return;
+
+    const imgList   = images.map(normaliseUrl);
+    const isAvail   = status.toLowerCase() === 'available';
+    const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
+    const card      = document.createElement('div');
+    card.className  = 'art-card';
+    card.style.animationDelay = delay + 'ms';
+    card.innerHTML = `
+      <div class="img-container">
+        ${badgeHTML}
+        <img src="${imgList[0]}"
+             draggable="false"
+             loading="${shownCount < 3 ? 'eager' : 'lazy'}"
+             fetchpriority="${shownCount < 3 ? 'high' : 'low'}"
+             decoding="async" alt="${title}"
+             onload="this.classList.add('loaded')"
+             onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">${title}</h3>
+        <p class="art-material">${material}</p>
+      </div>`;
+    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
+    gallery.appendChild(card);
+    delay += 80;
+  });
+
+  shownCount += batch.length;
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, {threshold: 0.1});
+  document.querySelectorAll('.art-card:not(.visible)').forEach(c => obs.observe(c));
+
+  btn.style.display = shownCount < filtered.length ? 'inline-block' : 'none';
+}
+
+document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
+
+function openModal(title, images, material, desc, price, status, payLink) {
+  document.getElementById('modal-title').textContent    = title;
+  document.getElementById('modal-material').textContent = material;
+  document.getElementById('modal-desc').textContent     = desc;
+
+  const container = document.getElementById('modal-images');
+  container.innerHTML = '';
+  images.forEach(src => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'loupe-wrapper';
+    const img = document.createElement('img');
+    img.className = 'modal-image';
+    img.draggable = false;
+    img.alt = title;
+    img.onerror = () => wrapper.remove();
+    img.src = src;
+    wrapper.appendChild(img);
+    container.appendChild(wrapper);
+  });
+
+  const box    = document.getElementById('inquiry-box-container');
+  const isSold = /private collection|sold/i.test(status);
+  const priceHTML = `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>`;
+
+  if (isSold) {
+    box.innerHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
+  } else if (payLink) {
+    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="${payLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;">Buy Now</a></div>`;
+  } else {
+    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a></div>`;
+  }
+
+  history.pushState({ modal: true }, '', '#painting');
+  document.getElementById('modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+  if (location.hash === '#painting') history.back();
+}
+
+window.addEventListener('popstate', () => {
+  if (document.getElementById('modal').classList.contains('active')) {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+document.getElementById('modal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+window.onload = loadData;
+</script>
+</body>
+</html>
+ + p.price : 'Price on Request'}</div>
+      </div>
+      ${btn}`;
+    grid.appendChild(card);
+  });
+}
+
+
   const gallery = document.getElementById('gallery');
   const btn     = document.getElementById('loadMoreBtn');
   const batch   = filtered.slice(shownCount, shownCount + PAGE_SIZE);

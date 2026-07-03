@@ -21,11 +21,15 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:#fff;color:#18181b;line-height:1.6;-webkit-user-select:none;user-select:none;}
 
+/* NAV */
 nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
 .nav-container{max-width:1000px;margin:0 auto;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:1.1rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;}
+.nav-links{display:flex;align-items:center;}
 .nav-links a{text-decoration:none;color:#71717a;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-left:2rem;transition:color .3s;font-weight:500;}
 .nav-links a:hover{color:#18181b;}
+.cart-icon{display:flex;align-items:center;gap:5px;}
+.cart-icon svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;background:none;border:none;}
 .hamburger span{display:block;width:22px;height:1px;background:#18181b;transition:.3s;}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg);}
@@ -35,6 +39,7 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .mobile-menu a{padding:1rem 2rem;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;border-bottom:1px solid #f4f4f5;}
 .mobile-menu.open{display:flex;}
 
+/* HERO */
 #hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#fff;border-bottom:1px solid #f4f4f5;}
 .hero-inner{display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
 .hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.4em;color:#a1a1aa;}
@@ -45,20 +50,17 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
+/* GALLERY */
 .gallery-wrap{max-width:1000px;margin:3rem auto 0;padding:0 2rem;}
 .filter-bar{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem;}
 .filter-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid #e4e4e7;background:#fff;color:#71717a;cursor:pointer;transition:all .2s;}
 .filter-btn:hover{border-color:#18181b;color:#18181b;}
 .filter-btn.active{background:#18181b;color:#fff;border-color:#18181b;}
-
 #gallery{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start;align-content:flex-start;}
-
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
-
 .art-card{cursor:pointer;opacity:0;position:relative;flex:0 0 auto;display:flex;flex-direction:column;}
 .art-card.visible{animation:fadeUp .8s forwards;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-
 .img-container{height:380px;width:auto;overflow:hidden;background:#fafafa;position:relative;display:block;flex-shrink:0;}
 .img-container img{height:100%;width:auto;display:block;transition:transform 2.5s cubic-bezier(.16,1,.3,1),opacity .4s ease;pointer-events:none;opacity:0;}
 .img-container img.loaded{opacity:1;}
@@ -72,27 +74,50 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
 .art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
 
+/* LOAD MORE */
 .load-more-wrap{max-width:1000px;margin:1.5rem auto 5rem;padding:0 2rem;text-align:center;}
 .load-more-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:12px 32px;border:1px solid #18181b;background:#fff;color:#18181b;cursor:pointer;transition:all .3s;}
 .load-more-btn:hover{background:#18181b;color:#fff;}
 
+/* SHOP */
+#shop{padding:8rem 2rem;border-top:1px solid #f4f4f5;}
+.shop-inner{max-width:1000px;margin:0 auto;}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2.5rem;margin-top:0;}
+.shop-card{display:flex;flex-direction:column;border:1px solid #f4f4f5;transition:border-color .3s;}
+.shop-card:hover{border-color:#e4e4e7;}
+.shop-img-wrap{aspect-ratio:1/1;overflow:hidden;background:#fafafa;}
+.shop-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 2s ease;pointer-events:none;display:block;}
+.shop-card:hover .shop-img-wrap img{transform:scale(1.04);}
+.shop-info{padding:1.2rem;flex:1;display:flex;flex-direction:column;gap:.5rem;}
+.shop-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;color:#18181b;}
+.shop-material{font-size:10px;color:#71717a;font-style:italic;}
+.shop-price{font-size:12px;color:#18181b;font-weight:400;margin-top:auto;padding-top:.6rem;}
+.shop-btn{display:block;text-align:center;padding:11px;font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;border-top:1px solid #f4f4f5;color:#18181b;transition:.3s;}
+.shop-btn:hover{background:#f4f4f5;}
+.shop-btn.buy{background:#18181b;color:#fff;border-top:none;}
+.shop-btn.buy:hover{background:#333;}
+
+/* CUSTOM */
 .custom-section{background:#fafafa;padding:clamp(4rem,8vh,8rem) 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
 .custom-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;text-align:center;}
 .step h4{font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-bottom:1rem;color:#18181b;}
 .step p{font-size:13px;color:#71717a;font-weight:300;line-height:1.8;}
 
+/* ABOUT */
 #about{padding:clamp(4rem,8vh,8rem) 2rem;border-top:1px solid #f4f4f5;text-align:left;}
-.about-container{max-width:800px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:2rem;align-items:start;}
+.about-container{max-width:800px;margin:0 auto;}
 .about-content{color:#52525b;font-size:.82rem;font-weight:300;line-height:2;}
 .about-content p+p{margin-top:1.2rem;}
 .about-content h2{margin-bottom:1.5rem;font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:#18181b;}
 
+/* CONTACT */
 #contact{padding:clamp(4rem,8vh,8rem) 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .contact-links{display:flex;flex-direction:column;gap:1.5rem;align-items:center;margin-top:1rem;}
 .contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
 .contact-links a:hover{border-color:#18181b;}
 
+/* MODAL */
 #modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
 #modal.active{display:block;}
 .close-btn{position:fixed;top:1.5rem;right:1.5rem;display:flex;align-items:center;gap:8px;padding:8px 18px;background:#18181b;color:#fff;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;z-index:210;transition:background .3s;}
@@ -108,14 +133,16 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .section-title{font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin-bottom:3rem;}
 footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
 
+/* RESPONSIVE */
 @media(max-width:768px){
   .gallery-wrap{padding:0 1rem;margin:2rem auto 0;}
   #gallery{gap:2rem;}
   .art-card{flex:0 0 100%;width:100%;}
   .img-container{height:auto;width:100%;display:block;}
   .img-container img{height:auto;width:100%;}
+  .shop-grid{grid-template-columns:1fr;}
   .custom-grid{grid-template-columns:1fr;gap:3rem;}
-  .about-container{gap:2rem;text-align:center;}
+  .about-container{text-align:center;}
   .about-content h2{text-align:center;}
   .nav-links{display:none;}
   .hamburger{display:flex;}
@@ -125,7 +152,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   .close-btn{top:1rem;right:1rem;}
 }
 @media(max-width:480px){
-  .custom-section,#about,#contact{padding:4rem 1rem;}
+  .custom-section,#about,#contact,#shop{padding:4rem 1rem;}
 }
 </style>
 </head>
@@ -150,6 +177,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   </div>
   <div class="mobile-menu" id="mobileMenu">
     <a href="#gallery" onclick="closeMobileMenu()">Paintings</a>
+    <a href="#shop" onclick="closeMobileMenu()">Shop</a>
     <a href="#custom" onclick="closeMobileMenu()">Custom</a>
     <a href="#about" onclick="closeMobileMenu()">About</a>
     <a href="#contact" onclick="closeMobileMenu()">Contact</a>
@@ -176,9 +204,8 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   <button class="load-more-btn" id="loadMoreBtn" style="display:none;">Load more paintings</button>
 </div>
 
-<!-- SHOP -->
 <section id="shop">
-  <div style="max-width:1000px;margin:0 auto;">
+  <div class="shop-inner">
     <h2 class="section-title" style="text-align:center;">Shop</h2>
     <div class="shop-grid" id="shopGrid"></div>
   </div>
@@ -234,7 +261,6 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 <script>
 const JSON_URL  = './paintings.json';
 const PAGE_SIZE = 12;
-
 let allPaintings = [], filtered = [], shownCount = 0;
 
 async function loadData() {
@@ -251,7 +277,7 @@ async function loadData() {
     renderBatch();
   } catch(err) {
     console.error('Gallery error:', err);
-    gallery.innerHTML = '<p style="color:#a1a1aa;font-size:13px;">Unable to load gallery. Check that paintings.json exists in your repo.</p>';
+    gallery.innerHTML = '<p style="color:#a1a1aa;font-size:13px;">Unable to load gallery.</p>';
   }
 }
 
@@ -265,6 +291,34 @@ function buildFilters() {
     btn.textContent = s;
     btn.addEventListener('click', () => applyFilter(s));
     bar.appendChild(btn);
+  });
+}
+
+function buildShop() {
+  const grid = document.getElementById('shopGrid');
+  const available = allPaintings.filter(p => (p.status || '').toLowerCase() === 'available');
+  if (!available.length) {
+    grid.innerHTML = '<p style="color:#a1a1aa;font-size:13px;text-align:center;">No paintings currently available.</p>';
+    return;
+  }
+  grid.innerHTML = '';
+  available.forEach(p => {
+    const imgSrc  = normaliseUrl((p.images || [])[0] || '');
+    const payLink = p.payment_link || '';
+    const btn     = payLink
+      ? `<a href="${payLink}" target="_blank" class="shop-btn buy">Buy Now — $${p.price}</a>`
+      : `<a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(p.title)}" class="shop-btn">Request Details</a>`;
+    const card = document.createElement('div');
+    card.className = 'shop-card';
+    card.innerHTML = `
+      <div class="shop-img-wrap"><img src="${imgSrc}" alt="${p.title}" loading="lazy" decoding="async" draggable="false"></div>
+      <div class="shop-info">
+        <div class="shop-title">${p.title}</div>
+        <div class="shop-material">${p.material}</div>
+        <div class="shop-price">${p.price ? '$' + p.price : 'Price on Request'}</div>
+      </div>
+      ${btn}`;
+    grid.appendChild(card);
   });
 }
 
@@ -287,25 +341,7 @@ function normaliseUrl(l) {
   return l;
 }
 
-function buildShop() {
-  const grid = document.getElementById('shopGrid');
-  const available = allPaintings.filter(p => (p.status || '').toLowerCase() === 'available');
-  if (!available.length) { grid.innerHTML = '<p style="color:#a1a1aa;font-size:13px;">No paintings currently available.</p>'; return; }
-  grid.innerHTML = '';
-  available.forEach(p => {
-    const img     = normaliseUrl((p.images || [])[0] || '');
-    const payLink = p.payment_link || '';
-    const btn     = payLink
-      ? `<a href="${payLink}" target="_blank" class="shop-btn buy">Buy Now — ${p.price}</a>`
-      : `<a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(p.title)}" class="shop-btn">Request Details</a>`;
-    const card = document.createElement('div');
-    card.className = 'shop-card';
-    card.innerHTML = `
-      <div class="shop-img-wrap"><img src="${img}" alt="${p.title}" loading="lazy" decoding="async" draggable="false"></div>
-      <div class="shop-info">
-        <div class="shop-title">${p.title}</div>
-        <div class="shop-material">${p.material}</div>
-        <div class="shop-price">${p.price ? '
+function renderBatch() {
   const gallery = document.getElementById('gallery');
   const btn     = document.getElementById('loadMoreBtn');
   const batch   = filtered.slice(shownCount, shownCount + PAGE_SIZE);
@@ -319,7 +355,6 @@ function buildShop() {
     const price    = p.price    || '';
     const status   = p.status   || '';
     const payLink  = p.payment_link || '';
-
     if (!images.length) return;
 
     const imgList   = images.map(normaliseUrl);
@@ -331,8 +366,7 @@ function buildShop() {
     card.innerHTML = `
       <div class="img-container">
         ${badgeHTML}
-        <img src="${imgList[0]}"
-             draggable="false"
+        <img src="${imgList[0]}" draggable="false"
              loading="${shownCount < 3 ? 'eager' : 'lazy'}"
              fetchpriority="${shownCount < 3 ? 'high' : 'low'}"
              decoding="async" alt="${title}"
@@ -380,135 +414,8 @@ function openModal(title, images, material, desc, price, status, payLink) {
     container.appendChild(wrapper);
   });
 
-  const box    = document.getElementById('inquiry-box-container');
-  const isSold = /private collection|sold/i.test(status);
-  const priceHTML = `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>`;
-
-  if (isSold) {
-    box.innerHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
-  } else if (payLink) {
-    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="${payLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;">Buy Now</a></div>`;
-  } else {
-    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a></div>`;
-  }
-
-  history.pushState({ modal: true }, '', '#painting');
-  document.getElementById('modal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('active');
-  document.body.style.overflow = '';
-  if (location.hash === '#painting') history.back();
-}
-
-window.addEventListener('popstate', () => {
-  if (document.getElementById('modal').classList.contains('active')) {
-    document.getElementById('modal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-});
-
-document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
-document.getElementById('modal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobileMenu').classList.toggle('open');
-});
-function closeMobileMenu() {
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('mobileMenu').classList.remove('open');
-}
-
-window.onload = loadData;
-</script>
-</body>
-</html>
- + p.price : 'Price on Request'}</div>
-      </div>
-      ${btn}`;
-    grid.appendChild(card);
-  });
-}
-
-
-  const gallery = document.getElementById('gallery');
-  const btn     = document.getElementById('loadMoreBtn');
-  const batch   = filtered.slice(shownCount, shownCount + PAGE_SIZE);
-  let delay = 0;
-
-  batch.forEach(p => {
-    const title    = p.title    || '';
-    const images   = p.images   || [];
-    const material = p.material || '';
-    const desc     = p.desc     || '';
-    const price    = p.price    || '';
-    const status   = p.status   || '';
-    const payLink  = p.payment_link || '';
-
-    if (!images.length) return;
-
-    const imgList   = images.map(normaliseUrl);
-    const isAvail   = status.toLowerCase() === 'available';
-    const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
-    const card      = document.createElement('div');
-    card.className  = 'art-card';
-    card.style.animationDelay = delay + 'ms';
-    card.innerHTML = `
-      <div class="img-container">
-        ${badgeHTML}
-        <img src="${imgList[0]}"
-             draggable="false"
-             loading="${shownCount < 3 ? 'eager' : 'lazy'}"
-             fetchpriority="${shownCount < 3 ? 'high' : 'low'}"
-             decoding="async" alt="${title}"
-             onload="this.classList.add('loaded')"
-             onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
-      </div>
-      <div class="art-info">
-        <h3 class="art-title">${title}</h3>
-        <p class="art-material">${material}</p>
-      </div>`;
-    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
-    gallery.appendChild(card);
-    delay += 80;
-  });
-
-  shownCount += batch.length;
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
-  }, {threshold: 0.1});
-  document.querySelectorAll('.art-card:not(.visible)').forEach(c => obs.observe(c));
-
-  btn.style.display = shownCount < filtered.length ? 'inline-block' : 'none';
-}
-
-document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
-
-function openModal(title, images, material, desc, price, status, payLink) {
-  document.getElementById('modal-title').textContent    = title;
-  document.getElementById('modal-material').textContent = material;
-  document.getElementById('modal-desc').textContent     = desc;
-
-  const container = document.getElementById('modal-images');
-  container.innerHTML = '';
-  images.forEach(src => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'loupe-wrapper';
-    const img = document.createElement('img');
-    img.className = 'modal-image';
-    img.draggable = false;
-    img.alt = title;
-    img.onerror = () => wrapper.remove();
-    img.src = src;
-    wrapper.appendChild(img);
-    container.appendChild(wrapper);
-  });
-
-  const box    = document.getElementById('inquiry-box-container');
-  const isSold = /private collection|sold/i.test(status);
+  const box     = document.getElementById('inquiry-box-container');
+  const isSold  = /private collection|sold/i.test(status);
   const priceHTML = `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>`;
 
   if (isSold) {

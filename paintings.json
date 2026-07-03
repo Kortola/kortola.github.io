@@ -8,7 +8,8 @@
     "desc": "The last warmth of an Indiana autumn, reflected in still water. I took this picture in my own neighborhood and could not stop thinking about it until I painted it.",
     "price": "950",
     "series": "Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "The Calm Between",
@@ -19,7 +20,8 @@
     "desc": "A summer field under a restless sky, the kind of afternoon that makes you stop and look up.",
     "price": "500",
     "series": "Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "Mexico",
@@ -30,7 +32,8 @@
     "desc": "A beautiful day in Mexico.",
     "price": "950",
     "series": "Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "Before Rain",
@@ -41,7 +44,8 @@
     "desc": "That particular stillness when the sky is building and the air holds its breath. I was so struck by this sky that I photographed it immediately and tried to capture its drama through my brushwork.",
     "price": "950",
     "series": "Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "I-65",
@@ -52,7 +56,8 @@
     "desc": "The open road and an endless Indiana sky. This is my road every single day, and I never stop finding it beautiful.",
     "price": "950",
     "series": "Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "Llutxent",
@@ -63,7 +68,8 @@
     "desc": "A view of the town where my father was born, nestled in the hills of Valencia, Spain. A painting made from memory and love.",
     "price": "",
     "series": "Landscapes",
-    "status": "Private Collection"
+    "status": "Private Collection",
+    "payment_link": ""
   },
   {
     "title": "Summer Path",
@@ -74,7 +80,8 @@
     "desc": "A path leading somewhere green and quiet. An invitation to slow down and follow.",
     "price": "100",
     "series": "Pocket Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": "https://buy.stripe.com/test_5kQ28s2Ha8rh5U52Rj57W00"
   },
   {
     "title": "In the Green Light",
@@ -85,7 +92,8 @@
     "desc": "Summer light breaking through the trees, that luminous moment when everything feels alive and still at the same time.",
     "price": "100",
     "series": "Pocket Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "July",
@@ -96,7 +104,8 @@
     "desc": "A wide open Indiana field under a sky full of possibility. The simplest and most honest kind of beauty.",
     "price": "100",
     "series": "Pocket Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "The Bend",
@@ -107,7 +116,8 @@
     "desc": "A path that curves and disappears into the trees, taking the eye and the heart somewhere just out of sight.",
     "price": "100",
     "series": "Pocket Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "Pink Morning",
@@ -118,7 +128,8 @@
     "desc": "An Indiana summer morning with flowers that took over the foreground and refused to be ignored.",
     "price": "100",
     "series": "Pocket Landscapes",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "A Garden in Mexico",
@@ -129,7 +140,8 @@
     "desc": "A lush and vivid garden full of bougainvillea, palm trees and green mountains. A place that feels like warmth itself.",
     "price": "",
     "series": "Quiet Moments",
-    "status": "Private Collection"
+    "status": "Private Collection",
+    "payment_link": ""
   },
   {
     "title": "Oranges",
@@ -140,7 +152,8 @@
     "desc": "Two oranges on a branch, painted against a cool turquoise background. A simple moment of color and light.",
     "price": "150",
     "series": "Quiet Moments",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "Window Garden",
@@ -151,7 +164,8 @@
     "desc": "Two houseplants in the morning light of a quiet room. A small reminder that beauty lives in the everyday.",
     "price": "150",
     "series": "Quiet Moments",
-    "status": "Available"
+    "status": "Available",
+    "payment_link": ""
   },
   {
     "title": "My Moment",
@@ -162,6 +176,7 @@
     "desc": "A cappuccino on a quiet morning, the pause before the day begins. Painted for everyone who knows that feeling.",
     "price": "",
     "series": "Quiet Moments",
-    "status": "Private Collection"
+    "status": "Private Collection",
+    "payment_link": ""
   }
 ]

@@ -21,7 +21,6 @@
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;background:#fff;color:#18181b;line-height:1.6;-webkit-user-select:none;user-select:none;}
 
-/* Navigation */
 nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);z-index:100;border-bottom:1px solid #f4f4f5;}
 .nav-container{max-width:1000px;margin:0 auto;padding:1.2rem 2rem;display:flex;justify-content:space-between;align-items:center;}
 .logo{font-size:1.1rem;font-weight:300;letter-spacing:.3em;text-transform:uppercase;}
@@ -36,7 +35,6 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .mobile-menu a{padding:1rem 2rem;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;font-weight:500;border-bottom:1px solid #f4f4f5;}
 .mobile-menu.open{display:flex;}
 
-/* Hero */
 #hero{height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:2rem;background:#fff;border-bottom:1px solid #f4f4f5;}
 .hero-inner{display:flex;flex-direction:column;align-items:center;gap:1.5rem;}
 .hero-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.4em;color:#a1a1aa;}
@@ -47,50 +45,24 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,#d4d4d8,transparent);}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
-/* Filters */
-.filter-bar{max-width:1000px;margin:1.5rem auto 1.5rem;padding:0 2rem;display:flex;flex-wrap:wrap;gap:.6rem;}
+/* Gallery wrapper — single container anchors filter + gallery to same left edge */
+.gallery-wrap{max-width:1000px;margin:3rem auto 0;padding:0 2rem;}
+
+.filter-bar{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.5rem;}
 .filter-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid #e4e4e7;background:#fff;color:#71717a;cursor:pointer;transition:all .2s;}
 .filter-btn:hover{border-color:#18181b;color:#18181b;}
 .filter-btn.active{background:#18181b;color:#fff;border-color:#18181b;}
 
-/* Gallery - Flexbox Restored */
-#gallery{
-  max-width:1000px;margin:0 auto 2rem;padding:0 2rem;
-  display:flex;flex-wrap:wrap;
-  gap:1.5rem;
-  align-items:flex-start;
-  align-content:flex-start;
-}
+#gallery{display:flex;flex-wrap:wrap;gap:1.5rem;align-items:flex-start;align-content:flex-start;}
 
 @keyframes shimmer{0%,100%{opacity:1}50%{opacity:.5}}
-.skeleton-card{opacity:1; flex: 0 0 300px;}
-.skeleton-img{aspect-ratio:1/1;background:#f4f4f5;animation:shimmer 1.4s ease infinite;}
-.skeleton-line{height:10px;background:#f4f4f5;margin-top:1.5rem;width:60%;animation:shimmer 1.4s ease .1s infinite;}
-.skeleton-line.short{width:40%;margin-top:.6rem;animation-delay:.2s;}
 
-.art-card{
-  cursor:pointer;opacity:0;
-  position:relative;flex:0 0 auto;
-  display:flex;flex-direction:column;
-  max-width: 100%;
-}
+.art-card{cursor:pointer;opacity:0;position:relative;flex:0 0 auto;display:flex;flex-direction:column;}
 .art-card.visible{animation:fadeUp .8s forwards;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
 
-.img-container{
-  height:380px;width:auto;
-  max-width: 100%;
-  overflow:hidden;background:#fafafa;
-  position:relative;display:block;
-  flex-shrink:0;
-}
-.img-container img{
-  height:100%;width:auto;display:block;
-  max-width: 100%;
-  transition:transform 2.5s cubic-bezier(.16,1,.3,1),opacity .4s ease;
-  pointer-events:none;opacity:0;
-  object-fit: contain;
-}
+.img-container{height:380px;width:auto;overflow:hidden;background:#fafafa;position:relative;display:block;flex-shrink:0;}
+.img-container img{height:100%;width:auto;display:block;transition:transform 2.5s cubic-bezier(.16,1,.3,1),opacity .4s ease;pointer-events:none;opacity:0;}
 .img-container img.loaded{opacity:1;}
 .img-container::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#f4f4f5 25%,#ebebeb 50%,#f4f4f5 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;}
 .img-container:has(img.loaded)::before{display:none;}
@@ -102,37 +74,27 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .art-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;margin-bottom:.5rem;}
 .art-material{font-size:10px;color:#71717a;font-style:italic;font-weight:300;}
 
-/* Load More */
-.load-more-wrap{max-width:1000px;margin:0 auto 2rem;padding:0 2rem;text-align:center;}
+.load-more-wrap{max-width:1000px;margin:1.5rem auto 5rem;padding:0 2rem;text-align:center;}
 .load-more-btn{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.25em;text-transform:uppercase;padding:12px 32px;border:1px solid #18181b;background:#fff;color:#18181b;cursor:pointer;transition:all .3s;}
 .load-more-btn:hover{background:#18181b;color:#fff;}
 
-/* Content Sections */
-.custom-section{
-  background:#fafafa;
-  padding:clamp(4rem, 8vh, 8rem) 2rem;
-  border-top:1px solid #f4f4f5;
-  text-align: center; /* Ensures the button and content are centered */
-}
+.custom-section{background:#fafafa;padding:clamp(4rem,8vh,8rem) 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .custom-intro{max-width:600px;margin:0 auto 4rem;text-align:center;color:#52525b;font-weight:300;font-size:13px;line-height:1.8;}
 .custom-grid{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:3rem;text-align:center;}
 .step h4{font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-bottom:1rem;color:#18181b;}
 .step p{font-size:13px;color:#71717a;font-weight:300;line-height:1.8;}
 
-#about{padding:clamp(4rem, 8vh, 8rem) 2rem;border-top:1px solid #f4f4f5;text-align:left;}
+#about{padding:clamp(4rem,8vh,8rem) 2rem;border-top:1px solid #f4f4f5;text-align:left;}
 .about-container{max-width:800px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:2rem;align-items:start;}
-.about-photo-wrapper{position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;background:#fafafa;}
-.about-photo-wrapper img{width:100%;height:100%;object-fit:cover;box-shadow:0 10px 30px rgba(0,0,0,.05);}
 .about-content{color:#52525b;font-size:.82rem;font-weight:300;line-height:2;}
 .about-content p+p{margin-top:1.2rem;}
 .about-content h2{margin-bottom:1.5rem;font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;color:#18181b;}
 
-#contact{padding:clamp(4rem, 8vh, 8rem) 2rem;border-top:1px solid #f4f4f5;text-align:center;}
+#contact{padding:clamp(4rem,8vh,8rem) 2rem;border-top:1px solid #f4f4f5;text-align:center;}
 .contact-links{display:flex;flex-direction:column;gap:1.5rem;align-items:center;margin-top:1rem;}
 .contact-links a{color:#18181b;text-decoration:none;font-size:12px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid #e4e4e7;padding-bottom:2px;transition:border-color .3s;}
 .contact-links a:hover{border-color:#18181b;}
 
-/* Modal & Inquiry Buttons */
 #modal{display:none;position:fixed;inset:0;background:#fff;z-index:200;overflow-y:auto;}
 #modal.active{display:block;}
 .close-btn{position:fixed;top:1.5rem;right:1.5rem;display:flex;align-items:center;gap:8px;padding:8px 18px;background:#18181b;color:#fff;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;border:none;cursor:pointer;z-index:210;transition:background .3s;}
@@ -142,40 +104,20 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 .loupe-wrapper{position:relative;display:inline-block;cursor:default;line-height:0;}
 .modal-image{display:block;max-width:100%;max-height:75vh;object-fit:contain;box-shadow:0 20px 50px rgba(0,0,0,.08);pointer-events:none;}
 .modal-details{width:100%;max-width:600px;margin:0 auto 8rem;}
-
-.inquiry-btn{
-  display:inline-block;
-  padding:12px 24px;
-  border:1px solid #18181b;
-  text-decoration:none;
-  color:#18181b;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:.2em;
-  margin-top:4rem;
-  transition:.3s;
-}
+.inquiry-btn{display:inline-block;padding:12px 24px;border:1px solid #18181b;text-decoration:none;color:#18181b;font-size:10px;text-transform:uppercase;letter-spacing:.2em;margin-top:2rem;transition:.3s;}
 .inquiry-btn:hover{background:#18181b;color:#fff;}
 
 .section-title{font-size:1.1rem;font-weight:300;letter-spacing:.4em;text-transform:uppercase;margin-bottom:3rem;}
 footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-transform:uppercase;letter-spacing:.2em;border-top:1px solid #f4f4f5;}
 
-/* Responsiveness */
-@media(max-width:1024px){
-  .art-card { flex: 0 1 auto; }
-  .img-container { height: auto; max-height: 45vh; }
-  .img-container img { width: auto; max-width: 100%; }
-}
-
 @media(max-width:768px){
-  .filter-bar{margin:2rem auto 1rem;gap:.5rem;}
-  #gallery{gap:2rem;padding:0 1rem;}
+  .gallery-wrap{padding:0 1rem;margin:2rem auto 0;}
+  #gallery{gap:2rem;}
   .art-card{flex:0 0 100%;width:100%;}
   .img-container{height:auto;width:100%;display:block;}
-  .img-container img{height:auto;width:100%;object-fit:unset;}
+  .img-container img{height:auto;width:100%;}
   .custom-grid{grid-template-columns:1fr;gap:3rem;}
-  .about-container{grid-template-columns:1fr;gap:2rem;text-align:center;}
-  .about-photo-wrapper{aspect-ratio:3/2;max-width:340px;margin:0 auto;}
+  .about-container{gap:2rem;text-align:center;}
   .about-content h2{text-align:center;}
   .nav-links{display:none;}
   .hamburger{display:flex;}
@@ -185,7 +127,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
   .close-btn{top:1rem;right:1rem;}
 }
 @media(max-width:480px){
-  .custom-section, #about, #contact{padding:4rem 1rem;}
+  .custom-section,#about,#contact{padding:4rem 1rem;}
 }
 </style>
 </head>
@@ -225,11 +167,7 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
 
 <div class="gallery-wrap">
   <div class="filter-bar" id="filterBar"></div>
-  <main id="gallery">
-    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-    <div class="skeleton-card"><div class="skeleton-img"></div><div class="skeleton-line"></div><div class="skeleton-line short"></div></div>
-  </main>
+  <main id="gallery"></main>
 </div>
 
 <div class="load-more-wrap">
@@ -252,14 +190,10 @@ footer{padding:4rem 2rem;text-align:center;font-size:10px;color:#a1a1aa;text-tra
     <div class="about-content">
       <h2>About the Artist</h2>
       <p>I am a painter working in acrylics on large scale canvases and intimate wood panels. Born in Brazil into a family with deep roots in Valencia, Spain, my work is a dialogue between the vibrant colors of South America and the Mediterranean tradition of light. My technique is grounded in this dual heritage, using direct brushwork and a natural sense of color to interpret the beauty of everyday scenes.</p>
-
-<p>I studied fine arts at the Escola Panamericana de Arte in São Paulo, where the city itself was my first subject: urban, colorful, and chaotic. It was there that I discovered the energy of color that still defines my palette today.</p>
-
-<p>Moving to Indiana changed everything. Surrounded by open skies, still water, and the unhurried rhythm of the Midwest, I discovered what I had been looking for all along: quiet. The chaos gave way to calm, the urban density to open horizon, and the noise to light.</p>
-
-<p>Today, I paint the landscapes that surround me and the quiet moments found in still life. I always begin with light with the same intention: to paint something that makes people stop, breathe, and feel at peace. People who see my paintings often tell me they feel calm just looking at them. That is the highest thing I could hope to achieve.</p>
-
-<p>Based in Northwest Indiana and conveniently located near Chicago, I welcome local collectors and am happy to arrange personal delivery or ship artwork nationwide.</p>
+      <p>I studied fine arts at the Escola Panamericana de Arte in São Paulo, where the city itself was my first subject: urban, colorful, and chaotic. It was there that I discovered the energy of color that still defines my palette today.</p>
+      <p>Moving to Indiana changed everything. Surrounded by open skies, still water, and the unhurried rhythm of the Midwest, I discovered what I had been looking for all along: quiet. The chaos gave way to calm, the urban density to open horizon, and the noise to light.</p>
+      <p>Today, I paint the landscapes that surround me and the quiet moments found in still life. I always begin with light with the same intention: to paint something that makes people stop, breathe, and feel at peace. People who see my paintings often tell me they feel calm just looking at them. That is the highest thing I could hope to achieve.</p>
+      <p>Based in Northwest Indiana and conveniently located near Chicago, I welcome local collectors and am happy to arrange personal delivery or ship artwork nationwide.</p>
     </div>
   </div>
 </section>
@@ -295,7 +229,7 @@ let allPaintings = [], filtered = [], shownCount = 0;
 
 async function loadData() {
   const gallery = document.getElementById('gallery');
-  gallery.innerHTML = ''; 
+  gallery.innerHTML = '';
   try {
     const res = await fetch(JSON_URL);
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -372,7 +306,8 @@ function renderBatch() {
         <h3 class="art-title">${title}</h3>
         <p class="art-material">${material}</p>
       </div>`;
-    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status));
+    const payLink = p.payment_link || '';
+  card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
     gallery.appendChild(card);
     delay += 80;
   });
@@ -389,7 +324,8 @@ function renderBatch() {
 
 document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
 
-function openModal(title, images, material, desc, price, status) {
+function openModal(title, images, material, desc, price, status, payLink='') {
+  images._paymentLink = payLink;
   document.getElementById('modal-title').textContent    = title;
   document.getElementById('modal-material').textContent = material;
   document.getElementById('modal-desc').textContent     = desc;
@@ -408,10 +344,18 @@ function openModal(title, images, material, desc, price, status) {
     container.appendChild(wrapper);
   });
   const isSold = /private collection|sold/i.test(status);
-  document.getElementById('inquiry-box-container').innerHTML = isSold
-    ? `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`
-    : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price?'$'+price:'Price on Request'}</p>
-       <a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn" style="margin-top: 2rem;">Request Acquisition Details</a>`;
+  let boxHTML = '';
+  if (isSold) {
+    boxHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
+  } else {
+    const priceTag = price ? `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price}</p>` : `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">Price on Request</p>`;
+    const buyBtn   = images._paymentLink
+      ? `<a href="${images._paymentLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;margin-right:.8rem;">Buy Now</a>`
+      : '';
+    const inquireBtn = `<a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a>`;
+    boxHTML = priceTag + `<div style="margin-top:1.5rem;display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;">${buyBtn}${inquireBtn}</div>`;
+  }
+  document.getElementById('inquiry-box-container').innerHTML = boxHTML;
   history.pushState({ modal: true }, '', '#painting');
   document.getElementById('modal').classList.add('active');
   document.body.style.overflow = 'hidden';

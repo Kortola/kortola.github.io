@@ -82,12 +82,16 @@ nav{position:fixed;top:0;width:100%;background:rgba(255,255,255,0.95);backdrop-f
 /* SHOP */
 #shop{padding:8rem 2rem;border-top:1px solid #f4f4f5;}
 .shop-inner{max-width:1000px;margin:0 auto;}
-.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2.5rem;margin-top:0;}
+.shop-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2.5rem;}
 .shop-card{display:flex;flex-direction:column;border:1px solid #f4f4f5;transition:border-color .3s;}
 .shop-card:hover{border-color:#e4e4e7;}
-.shop-img-wrap{aspect-ratio:1/1;overflow:hidden;background:#fafafa;}
+.shop-img-wrap{aspect-ratio:1/1;overflow:hidden;background:#fafafa;position:relative;cursor:pointer;}
 .shop-img-wrap img{width:100%;height:100%;object-fit:cover;transition:transform 2s ease;pointer-events:none;display:block;}
 .shop-card:hover .shop-img-wrap img{transform:scale(1.04);}
+.shop-img-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0);transition:background .3s;}
+.shop-card:hover .shop-img-hint{background:rgba(0,0,0,.18);}
+.shop-img-hint span{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#fff;opacity:0;transition:opacity .3s;}
+.shop-card:hover .shop-img-hint span{opacity:1;}
 .shop-info{padding:1.2rem;flex:1;display:flex;flex-direction:column;gap:.5rem;}
 .shop-title{font-size:11px;text-transform:uppercase;letter-spacing:.15em;font-weight:500;color:#18181b;}
 .shop-material{font-size:10px;color:#71717a;font-style:italic;}
@@ -311,13 +315,161 @@ function buildShop() {
     const card = document.createElement('div');
     card.className = 'shop-card';
     card.innerHTML = `
-      <div class="shop-img-wrap"><img src="${imgSrc}" alt="${p.title}" loading="lazy" decoding="async" draggable="false"></div>
+      <div class="shop-img-wrap">
+        <img src="${imgSrc}" alt="${p.title}" loading="lazy" decoding="async" draggable="false">
+        <div class="shop-img-hint"><span>View painting</span></div>
+      </div>
       <div class="shop-info">
         <div class="shop-title">${p.title}</div>
         <div class="shop-material">${p.material}</div>
-        <div class="shop-price">${p.price ? '$' + p.price : 'Price on Request'}</div>
+        <div class="shop-price">${p.price ? '
+  });
+}
+
+function applyFilter(series) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent === series));
+  filtered = series === 'All' ? allPaintings : allPaintings.filter(p => p.series === series);
+  shownCount = 0;
+  document.getElementById('gallery').innerHTML = '';
+  renderBatch();
+}
+
+function normaliseUrl(l) {
+  l = l.trim();
+  if (l.includes('github.com') && l.includes('/blob/main/'))
+    return 'https://kortola.github.io/' + l.split('/blob/main/')[1];
+  if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
+    return 'https://kortola.github.io/' + l.split('/main/')[1];
+  if (l.startsWith('/'))
+    return 'https://kortola.github.io' + l;
+  return l;
+}
+
+function renderBatch() {
+  const gallery = document.getElementById('gallery');
+  const btn     = document.getElementById('loadMoreBtn');
+  const batch   = filtered.slice(shownCount, shownCount + PAGE_SIZE);
+  let delay = 0;
+
+  batch.forEach(p => {
+    const title    = p.title    || '';
+    const images   = p.images   || [];
+    const material = p.material || '';
+    const desc     = p.desc     || '';
+    const price    = p.price    || '';
+    const status   = p.status   || '';
+    const payLink  = p.payment_link || '';
+    if (!images.length) return;
+
+    const imgList   = images.map(normaliseUrl);
+    const isAvail   = status.toLowerCase() === 'available';
+    const badgeHTML = status ? `<div class="status-badge ${isAvail?'available-tag':''}">${status}</div>` : '';
+    const card      = document.createElement('div');
+    card.className  = 'art-card';
+    card.style.animationDelay = delay + 'ms';
+    card.innerHTML = `
+      <div class="img-container">
+        ${badgeHTML}
+        <img src="${imgList[0]}" draggable="false"
+             loading="${shownCount < 3 ? 'eager' : 'lazy'}"
+             fetchpriority="${shownCount < 3 ? 'high' : 'low'}"
+             decoding="async" alt="${title}"
+             onload="this.classList.add('loaded')"
+             onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
+      </div>
+      <div class="art-info">
+        <h3 class="art-title">${title}</h3>
+        <p class="art-material">${material}</p>
+      </div>`;
+    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
+    gallery.appendChild(card);
+    delay += 80;
+  });
+
+  shownCount += batch.length;
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }});
+  }, {threshold: 0.1});
+  document.querySelectorAll('.art-card:not(.visible)').forEach(c => obs.observe(c));
+
+  btn.style.display = shownCount < filtered.length ? 'inline-block' : 'none';
+}
+
+document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
+
+function openModal(title, images, material, desc, price, status, payLink) {
+  document.getElementById('modal-title').textContent    = title;
+  document.getElementById('modal-material').textContent = material;
+  document.getElementById('modal-desc').textContent     = desc;
+
+  const container = document.getElementById('modal-images');
+  container.innerHTML = '';
+  images.forEach(src => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'loupe-wrapper';
+    const img = document.createElement('img');
+    img.className = 'modal-image';
+    img.draggable = false;
+    img.alt = title;
+    img.onerror = () => wrapper.remove();
+    img.src = src;
+    wrapper.appendChild(img);
+    container.appendChild(wrapper);
+  });
+
+  const box     = document.getElementById('inquiry-box-container');
+  const isSold  = /private collection|sold/i.test(status);
+  const priceHTML = `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>`;
+
+  if (isSold) {
+    box.innerHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
+  } else if (payLink) {
+    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="${payLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;">Buy Now</a></div>`;
+  } else {
+    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a></div>`;
+  }
+
+  history.pushState({ modal: true }, '', '#painting');
+  document.getElementById('modal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  document.body.style.overflow = '';
+  if (location.hash === '#painting') history.back();
+}
+
+window.addEventListener('popstate', () => {
+  if (document.getElementById('modal').classList.contains('active')) {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+document.addEventListener('keydown', e => { if (e.key==='Escape') closeModal(); });
+document.getElementById('modal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+document.getElementById('hamburger').addEventListener('click', () => {
+  document.getElementById('hamburger').classList.toggle('open');
+  document.getElementById('mobileMenu').classList.toggle('open');
+});
+function closeMobileMenu() {
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+}
+
+window.onload = loadData;
+</script>
+</body>
+</html>
+ + p.price : 'Price on Request'}</div>
       </div>
       ${btn}`;
+    // Clicking the image opens the modal with full view + buy button
+    card.querySelector('.shop-img-wrap').addEventListener('click', () => {
+      openModal(p.title, (p.images||[]).map(normaliseUrl), p.material, p.desc||'', p.price||'', p.status||'', payLink);
+    });
     grid.appendChild(card);
   });
 }

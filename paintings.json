@@ -76,12 +76,12 @@
     "images": [
       "/littlelandscape1.webp"
     ],
-    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"d",
     "desc": "A path leading somewhere green and quiet. An invitation to slow down and follow.",
-    "price": "100",
+    "price": "128",
     "series": "Pocket Landscapes",
     "status": "Available",
-    "payment_link": "https://buy.stripe.com/test_5kQ28s2Ha8rh5U52Rj57W00"
+    "payment_link": ""
   },
   {
     "title": "In the Green Light",
@@ -90,7 +90,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "Summer light breaking through the trees, that luminous moment when everything feels alive and still at the same time.",
-    "price": "100",
+    "price": "128",
     "series": "Pocket Landscapes",
     "status": "Available",
     "payment_link": ""
@@ -102,7 +102,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "A wide open Indiana field under a sky full of possibility. The simplest and most honest kind of beauty.",
-    "price": "100",
+    "price": "128",
     "series": "Pocket Landscapes",
     "status": "Available",
     "payment_link": ""
@@ -114,7 +114,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "A path that curves and disappears into the trees, taking the eye and the heart somewhere just out of sight.",
-    "price": "100",
+    "price": "128",
     "series": "Pocket Landscapes",
     "status": "Available",
     "payment_link": ""
@@ -126,7 +126,7 @@
     ],
     "material": "Acrylic on Wood Panel 10\" x 10\"",
     "desc": "An Indiana summer morning with flowers that took over the foreground and refused to be ignored.",
-    "price": "100",
+    "price": "128",
     "series": "Pocket Landscapes",
     "status": "Available",
     "payment_link": ""

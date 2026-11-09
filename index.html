@@ -12,28 +12,35 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap"/>
 <title>Karina Ortolá | Contemporary Expressive Painter | Northwest Indiana</title>
 <meta name="description" content="Original acrylic paintings of calm landscapes, quiet interiors and still life by Karina Ortolá. Contemporary expressive painter based in Northwest Indiana near Chicago. Original paintings available for purchase and custom commissions.">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=EB+Garamond:ital,wght@0,400;1,400&display=swap');
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { font-family: 'Inter', sans-serif; background: #fff; color: #18181b; line-height: 1.6; -webkit-user-select: none; user-select: none; }
 
 /* NAV */
-nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #f4f4f5; }
-.nav-container { max-width: 1000px; margin: 0 auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
+nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #f4f4f5; }
+.nav-container { max-width: 1000px; margin: 0 auto; padding: 1.1rem 2rem; display: flex; justify-content: space-between; align-items: center; }
 .logo { font-size: 1.1rem; font-weight: 300; letter-spacing: .3em; text-transform: uppercase; }
+
 .nav-right { display: flex; align-items: center; }
 .nav-links { display: flex; align-items: center; }
-.nav-links a { text-decoration: none; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: .2em; margin-left: 2rem; transition: color .3s; font-weight: 500; }
+.nav-links a { text-decoration: none; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: .2em; margin-left: 2rem; transition: color .2s; font-weight: 500; }
 .nav-links a:hover { color: #18181b; }
-.nav-actions { display: flex; align-items: center; margin-left: 2rem; gap: 1.2rem; }
-.menu-icon { display: flex; align-items: center; color: #71717a; transition: color .3s; }
-.menu-icon:hover { color: #18181b; }
-.menu-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; margin-left: 0.5rem; }
+
+.nav-actions { display: flex; align-items: center; margin-left: 2rem; gap: 14px; }
+.cart-icon { display: flex; align-items: center; color: #71717a; transition: color .2s; }
+.cart-icon:hover { color: #18181b; }
+.cart-icon svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+/* COLORED INSTAGRAM BADGE */
+.ig-btn { display: flex; align-items: center; justify-content: center; text-decoration: none; transition: transform .2s ease, opacity .2s ease; }
+.ig-btn:hover { transform: scale(1.08); opacity: 0.92; }
+.ig-svg { width: 18px; height: 18px; display: block; border-radius: 5px; }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; margin-left: 4px; }
 .hamburger span { display: block; width: 22px; height: 1px; background: #18181b; transition: .3s; }
 .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; }
@@ -62,10 +69,10 @@ nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); 
 #gallery { display: flex; flex-wrap: wrap; gap: 1.5rem; align-items: flex-start; align-content: flex-start; }
 @keyframes shimmer { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
 .art-card { cursor: pointer; opacity: 0; position: relative; flex: 0 0 auto; display: flex; flex-direction: column; }
-.art-card.visible { animation: fadeUp .8s forwards; }
-@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+.art-card.visible { animation: fadeUp .35s ease-out forwards; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 .img-container { height: 380px; width: auto; overflow: hidden; background: #fafafa; position: relative; display: block; flex-shrink: 0; }
-.img-container img { height: 100%; width: auto; display: block; transition: transform 2.5s cubic-bezier(.16,1,.3,1), opacity .4s ease; pointer-events: none; opacity: 0; }
+.img-container img { height: 100%; width: auto; display: block; transition: transform 2.5s cubic-bezier(.16,1,.3,1), opacity .3s ease; pointer-events: none; opacity: 0; }
 .img-container img.loaded { opacity: 1; }
 .img-container::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, #f4f4f5 25%, #ebebeb 50%, #f4f4f5 75%); background-size: 200% 100%; animation: shimmer 1.4s ease infinite; }
 .img-container:has(img.loaded)::before { display: none; }
@@ -143,352 +150,4 @@ footer { padding: 4rem 2rem; text-align: center; font-size: 10px; color: #a1a1aa
 @media(max-width: 768px) {
   .gallery-wrap { padding: 0 1rem; margin: 2rem auto 0; }
   #gallery { gap: 2rem; }
-  .art-card { flex: 0 0 100%; width: 100%; }
-  .img-container { height: auto; width: 100%; display: block; }
-  .img-container img { height: auto; width: 100%; }
-  .shop-grid { grid-template-columns: 1fr; }
-  .custom-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .about-container { text-align: center; }
-  .about-content h2 { text-align: center; }
-  .nav-links { display: none; }
-  .nav-actions { margin-left: 0; gap: 1rem; }
-  .hamburger { display: flex; }
-  #hero { padding: 1.5rem; }
-  .hero-name { font-size: clamp(2.5rem,14vw,5rem); }
-  .modal-content { margin: 4rem auto; padding: 0 1rem; }
-  .close-btn { top: 1rem; right: 1rem; }
-}
-@media(max-width: 480px) {
-  .custom-section, #about, #contact, #shop { padding: 4rem 1rem; }
-}
-</style>
-</head>
-<body oncontextmenu="return false;">
-
-<nav>
-  <div class="nav-container">
-    <div class="logo">Karina Ortolá</div>
-    
-    <div class="nav-right">
-      <div class="nav-links">
-        <a href="#gallery">Paintings</a>
-        <a href="#shop">Shop</a>
-        <a href="#custom">Custom</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </div>
-      
-      <!-- Icons grouped here stay visible immediately upon loading, even on mobile -->
-      <div class="nav-actions">
-        <a href="https://instagram.com/karinaortola.art" target="_blank" class="menu-icon" aria-label="Instagram">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
-            <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
-          </svg>
-        </a>
-        <a href="#shop" class="menu-icon" aria-label="Shop">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <path d="M16 10a4 4 0 01-8 0"/>
-          </svg>
-        </a>
-        <button class="hamburger" id="hamburger" aria-label="Menu">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </div>
-  </div>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="#gallery" onclick="closeMobileMenu()">Paintings</a>
-    <a href="#shop" onclick="closeMobileMenu()">Shop</a>
-    <a href="#custom" onclick="closeMobileMenu()">Custom</a>
-    <a href="#about" onclick="closeMobileMenu()">About</a>
-    <a href="#contact" onclick="closeMobileMenu()">Contact</a>
-  </div>
-</nav>
-
-<section id="hero">
-  <div class="hero-inner">
-    <div class="hero-eyebrow">Original Paintings · Acrylics on Canvas</div>
-    <h1 class="hero-name">Karina<br><em>Ortolá</em></h1>
-    <p class="hero-tagline">Contemporary expressive painter of landscapes, still life, and quiet everyday scenes</p>
-    <a href="#gallery" style="text-decoration:none;">
-      <div class="hero-scroll-hint"><div class="scroll-line"></div>View works</div>
-    </a>
-  </div>
-</section>
-
-<div class="gallery-wrap">
-  <div class="filter-bar" id="filterBar"></div>
-  <main id="gallery"></main>
-</div>
-
-<div class="load-more-wrap">
-  <button class="load-more-btn" id="loadMoreBtn" style="display:none;">Load more paintings</button>
-</div>
-
-<section id="shop">
-  <div class="shop-inner">
-    <h2 class="section-title" style="text-align:center;">Shop</h2>
-    <div class="shop-grid" id="shopGrid"></div>
-  </div>
-</section>
-
-<section id="custom" class="custom-section">
-  <h2 class="section-title">Custom Paintings</h2>
-  <p class="custom-intro">Transform a beautiful moment into a lasting work of art. I specialize in expressive landscapes that capture the essence of a place or memory through a focus on color and light.</p>
-  <div class="custom-grid">
-    <div class="step"><h4>01 · Your Reference</h4><p>Share a photograph of a landscape or a special moment that moves you.</p></div>
-    <div class="step"><h4>02 · Artistic Study</h4><p>I translate your image into an original composition, focusing on the interplay of colour and atmosphere.</p></div>
-    <div class="step"><h4>03 · Final Reveal</h4><p>Your custom acrylic painting is completed and shipped directly to your collection.</p></div>
-  </div>
-  <a href="mailto:hello@karinaortola.com?subject=Custom Landscape Inquiry" class="inquiry-btn">Inquire About a Custom Work</a>
-</section>
-
-<section id="about">
-  <div class="about-container">
-    <div class="about-content">
-      <h2>About the Artist</h2>
-      <p>I am a painter working in acrylics on large scale canvases and intimate wood panels. I studied fine arts at the Escola Panamericana de Arte in São Paulo, a massive and chaotic metropolis in Brazil that became my very first subject. It was there, amid the intense energy of the city, that I discovered the vibrant palette that still defines my work today.</p>
-      <p>Moving to Indiana changed everything. Surrounded by open skies, still water, and the unhurried rhythm of the Midwest, I discovered what I had been looking for all along: quiet. The chaos gave way to calm, the urban density to open horizons, and the noise to light.</p>
-      <p>Today, I paint the landscapes that surround me and the quiet moments found in still life. I always begin with light with a simple intention: to paint something that makes people stop, breathe, and feel at peace. When people who see my paintings tell me they feel a sense of calm just looking at them, I feel I have done my job.</p>
-     </div>
-  </div>
-</section>
-
-<section id="contact">
-  <h2 class="section-title">Connect</h2>
-  <div class="contact-links">
-    <a href="mailto:hello@karinaortola.com">Email the Studio</a>
-    <a href="https://instagram.com/karinaortola.art" target="_blank">Follow on Instagram</a>
-  </div>
-</section>
-
-<footer>&copy; 2026 Karina Ortolá. All images and content property of the artist.</footer>
-
-<div id="modal">
-  <button class="close-btn" onclick="closeModal()" aria-label="Close">← Back to Gallery</button>
-  <div class="modal-content">
-    <div id="modal-images"></div>
-    <div class="modal-details">
-      <h2 id="modal-title" class="section-title" style="margin-bottom:1rem;"></h2>
-      <p id="modal-material" style="color:#71717a;margin-bottom:1.5rem;font-size:13px;"></p>
-      <p id="modal-desc" style="color:#52525b;font-size:13px;font-weight:300;line-height:1.8;"></p>
-      <div id="inquiry-box-container"></div>
-    </div>
-  </div>
-</div>
-
-<script>
-const JSON_URL  = './paintings.json';
-const PAGE_SIZE = 12;
-let allPaintings = [], filtered = [], shownCount = 0;
-
-async function loadData() {
-  const gallery = document.getElementById('gallery');
-  gallery.innerHTML = '';
-  try {
-    const res = await fetch(JSON_URL);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    allPaintings = await res.json();
-    buildFilters();
-    buildShop();
-    filtered = allPaintings;
-    shownCount = 0;
-    renderBatch();
-  } catch(err) {
-    console.error('Gallery error:', err);
-    gallery.innerHTML = '<p style="color:#a1a1aa;font-size:13px;">Unable to load gallery.</p>';
-  }
-}
-
-function buildFilters() {
-  const bar = document.getElementById('filterBar');
-  const series = ['All', ...new Set(allPaintings.map(p => p.series).filter(Boolean))];
-  bar.innerHTML = '';
-  series.forEach(s => {
-    const btn = document.createElement('button');
-    btn.className = 'filter-btn' + (s === 'All' ? ' active' : '');
-    btn.textContent = s;
-    btn.addEventListener('click', () => applyFilter(s));
-    bar.appendChild(btn);
-  });
-}
-
-function buildShop() {
-  const grid = document.getElementById('shopGrid');
-  const available = allPaintings.filter(p => (p.status || '').toLowerCase() === 'available');
-  if (!available.length) {
-    grid.innerHTML = '<p style="color:#a1a1aa;font-size:13px;text-align:center;">No paintings currently available.</p>';
-    return;
-  }
-  grid.innerHTML = '';
-  available.forEach(p => {
-    const imgSrc  = normaliseUrl((p.images || [])[0] || '');
-    const payLink = p.payment_link || '';
-    const btn     = payLink
-      ? `<a href="${payLink}" target="_blank" class="shop-btn buy">Buy Now — $${p.price}</a>`
-      : `<a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(p.title)}" class="shop-btn">Request Details</a>`;
-    const card = document.createElement('div');
-    card.className = 'shop-card';
-    card.innerHTML = `
-      <div class="shop-img-wrap">
-        <img src="${imgSrc}" alt="${p.title}" loading="lazy" decoding="async" draggable="false">
-        <div class="shop-img-hint"><span>View painting</span></div>
-      </div>
-      <div class="shop-info">
-        <div class="shop-title">${p.title}</div>
-        <div class="shop-material">${p.material}</div>
-        <div class="shop-price">${p.price ? '$' + p.price : 'Price on Request'}</div>
-      </div>
-      ${btn}`;
-    card.querySelector('.shop-img-wrap').addEventListener('click', () => {
-      openModal(p.title, (p.images || []).map(normaliseUrl), p.material, p.desc || '', p.price || '', p.status || '', payLink);
-    });
-    grid.appendChild(card);
-  });
-}
-
-function applyFilter(series) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.textContent === series));
-  filtered = series === 'All' ? allPaintings : allPaintings.filter(p => p.series === series);
-  shownCount = 0;
-  document.getElementById('gallery').innerHTML = '';
-  renderBatch();
-}
-
-function normaliseUrl(l) {
-  l = l.trim();
-  if (l.includes('github.com') && l.includes('/blob/main/'))
-    return 'https://kortola.github.io/' + l.split('/blob/main/')[1];
-  if (l.includes('raw.githubusercontent.com') && l.includes('/main/'))
-    return 'https://kortola.github.io/' + l.split('/main/')[1];
-  if (l.startsWith('/'))
-    return 'https://kortola.github.io' + l;
-  return l;
-}
-
-function renderBatch() {
-  const gallery = document.getElementById('gallery');
-  const btn     = document.getElementById('loadMoreBtn');
-  const batch   = filtered.slice(shownCount, shownCount + PAGE_SIZE);
-  let delay = 0;
-
-  batch.forEach(p => {
-    const title    = p.title    || '';
-    const images   = p.images   || [];
-    const material = p.material || '';
-    const desc     = p.desc     || '';
-    const price    = p.price    || '';
-    const status   = p.status   || '';
-    const payLink  = p.payment_link || '';
-    if (!images.length) return;
-
-    const imgList   = images.map(normaliseUrl);
-    const isAvail   = status.toLowerCase() === 'available';
-    const badgeHTML = status ? `<div class="status-badge ${isAvail ? 'available-tag' : ''}">${status}</div>` : '';
-    const card      = document.createElement('div');
-    card.className  = 'art-card';
-    card.style.animationDelay = delay + 'ms';
-    card.innerHTML = `
-      <div class="img-container">
-        ${badgeHTML}
-        <img src="${imgList[0]}"
-             draggable="false"
-             loading="${shownCount < 3 ? 'eager' : 'lazy'}"
-             fetchpriority="${shownCount < 3 ? 'high' : 'low'}"
-             decoding="async"
-             alt="${title}"
-             onload="this.classList.add('loaded')"
-             onerror="this.parentElement.innerHTML='<div class=\\'img-fallback\\'>Image unavailable</div>'">
-      </div>
-      <div class="art-info">
-        <h3 class="art-title">${title}</h3>
-        <p class="art-material">${material}</p>
-      </div>`;
-    card.addEventListener('click', () => openModal(title, imgList, material, desc, price, status, payLink));
-    gallery.appendChild(card);
-    delay += 80;
-  });
-
-  shownCount += batch.length;
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
-    });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.art-card:not(.visible)').forEach(c => obs.observe(c));
-
-  btn.style.display = shownCount < filtered.length ? 'inline-block' : 'none';
-}
-
-document.getElementById('loadMoreBtn').addEventListener('click', renderBatch);
-
-function openModal(title, images, material, desc, price, status, payLink) {
-  document.getElementById('modal-title').textContent    = title;
-  document.getElementById('modal-material').textContent = material;
-  document.getElementById('modal-desc').textContent     = desc;
-
-  const container = document.getElementById('modal-images');
-  container.innerHTML = '';
-  images.forEach(src => {
-    const wrapper = document.createElement('div');
-    wrapper.className = 'loupe-wrapper';
-    const img = document.createElement('img');
-    img.className = 'modal-image';
-    img.draggable = false;
-    img.alt = title;
-    img.onerror = () => wrapper.remove();
-    img.src = src;
-    wrapper.appendChild(img);
-    container.appendChild(wrapper);
-  });
-
-  const box      = document.getElementById('inquiry-box-container');
-  const isSold   = /private collection|sold/i.test(status);
-  const priceHTML = `<p style="font-size:13px;color:#71717a;margin-top:1.5rem;">${price ? '$' + price : 'Price on Request'}</p>`;
-
-  if (isSold) {
-    box.innerHTML = `<p style="color:#18181b;font-size:10px;letter-spacing:.2em;text-transform:uppercase;margin-top:2rem;">${status}</p>`;
-  } else if (payLink) {
-    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="${payLink}" target="_blank" class="inquiry-btn" style="background:#18181b;color:#fff;">Buy Now</a></div>`;
-  } else {
-    box.innerHTML = priceHTML + `<div style="margin-top:1.5rem;"><a href="mailto:hello@karinaortola.com?subject=Inquiry: ${encodeURIComponent(title)}" class="inquiry-btn">Request Details</a></div>`;
-  }
-
-  history.pushState({ modal: true }, '', '#painting');
-  document.getElementById('modal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('active');
-  document.body.style.overflow = '';
-  if (location.hash === '#painting') history.back();
-}
-
-window.addEventListener('popstate', () => {
-  if (document.getElementById('modal').classList.contains('active')) {
-    document.getElementById('modal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-});
-
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
-document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('hamburger').classList.toggle('open');
-  document.getElementById('mobileMenu').classList.toggle('open');
-});
-function closeMobileMenu() {
-  document.getElementById('hamburger').classList.remove('open');
-  document.getElementById('mobileMenu').classList.remove('open');
-}
-
-window.onload = loadData;
-</script>
-</body>
-</html>
+  .art

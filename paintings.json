@@ -88,7 +88,7 @@
     "images": [
       "/littlelandscape1.webp"
     ],
-    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"d",
+    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"",
     "desc": "A path leading somewhere green and quiet. An invitation to slow down and follow.",
     "price": "128",
     "series": "Pocket Landscapes",
@@ -100,7 +100,7 @@
     "images": [
       "/littlelandscape2.webp"
     ],
-    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"",
     "desc": "Summer light breaking through the trees, that luminous moment when everything feels alive and still at the same time.",
     "price": "128",
     "series": "Pocket Landscapes",
@@ -112,7 +112,7 @@
     "images": [
       "/littlelandscape3.webp"
     ],
-    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"",
     "desc": "A wide open Indiana field under a sky full of possibility. The simplest and most honest kind of beauty.",
     "price": "128",
     "series": "Pocket Landscapes",
@@ -124,7 +124,7 @@
     "images": [
       "/littlelandscape4.webp"
     ],
-    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"",
     "desc": "A path that curves and disappears into the trees, taking the eye and the heart somewhere just out of sight.",
     "price": "128",
     "series": "Pocket Landscapes",
@@ -136,11 +136,23 @@
     "images": [
       "/littlelandscape5.WEBP"
     ],
-    "material": "Acrylic on Wood Panel 10\" x 10\"",
+    "material": "Acrylic on Wood Panel 10\" x 10\" x 1.5\"",
     "desc": "An Indiana summer morning with flowers that took over the foreground and refused to be ignored.",
     "price": "128",
     "series": "Pocket Landscapes",
     "status": "Available",
+    "payment_link": ""
+  },
+  {
+    "title": "Mexican Land",
+    "images": [
+      "/Mexicanland.jpg"
+    ],
+    "material": "Acrylic on Wood Panel 12\" x 12\" x 1.5\"",
+    "desc": "",
+    "price": "",
+    "series": "",
+    "status": "",
     "payment_link": ""
   },
   {

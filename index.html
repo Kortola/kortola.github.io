@@ -25,12 +25,15 @@ body { font-family: 'Inter', sans-serif; background: #fff; color: #18181b; line-
 nav { position: fixed; top: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid #f4f4f5; }
 .nav-container { max-width: 1000px; margin: 0 auto; padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center; }
 .logo { font-size: 1.1rem; font-weight: 300; letter-spacing: .3em; text-transform: uppercase; }
+.nav-right { display: flex; align-items: center; }
 .nav-links { display: flex; align-items: center; }
 .nav-links a { text-decoration: none; color: #71717a; font-size: 10px; text-transform: uppercase; letter-spacing: .2em; margin-left: 2rem; transition: color .3s; font-weight: 500; }
 .nav-links a:hover { color: #18181b; }
-.cart-icon { display: flex; align-items: center; gap: 5px; }
-.cart-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; }
+.nav-actions { display: flex; align-items: center; margin-left: 2rem; gap: 1.2rem; }
+.menu-icon { display: flex; align-items: center; color: #71717a; transition: color .3s; }
+.menu-icon:hover { color: #18181b; }
+.menu-icon svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; background: none; border: none; margin-left: 0.5rem; }
 .hamburger span { display: block; width: 22px; height: 1px; background: #18181b; transition: .3s; }
 .hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
 .hamburger.open span:nth-child(2) { opacity: 0; }
@@ -148,6 +151,7 @@ footer { padding: 4rem 2rem; text-align: center; font-size: 10px; color: #a1a1aa
   .about-container { text-align: center; }
   .about-content h2 { text-align: center; }
   .nav-links { display: none; }
+  .nav-actions { margin-left: 0; gap: 1rem; }
   .hamburger { display: flex; }
   #hero { padding: 1.5rem; }
   .hero-name { font-size: clamp(2.5rem,14vw,5rem); }
@@ -164,23 +168,37 @@ footer { padding: 4rem 2rem; text-align: center; font-size: 10px; color: #a1a1aa
 <nav>
   <div class="nav-container">
     <div class="logo">Karina Ortolá</div>
-    <div class="nav-links">
-      <a href="#gallery">Paintings</a>
-      <a href="#shop">Shop</a>
-      <a href="#custom">Custom</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-      <a href="#shop" class="cart-icon" aria-label="Shop">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <path d="M16 10a4 4 0 01-8 0"/>
-        </svg>
-      </a>
+    
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#gallery">Paintings</a>
+        <a href="#shop">Shop</a>
+        <a href="#custom">Custom</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      
+      <!-- Icons grouped here stay visible immediately upon loading, even on mobile -->
+      <div class="nav-actions">
+        <a href="https://instagram.com/karinaortola.art" target="_blank" class="menu-icon" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+            <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+            <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+          </svg>
+        </a>
+        <a href="#shop" class="menu-icon" aria-label="Shop">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 01-8 0"/>
+          </svg>
+        </a>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
   </div>
   <div class="mobile-menu" id="mobileMenu">
     <a href="#gallery" onclick="closeMobileMenu()">Paintings</a>
